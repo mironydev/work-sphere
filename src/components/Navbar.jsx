@@ -83,7 +83,7 @@ export default function Navbar() {
             <div className="items-center gap-10 md:flex">
               <Link
                 href="#"
-                className="text-indigo-500 active:text-indigo-600 hidden md:block"
+                className=" active:text-indigo-400 hidden md:block"
               >
                 Sign In
               </Link>
