@@ -8,8 +8,8 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="p-4 sticky top-0 z-40">
-      <nav className=" w-full bg-background/70 backdrop-blur-lg max-w-7xl mx-auto rounded-lg">
+    <div className="p-4 fixed w-full top-0 z-40">
+      <nav className=" w-full bg-background/70 backdrop-blur-lg max-w-6xl mx-auto rounded-lg">
         <header className=" flex h-16  items-center justify-between px-3 md:px-6">
           <div className="flex items-center gap-4">
             <button
@@ -80,10 +80,10 @@ export default function Navbar() {
               </li>
             </ul>
             <div className="border-r hidden lg:block"></div>
-            <div className="items-center gap-10 md:flex">
+            <div className="items-center gap-10 sm:flex">
               <Link
                 href="#"
-                className=" active:text-indigo-400 hidden md:block"
+                className=" active:text-indigo-500 hidden sm:block"
               >
                 Sign In
               </Link>
@@ -117,7 +117,7 @@ export default function Navbar() {
                   Pricing
                 </Link>
               </li>
-              <li className="mt-1 flex flex-col gap-2 border-t border-separator py-2 px-2">
+              <li className="mt-1 flex flex-col gap-2 border-t border-separator py-2 px-2 active:text-indigo-600">
                 <Link href="#" className="block py-2">
                   Login
                 </Link>

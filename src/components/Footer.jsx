@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import { LogoFacebook } from "@gravity-ui/icons";
 
 const Footer = () => {
   return (
@@ -9,23 +8,23 @@ const Footer = () => {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-bold">WorkSphere</h2>
-            <p className="mx-auto mt-4 text-gray-600 max-w-md">
-              The AI native career platform. Built for people who take their
-              work seriously.
+            <p className="mx-auto lg:mx-0 mt-4 text-gray-600 max-w-md">
+              A platform that connects serious professionals with real
+              opportunities.
             </p>
           </div>
 
           <div>
-            <h3 className="font-semibold text-indigo-700 mb-4">Product</h3>
+            <h3 className="font-semibold text-indigo-500 mb-4">Product</h3>
             <ul className="space-y-3 text-gray-600">
               <li>
                 <Link href="/" className="active:opacity-70">
-                  Job Discovery
+                  Find Jobs
                 </Link>
               </li>
               <li>
                 <Link href="/" className="active:opacity-70">
-                  Worker AI
+                  Career Assistant
                 </Link>
               </li>
               <li>
@@ -35,14 +34,14 @@ const Footer = () => {
               </li>
               <li>
                 <Link href="/" className="active:opacity-70">
-                  Salary Data
+                  Salary Insights
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-semibold text-indigo-700 mb-4">Navigation</h3>
+            <h3 className="font-semibold text-indigo-500 mb-4">Navigation</h3>
             <ul className="space-y-3 text-gray-600">
               <li>
                 <Link href="/" className="active:opacity-70">
@@ -63,16 +62,16 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold text-indigo-700 mb-4">Resources</h3>
+            <h3 className="font-semibold text-indigo-500 mb-4">Resources</h3>
             <ul className="space-y-3 text-gray-600">
               <li>
                 <Link href="/" className="active:opacity-70">
-                  Newsroom
+                  News
                 </Link>
               </li>
               <li>
                 <Link href="/" className="active:opacity-70">
-                  Brand Guideline
+                  Brand Guidelines
                 </Link>
               </li>
             </ul>
