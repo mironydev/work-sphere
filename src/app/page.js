@@ -1,6 +1,7 @@
 import Banner from "@/components/homepage/Banner";
 import Careertools from "@/components/homepage/Careertools";
 import FeaturedJobs from "@/components/homepage/FeaturedJobs";
+import Pricing from "@/components/homepage/Pricing";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <Banner />
       <FeaturedJobs />
       <Careertools />
+      <Pricing />
     </div>
   );
 }

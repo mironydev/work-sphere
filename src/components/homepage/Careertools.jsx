@@ -11,20 +11,20 @@ import {
 
 const Careertools = () => {
   return (
-    <div className="mt-28 sm:mt-48 pl-6 pr-4">
+    <div className="mt-28 sm:mt-48 bg-black/5 dark:bg-stone-900/60 py-14 sm:py-20 rounded-lg mx-4 px-4">
       <div className="text-center space-y-2">
         <div className="flex justify-center items-center gap-3">
-          <span className="bg-cyan-500 h-2 w-2 rounded-xs"></span>
+          <span className="bg-black dark:bg-cyan-500 h-2 w-2 rounded-xs"></span>
           <p className="text-lg text-stone-500 dark:text-stone-300">
             CAREER TOOLS
           </p>
-          <span className="bg-cyan-500 h-2 w-2 rounded-xs"></span>
+          <span className="bg-black dark:bg-cyan-500 h-2 w-2 rounded-xs"></span>
         </div>
         <h2 className="text-4xl font-semibold max-w-xl mx-auto">
           Everything You Need for Your Job Search
         </h2>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-14 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-14 mb-8 sm:px-10 pl-2">
         <div className="flex items-center gap-7">
           <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md scale-150 dark:text-cyan-400">
             <Magnifier />

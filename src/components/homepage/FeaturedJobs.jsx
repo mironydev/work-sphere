@@ -205,7 +205,7 @@ const FeaturedJobs = () => {
         </div>
       </div>
       <div className="text-center">
-        <Button className="rounded-lg bg-black dark:bg-white dark:text-black py-6 text-base text-center">
+        <Button className="rounded-lg bg-black dark:bg-white dark:text-black py-6 px-20 text-base text-center">
           View All Jobs
         </Button>
       </div>
