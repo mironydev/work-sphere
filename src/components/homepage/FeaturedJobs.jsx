@@ -14,7 +14,7 @@ const FeaturedJobs = () => {
         <div className="flex justify-center items-center gap-3">
           <span className="bg-indigo-500 h-2 w-2 rounded-xs"></span>
           <p className="text-lg text-stone-500 dark:text-stone-300">
-            Featured Jobs
+            FEATURED JOBS
           </p>
           <span className="bg-indigo-500 h-2 w-2 rounded-xs"></span>
         </div>
