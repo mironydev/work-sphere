@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@heroui/react";
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -79,7 +80,10 @@ export default function Navbar() {
                 </Link>
               </li>
             </ul>
-            <div className="border-r hidden lg:block"></div>
+            <div className="hidden sm:block my-auto -mx-3">
+              <ThemeToggle />
+            </div>
+            <div className="border-r hidden sm:block"></div>
             <div className="items-center gap-10 sm:flex">
               <Link
                 href="#"
@@ -117,10 +121,13 @@ export default function Navbar() {
                   Pricing
                 </Link>
               </li>
-              <li className="mt-1 flex flex-col gap-2 border-t border-separator py-2 px-2 active:text-indigo-600">
-                <Link href="#" className="block py-2">
-                  Login
-                </Link>
+              <li className="mt-1 flex flex-col gap-2 border-t border-separator py-2 px-2 ">
+                <div className="flex justify-between">
+                  <Link href="#" className="block py-2 active:text-indigo-600">
+                    Login
+                  </Link>
+                  <ThemeToggle />
+                </div>
               </li>
             </ul>
           </div>

@@ -1,11 +1,12 @@
 import React from "react";
 import Link from "next/link";
+import ThemeToggle from "./ThemeToggle";
 
 const Footer = () => {
   return (
     <footer className="mt-16 px-4">
       <div className="max-w-7xl mx-auto bg-background/70 rounded-lg pt-10 pb-6 px-4 md:px-6 text-center lg:text-left">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-bold">WorkSphere</h2>
             <p className="mx-auto lg:mx-0 mt-4 text-gray-600 max-w-md">
@@ -137,6 +138,13 @@ const Footer = () => {
                   ></path>
                 </svg>
               </Link>
+            </div>
+          </div>
+
+          <div className=" text-center">
+            <h3 className="font-semibold mb-4">Switch Theme</h3>
+            <div className="scale-150 w-fit mx-auto">
+              <ThemeToggle />
             </div>
           </div>
         </div>
