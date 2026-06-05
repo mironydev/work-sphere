@@ -11,7 +11,7 @@ import {
 
 const Careertools = () => {
   return (
-    <div className="mt-28 sm:mt-48 bg-black/5 dark:bg-stone-900/60 py-14 sm:py-20 rounded-lg mx-4 px-4">
+    <div className="mt-28 sm:mt-36 bg-black/5 dark:bg-stone-900/60 py-14 sm:py-20 rounded-lg mx-4 px-4">
       <div className="text-center space-y-2">
         <div className="flex justify-center items-center gap-3">
           <span className="bg-black dark:bg-cyan-500 h-2 w-2 rounded-xs"></span>

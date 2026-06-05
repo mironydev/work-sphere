@@ -14,7 +14,7 @@ const Pricing = () => {
   const [isActive, setIsActive] = useState("monthly");
 
   return (
-    <div className="mt-28 sm:mt-48 px-4">
+    <div className="mt-28 sm:mt-36 px-4">
       <div className="text-center space-y-2">
         <div className="flex justify-center items-center gap-3">
           <span className="bg-indigo-500 h-2 w-2 rounded-xs"></span>
@@ -47,7 +47,7 @@ const Pricing = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-7 md:gap-4 lg:gap-7">
         <div className="border rounded-2xl px-5 py-8 flex flex-col justify-between inset-shadow-[0_1px_30px_rgba(0,0,0,.1)] dark:inset-shadow-[0_1px_40px_rgba(255,255,255,.1)]">
           <div>
-            <div className="flex justify-between items-">
+            <div className="flex flex-wrap gap-3 justify-between">
               <div className="flex items-end gap-3">
                 <div className="border bg-foreground/5 dark:bg-foreground/10 p-2 rounded-md">
                   <Person />
@@ -102,12 +102,12 @@ const Pricing = () => {
             <ArrowRight />
           </Button>
         </div>
-        <div className="relative border rounded-2xl px-5 py-8 flex flex-col justify-between inset-shadow-[0_0_40px_rgba(99,102,241,0.5)] bg-indigo-600 text-white dark:bg-indigo-600/30 mt-5 sm:mt-0">
+        <div className="relative  rounded-2xl px-5 py-8 flex flex-col justify-between inset-shadow-[0_0_40px_rgba(99,102,241,0.5)] bg-indigo-600 text-white dark:bg-indigo-600/30 mt-5 sm:mt-0">
           <div className="bg-linear-to-b from-white to-stone-300 dark:from-black dark:to-indigo-600 border-t  dark:border-gray-500 text-indigo-600 dark:text-white py-1.5 px-4 font-medium rounded-full absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm whitespace-nowrap">
             MOST POPULAR
           </div>
           <div>
-            <div className="flex justify-between items-">
+            <div className="flex flex-wrap gap-3 justify-between">
               <div className="flex items-end gap-3">
                 <div className=" bg-foreground/5 dark:bg-foreground/10 p-2 rounded-md">
                   <ChartLineArrowUp />
@@ -166,7 +166,7 @@ const Pricing = () => {
         </div>
         <div className="border rounded-2xl px-5 py-8 flex flex-col justify-between inset-shadow-[0_1px_30px_rgba(0,0,0,.1)] dark:inset-shadow-[0_1px_40px_rgba(255,255,255,.1)]">
           <div>
-            <div className="flex justify-between items-">
+            <div className="flex flex-wrap gap-3 justify-between">
               <div className="flex items-end gap-3">
                 <div className="border bg-foreground/5 dark:bg-foreground/10 p-2 rounded-md">
                   <Star />

@@ -11,7 +11,7 @@ export default function Navbar() {
   return (
     <div className="p-4 fixed w-full top-0 z-40">
       <nav className=" w-full bg-background/70 backdrop-blur-lg max-w-6xl mx-auto rounded-lg border">
-        <header className=" flex h-16  items-center justify-between px-3 md:px-6">
+        <header className=" flex py-3.5 gap-3 items-center justify-between px-3 md:px-6 flex-wrap ">
           <div className="flex items-center gap-4">
             <button
               className="md:hidden"

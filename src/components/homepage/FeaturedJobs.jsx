@@ -9,7 +9,7 @@ import {
 
 const FeaturedJobs = () => {
   return (
-    <div className="mt-28 sm:mt-48 px-4">
+    <div className="mt-28 sm:mt-36 px-4">
       <div className="text-center space-y-2">
         <div className="flex justify-center items-center gap-3">
           <span className="bg-indigo-500 h-2 w-2 rounded-xs"></span>
@@ -205,7 +205,7 @@ const FeaturedJobs = () => {
         </div>
       </div>
       <div className="text-center">
-        <Button className="rounded-lg bg-black dark:bg-white dark:text-black py-6 px-20 text-base text-center">
+        <Button className="rounded-lg bg-black dark:bg-white dark:text-black py-6 px-10 sm:px-20 text-base text-center">
           View All Jobs
         </Button>
       </div>

@@ -6,7 +6,7 @@ const Findjobs = () => {
   return (
     <div className="text-center space-y-5 mt-32 px-4">
       <div className="bg-linear-to-b from-white to-stone-300 dark:from-stone-900 dark:to-black rounded-full px-5 py-2 w-fit mx-auto border-t dark:border-foreground/30">
-        <p className="flex items-center gap-2 ">
+        <p className="flex flex-wrap justify-center items-center gap-2 ">
           <span>
             <Briefcase />
           </span>
@@ -30,7 +30,7 @@ const Findjobs = () => {
           placeholder="Enter job title, skill or company"
         />
 
-        <Button className="rounded-lg absolute right-2 top-1/2 -translate-y-1/2 ">
+        <Button className="rounded-lg absolute right-2 top-1/2 -translate-y-1/2 bg-indigo-600">
           <Magnifier />
         </Button>
       </div>
