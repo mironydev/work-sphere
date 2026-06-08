@@ -86,15 +86,17 @@ export default function Navbar() {
             <div className="border-r hidden sm:block"></div>
             <div className="items-center gap-10 sm:flex">
               <Link
-                href="#"
+                href="/login"
                 className=" active:text-indigo-500 hidden sm:block"
               >
-                Sign In
+                Log in
               </Link>
-              <Link href="#">
-                <Button className="bg-indigo-600 rounded-lg">
-                  Get Started
-                </Button>
+
+              <Link
+                href="/signup"
+                className="bg-indigo-600 text-white rounded-lg text-base px-4 py-2 active:scale-95 duration-75"
+              >
+                Get Started
               </Link>
             </div>
           </div>
@@ -123,8 +125,11 @@ export default function Navbar() {
               </li>
               <li className="mt-1 flex flex-col gap-2 border-t border-separator py-2 px-2 ">
                 <div className="flex justify-between">
-                  <Link href="#" className="block py-2 active:text-indigo-600">
-                    Login
+                  <Link
+                    href="/login"
+                    className="block py-2 active:text-indigo-600"
+                  >
+                    Log in
                   </Link>
                   <ThemeToggle />
                 </div>

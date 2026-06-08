@@ -23,7 +23,7 @@ const FeaturedJobs = () => {
         </h2>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 mt-14 mb-8">
-        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-[#151516] border">
+        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-foreground/10 sm:dark:bg-foreground/5 border">
           <h3 className="text-3xl">DevOps Engineer</h3>
           <p className="text-stone-600 dark:text-stone-300 mt-3">
             Showcase your commitment to diversity and inclusion by highlighting
@@ -53,7 +53,7 @@ const FeaturedJobs = () => {
             Apply Now <ArrowUpRight />
           </Button>
         </div>
-        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-[#151516] border">
+        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-foreground/10 sm:dark:bg-foreground/5 border">
           <h3 className="text-3xl">DevOps Engineer</h3>
           <p className="text-stone-600 dark:text-stone-300 mt-3">
             Showcase your commitment to diversity and inclusion by highlighting
@@ -83,7 +83,7 @@ const FeaturedJobs = () => {
             Apply Now <ArrowUpRight />
           </Button>
         </div>
-        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-[#151516] border">
+        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-foreground/10 sm:dark:bg-foreground/5 border">
           <h3 className="text-3xl">DevOps Engineer</h3>
           <p className="text-stone-600 dark:text-stone-300 mt-3">
             Showcase your commitment to diversity and inclusion by highlighting
@@ -113,7 +113,7 @@ const FeaturedJobs = () => {
             Apply Now <ArrowUpRight />
           </Button>
         </div>
-        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-[#151516] border">
+        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-foreground/10 sm:dark:bg-foreground/5 border">
           <h3 className="text-3xl">DevOps Engineer</h3>
           <p className="text-stone-600 dark:text-stone-300 mt-3">
             Showcase your commitment to diversity and inclusion by highlighting
@@ -143,7 +143,7 @@ const FeaturedJobs = () => {
             Apply Now <ArrowUpRight />
           </Button>
         </div>
-        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-[#151516] border">
+        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-foreground/10 sm:dark:bg-foreground/5 border">
           <h3 className="text-3xl">DevOps Engineer</h3>
           <p className="text-stone-600 dark:text-stone-300 mt-3">
             Showcase your commitment to diversity and inclusion by highlighting
@@ -173,7 +173,7 @@ const FeaturedJobs = () => {
             Apply Now <ArrowUpRight />
           </Button>
         </div>
-        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-[#151516] border">
+        <div className="p-6 rounded-xl bg-foreground/5 dark:bg-foreground/10 sm:dark:bg-foreground/5 border">
           <h3 className="text-3xl">DevOps Engineer</h3>
           <p className="text-stone-600 dark:text-stone-300 mt-3">
             Showcase your commitment to diversity and inclusion by highlighting

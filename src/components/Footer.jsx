@@ -5,7 +5,7 @@ import ThemeToggle from "./ThemeToggle";
 const Footer = () => {
   return (
     <footer className="mt-16 sm:mt-24 px-4">
-      <div className="max-w-7xl mx-auto bg-background/70 rounded-lg pt-10 pb-6 px-4 md:px-6 text-center lg:text-left">
+      <div className="max-w-7xl mx-auto bg-background/70 rounded-lg pt-10 pb-6 px-4 md:px-6 lg:px-10 text-center lg:text-left">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-2">
             <h2 className="text-2xl font-bold">WorkSphere</h2>
@@ -150,7 +150,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500">
-          <p>Copyright © {new Date().getFullYear()} WorkSphere</p>
+          <p>© {new Date().getFullYear()} WorkSphere</p>
 
           <div className="flex items-center gap-3">
             <Link href="/" className="active:opacity-70">

@@ -1,3 +1,4 @@
+import AuthToast from "@/components/AuthToast";
 import Banner from "@/components/homepage/Banner";
 import BottomBanner from "@/components/homepage/BottomBanner";
 import Careertools from "@/components/homepage/Careertools";
@@ -6,12 +7,13 @@ import Pricing from "@/components/homepage/Pricing";
 
 export default function Home() {
   return (
-    <div className="">
+    <div>
       <Banner />
       <FeaturedJobs />
       <Careertools />
       <Pricing />
       <BottomBanner />
+      <AuthToast />
     </div>
   );
 }

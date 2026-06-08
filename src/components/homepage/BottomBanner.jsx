@@ -22,7 +22,7 @@ const BottomBanner = () => {
         </Button>
         <Button
           className={
-            "rounded-lg text-base py-5 border-2 bg-stone-100 text-black dark:text-white dark:bg-zinc-900"
+            "rounded-lg text-base py-5 border-2 bg-stone-100 text-black dark:text-white dark:bg-black"
           }
         >
           View Pricing

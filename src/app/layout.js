@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Providers from "./providers";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,13 +25,22 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark:bg-black`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body>
         <Providers>
           <Navbar />
           <main className="max-w-7xl mx-auto">{children}</main>
           <Footer />
+          <Toaster
+            position="top-right"
+            richColors
+            gap={12}
+            visibleToasts={3}
+            toastOptions={{
+              duration: 3000,
+            }}
+          />
         </Providers>
       </body>
     </html>

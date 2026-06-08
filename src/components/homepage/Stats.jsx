@@ -19,7 +19,7 @@ const Stats = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          <div className="bg-linear-to-b from-white to-stone-300 dark:from-black dark:to-stone-900 p-5 rounded-xl border">
+          <div className="bg-linear-to-b from-white to-stone-300 dark:from-black dark:to-stone-800 p-5 rounded-xl border">
             <div>
               <BriefcaseFill />
             </div>
@@ -27,7 +27,7 @@ const Stats = () => {
             <p>Active Jobs</p>
           </div>
 
-          <div className="bg-linear-to-b from-white to-stone-300 dark:from-black dark:to-stone-900 p-5 rounded-xl border">
+          <div className="bg-linear-to-b from-white to-stone-300 dark:from-black dark:to-stone-800 p-5 rounded-xl border">
             <div>
               <Factory />
             </div>
@@ -35,7 +35,7 @@ const Stats = () => {
             <p>Companies</p>
           </div>
 
-          <div className="bg-linear-to-b from-white to-stone-300 dark:from-black dark:to-stone-900 p-5 rounded-xl border">
+          <div className="bg-linear-to-b from-white to-stone-300 dark:from-black dark:to-stone-800 p-5 rounded-xl border">
             <div>
               <PersonMagnifier />
             </div>
@@ -43,7 +43,7 @@ const Stats = () => {
             <p>Job Seekers</p>
           </div>
 
-          <div className="bg-linear-to-b from-white to-stone-300 dark:from-black dark:to-stone-900 p-5 rounded-xl border">
+          <div className="bg-linear-to-b from-white to-stone-300 dark:from-black dark:to-stone-800 p-5 rounded-xl border">
             <div>
               <StarFill />
             </div>
