@@ -11,6 +11,7 @@ export const auth = betterAuth({
   },
   socialProviders: {
     google: {
+      prompt: "select_account",
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     },
@@ -18,4 +19,11 @@ export const auth = betterAuth({
   database: mongodbAdapter(db, {
     client,
   }),
+  user: {
+    additionalFields: {
+      role: {
+        default: "seeker",
+      },
+    },
+  },
 });

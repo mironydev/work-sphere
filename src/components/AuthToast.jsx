@@ -1,34 +1,37 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
+import { useSession } from "@/lib/auth-client";
 
 const AuthToast = () => {
+  const { data: session } = useSession();
+  const prevSession = useRef(null);
+  const hasShownToast = useRef(false);
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (localStorage.getItem("loginSuccess") === "true") {
-        toast.success("Login successful");
-        localStorage.removeItem("loginSuccess");
-      }
+    const wasLoggedOut = !prevSession.current;
+    const isLoggedIn = !!session;
 
-      if (localStorage.getItem("signupSuccess") === "true") {
+    if (wasLoggedOut && isLoggedIn && !hasShownToast.current) {
+      const intent = sessionStorage.getItem("authIntent");
+
+      if (intent === "signup") {
         toast.success("Account created successfully");
-        localStorage.removeItem("signupSuccess");
+      } else if (intent === "login") {
+        toast.success("Login successful");
       }
 
-      if (localStorage.getItem("authError") === "login") {
-        toast.error("Login failed. Please try again.");
-        localStorage.removeItem("authError");
-      }
+      sessionStorage.removeItem("authIntent");
+      hasShownToast.current = true;
+    }
 
-      if (localStorage.getItem("authError") === "signup") {
-        toast.error("Signup failed. Please try again.");
-        localStorage.removeItem("authError");
-      }
-    }, 50);
+    if (!isLoggedIn) {
+      hasShownToast.current = false;
+    }
 
-    return () => clearTimeout(timer);
-  }, []);
+    prevSession.current = session;
+  }, [session]);
 
   return null;
 };

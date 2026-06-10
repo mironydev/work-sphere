@@ -1,17 +1,35 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@heroui/react";
+import { Avatar, Button, Spinner } from "@heroui/react";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import { signOut, useSession } from "@/lib/auth-client";
+import { ArrowRightFromSquare } from "@gravity-ui/icons";
+import { toast } from "sonner";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const { data: session, isPending } = useSession();
+  const user = session?.user;
+
+  const handleSignout = async () => {
+    const res = await signOut();
+    if (!res.error) {
+      toast.success("Logout successful");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    } else {
+      toast.error("Couldn't log out, something went wrong.");
+    }
+  };
+
   return (
     <div className="p-4 fixed w-full top-0 z-40">
       <nav className=" w-full bg-background/70 backdrop-blur-lg max-w-6xl mx-auto rounded-lg border">
-        <header className=" flex py-3.5 gap-3 items-center justify-between px-3 md:px-6 flex-wrap ">
+        <header className=" flex py-3.5 sm:py-0 sm:h-16 gap-3 items-center justify-between px-3 md:px-6 flex-wrap ">
           <div className="flex items-center gap-4">
             <button
               className="md:hidden"
@@ -58,7 +76,7 @@ export default function Navbar() {
               <p className="font-bold text-xl md:text-2xl">WorkSphere</p>
             </Link>
           </div>
-          <div className="flex gap-10">
+          <div className="flex gap-6">
             <ul className="hidden items-center gap-4 lg:flex">
               <li>
                 <Link href="#" className="p-2 active:text-stone-500">
@@ -84,21 +102,45 @@ export default function Navbar() {
               <ThemeToggle />
             </div>
             <div className="border-r hidden sm:block"></div>
-            <div className="items-center gap-10 sm:flex">
-              <Link
-                href="/login"
-                className=" active:text-indigo-500 hidden sm:block"
-              >
-                Log in
-              </Link>
 
-              <Link
-                href="/signup"
-                className="bg-indigo-600 text-white rounded-lg text-base px-4 py-2 active:scale-95 duration-75"
-              >
-                Get Started
-              </Link>
-            </div>
+            {isPending ? (
+              <div className=" flex justify-center items-center px-5">
+                <Spinner color="current" />
+              </div>
+            ) : user ? (
+              <div className="flex items-center gap-4">
+                <Link href="/profile">
+                  <Avatar>
+                    <Avatar.Image alt="profile image" src={user.image} />
+                    <Avatar.Fallback className="bg-foreground/5 dark:bg-background/5">
+                      {user.name?.[0]?.toUpperCase() || "U"}
+                    </Avatar.Fallback>
+                  </Avatar>
+                </Link>
+                <Button
+                  onClick={handleSignout}
+                  className="bg-transparent rounded-md p-0 ring-0"
+                >
+                  <ArrowRightFromSquare className="w-7 h-7 text-black dark:text-white" />
+                </Button>
+              </div>
+            ) : (
+              <div className="items-center gap-6 sm:flex">
+                <Link
+                  href="/login"
+                  className=" active:text-indigo-500 hidden sm:block px-2 py-1.5"
+                >
+                  Log in
+                </Link>
+
+                <Link
+                  href="/signup"
+                  className="bg-indigo-600 text-white rounded-lg text-base px-4 py-2 active:scale-95 duration-75"
+                >
+                  Get Started
+                </Link>
+              </div>
+            )}
           </div>
         </header>
         {isMenuOpen && (

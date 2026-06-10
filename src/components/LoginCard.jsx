@@ -20,6 +20,7 @@ const LoginCard = () => {
   const [message, setMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [show, setShow] = useState(false);
   const router = useRouter();
 
@@ -52,15 +53,17 @@ const LoginCard = () => {
   };
 
   const loginWithGoogle = async () => {
-    try {
-      localStorage.setItem("loginSuccess", "true");
+    setGoogleLoading(true);
+    sessionStorage.setItem("authIntent", "login");
 
+    try {
       await signIn.social({
         provider: "google",
         callbackURL: "/",
       });
     } catch (err) {
-      localStorage.setItem("authError", "login");
+      sessionStorage.removeItem("authIntent");
+      setGoogleLoading(false);
     }
   };
 
@@ -133,7 +136,7 @@ const LoginCard = () => {
               type="submit"
               className="rounded-md w-25 bg-indigo-600"
               isLoading={isLoading}
-              isDisabled={isLoading}
+              isDisabled={isLoading || googleLoading}
             >
               {isLoading ? <Spinner color="current" /> : <>Log in</>}
             </Button>
@@ -141,7 +144,7 @@ const LoginCard = () => {
               type="reset"
               variant="secondary"
               className="rounded-md text-black dark:text-white"
-              isDisabled={isLoading}
+              isDisabled={isLoading || googleLoading}
               onClick={clearMessage}
             >
               Clear
@@ -154,38 +157,51 @@ const LoginCard = () => {
           </div>
           <div
             onClick={loginWithGoogle}
-            className="select-none bg-white border dark:border-0 dark:bg-gray-800 rounded-md py-2 active:scale-99 duration-75 cursor-pointer flex items-center gap-2 justify-center"
+            className="relative select-none bg-white border dark:border-0 dark:bg-gray-800 rounded-md py-2 cursor-pointer"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
-              viewBox="0 0 16 16"
-            >
-              <g fill="none" fillRule="evenodd" clipRule="evenodd">
-                <path
-                  fill="#f44336"
-                  d="M7.209 1.061c.725-.081 1.154-.081 1.933 0a6.57 6.57 0 0 1 3.65 1.82a100 100 0 0 0-1.986 1.93q-1.876-1.59-4.188-.734q-1.696.78-2.362 2.528a78 78 0 0 1-2.148-1.658a.26.26 0 0 0-.16-.027q1.683-3.245 5.26-3.86"
-                  opacity={0.987}
-                ></path>
-                <path
-                  fill="#ffc107"
-                  d="M1.946 4.92q.085-.013.161.027a78 78 0 0 0 2.148 1.658A7.6 7.6 0 0 0 4.04 7.99q.037.678.215 1.331L2 11.116Q.527 8.038 1.946 4.92"
-                  opacity={0.997}
-                ></path>
-                <path
-                  fill="#448aff"
-                  d="M12.685 13.29a26 26 0 0 0-2.202-1.74q1.15-.812 1.396-2.228H8.122V6.713q3.25-.027 6.497.055q.616 3.345-1.423 6.032a7 7 0 0 1-.51.49"
-                  opacity={0.999}
-                ></path>
-                <path
-                  fill="#43a047"
-                  d="M4.255 9.322q1.23 3.057 4.51 2.854a3.94 3.94 0 0 0 1.718-.626q1.148.812 2.202 1.74a6.62 6.62 0 0 1-4.027 1.684a6.4 6.4 0 0 1-1.02 0Q3.82 14.524 2 11.116z"
-                  opacity={0.993}
-                ></path>
-              </g>
-            </svg>
-            Log In with Google
+            <div className={googleLoading ? "opacity-20" : "opacity-100"}>
+              <div className="flex items-center justify-center gap-2">
+                <svg
+                  className="mt-1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                >
+                  {" "}
+                  <g fill="none" fillRule="evenodd" clipRule="evenodd">
+                    {" "}
+                    <path
+                      fill="#f44336"
+                      d="M7.209 1.061c.725-.081 1.154-.081 1.933 0a6.57 6.57 0 0 1 3.65 1.82a100 100 0 0 0-1.986 1.93q-1.876-1.59-4.188-.734q-1.696.78-2.362 2.528a78 78 0 0 1-2.148-1.658a.26.26 0 0 0-.16-.027q1.683-3.245 5.26-3.86"
+                      opacity={0.987}
+                    ></path>{" "}
+                    <path
+                      fill="#ffc107"
+                      d="M1.946 4.92q.085-.013.161.027a78 78 0 0 0 2.148 1.658A7.6 7.6 0 0 0 4.04 7.99q.037.678.215 1.331L2 11.116Q.527 8.038 1.946 4.92"
+                      opacity={0.997}
+                    ></path>{" "}
+                    <path
+                      fill="#448aff"
+                      d="M12.685 13.29a26 26 0 0 0-2.202-1.74q1.15-.812 1.396-2.228H8.122V6.713q3.25-.027 6.497.055q.616 3.345-1.423 6.032a7 7 0 0 1-.51.49"
+                      opacity={0.999}
+                    ></path>{" "}
+                    <path
+                      fill="#43a047"
+                      d="M4.255 9.322q1.23 3.057 4.51 2.854a3.94 3.94 0 0 0 1.718-.626q1.148.812 2.202 1.74a6.62 6.62 0 0 1-4.027 1.684a6.4 6.4 0 0 1-1.02 0Q3.82 14.524 2 11.116z"
+                      opacity={0.993}
+                    ></path>{" "}
+                  </g>{" "}
+                </svg>
+                Log In with Google
+              </div>
+            </div>
+
+            {googleLoading && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Spinner color="current" />
+              </div>
+            )}
           </div>
           <div className="text-center text-sm mt-2">
             Don&apos;t have an account?{" "}
@@ -193,7 +209,7 @@ const LoginCard = () => {
               href={"/signup"}
               className="cursor-pointer underline hover:text-blue-700 active:text-blue-800 dark:hover:text-indigo-200 dark:active:text-indigo-300"
             >
-              Create one.
+              Create one
             </Link>
           </div>
         </Form>

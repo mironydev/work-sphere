@@ -39,6 +39,9 @@ export default function RootLayout({ children }) {
             visibleToasts={3}
             toastOptions={{
               duration: 3000,
+              style: {
+                pointerEvents: "none", // disables hover interaction
+              },
             }}
           />
         </Providers>
