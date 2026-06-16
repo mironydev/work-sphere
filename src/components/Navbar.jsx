@@ -7,9 +7,11 @@ import ThemeToggle from "./ThemeToggle";
 import { signOut, useSession } from "@/lib/auth-client";
 import { ArrowRightFromSquare } from "@gravity-ui/icons";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
 
   const { data: session, isPending } = useSession();
   const user = session?.user;
@@ -18,9 +20,7 @@ export default function Navbar() {
     const res = await signOut();
     if (!res.error) {
       toast.success("Logout successful");
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      router.refresh();
     } else {
       toast.error("Couldn't log out, something went wrong.");
     }

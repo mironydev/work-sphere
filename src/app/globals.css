@@ -1,2 +1,18 @@
 @import "tailwindcss";
 @import "@heroui/styles";
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+[class*="textarea"] {
+  resize: none !important;
+  overflow: auto !important;
+  scrollbar-width: none !important; /* Firefox */
+}
+
+[class*="textarea"]::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Edge */
+}
