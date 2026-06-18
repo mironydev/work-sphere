@@ -29,3 +29,8 @@ export const getCompanyDetails = async (companyId) => {
   const res = await fetch(`${url}/companies/${companyId}`);
   return res.json();
 };
+
+export const getJobDetails = async (jobId) => {
+  const res = await fetch(`${url}/jobs/${jobId}`);
+  return res.json();
+};

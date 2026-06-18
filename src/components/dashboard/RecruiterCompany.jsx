@@ -1,7 +1,14 @@
 "use client";
 
 import RecruiterAddCompanyModal from "./RecruiterAddCompanyModal";
-import { AlertDialog, Button, Modal, Popover, Separator } from "@heroui/react";
+import {
+  AlertDialog,
+  Avatar,
+  Button,
+  Modal,
+  Popover,
+  Separator,
+} from "@heroui/react";
 import Link from "next/link";
 import {
   Check,
@@ -66,7 +73,12 @@ const RecruiterCompany = ({ companies }) => {
             <div>
               <div className="flex items-center justify-between ">
                 <div className="flex items-center gap-3">
-                  <div className="bg-foreground/15 rounded-md p-2">IMG</div>
+                  <Avatar className="rounded-lg">
+                    <Avatar.Image alt={comp.companyName} src={comp.logo} />
+                    <Avatar.Fallback className="rounded-lg">
+                      {comp.companyName.charAt(0).toUpperCase()}
+                    </Avatar.Fallback>
+                  </Avatar>
                   <div className="text-xl font-medium flex flex-col gap-1">
                     <p>{comp.companyName}</p>
                     <span className="text-xs text-muted">
@@ -131,7 +143,6 @@ const RecruiterCompany = ({ companies }) => {
                                       Cancel
                                     </Button>
                                     <Button
-                                      slot="close"
                                       variant="danger"
                                       className="rounded-lg"
                                       onClick={() => {

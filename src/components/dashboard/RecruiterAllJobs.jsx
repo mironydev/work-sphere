@@ -103,12 +103,18 @@ const RecruiterAllJobs = ({ allJobs }) => {
                   <Table.Cell>{formatDate(job.deadline)}</Table.Cell>
                   <Table.Cell className={"rounded-none"}>
                     <div className="flex gap-1">
-                      <span className=" cursor-pointer p-2 hover:bg-foreground/5 rounded-sm duration-75">
+                      <Link
+                        href={`/dashboard/recruiter/jobs/${job._id}`}
+                        className=" cursor-pointer p-2 hover:bg-foreground/5 rounded-sm duration-75"
+                      >
                         <Eye />
-                      </span>
-                      <span className="hover:text-blue-500 dark:hover:text-blue-400 active:text-blue-400 cursor-pointer p-2 hover:bg-foreground/5 active:bg-foreground/5 rounded-sm duration-75">
+                      </Link>
+                      <Link
+                        href={`/dashboard/recruiter/jobs/edit/${job._id}`}
+                        className="hover:text-blue-500 dark:hover:text-blue-400 active:text-blue-400 cursor-pointer p-2 hover:bg-foreground/5 active:bg-foreground/5 rounded-sm duration-75"
+                      >
                         <Pencil />
-                      </span>
+                      </Link>
 
                       <AlertDialog>
                         <AlertDialog.Trigger>

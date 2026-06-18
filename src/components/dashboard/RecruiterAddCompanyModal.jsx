@@ -18,9 +18,11 @@ import {
 import { createCompany } from "@/lib/actions/jobs";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
+import ImageUpload from "./ImageUpload";
 
 const RecruiterAddCompanyModal = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [logoUrl, setLogoUrl] = useState("");
 
   const { data: session } = useSession();
   const userId = session?.user?.id;
@@ -32,10 +34,15 @@ const RecruiterAddCompanyModal = () => {
     newData.totalEmployees = parseInt(newData.totalEmployees, 10);
     newData.userId = userId;
 
+    if (logoUrl) {
+      newData.logo = logoUrl;
+    }
+
     const res = await createCompany(newData);
     if (res.insertedId) {
       toast.success("Company created");
       setIsOpen(false);
+      setLogoUrl("");
     } else {
       toast.error("Something went wrong");
     }
@@ -198,7 +205,7 @@ const RecruiterAddCompanyModal = () => {
                     <div className="flex flex-col sm:flex-row gap-5">
                       <TextField
                         isRequired
-                        className="w-full"
+                        className="flex-1"
                         name="totalEmployees"
                         variant="secondary"
                         type="number"
@@ -216,18 +223,11 @@ const RecruiterAddCompanyModal = () => {
                         />
                         <FieldError />
                       </TextField>
-                      <TextField
-                        className="w-full"
-                        name="logo"
-                        variant="secondary"
-                        isDisabled
-                      >
+
+                      <div className="flex-1">
                         <Label>Company Logo</Label>
-                        <Input
-                          placeholder="*under construction*"
-                          className={inputClassName}
-                        />
-                      </TextField>
+                        <ImageUpload onImageUpload={setLogoUrl} />
+                      </div>
                     </div>
                     <TextField
                       isRequired

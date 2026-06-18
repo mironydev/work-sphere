@@ -12,12 +12,12 @@ import {
   TextField,
   Select,
 } from "@heroui/react";
-import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
+import ImageUpload from "./ImageUpload";
 
 const RecruiterEditCompanyModal = ({ company }) => {
-  const router = useRouter();
+  const [logoUrl, setLogoUrl] = useState("");
   const {
     companyName,
     description,
@@ -35,12 +35,19 @@ const RecruiterEditCompanyModal = ({ company }) => {
     const data = new FormData(e.currentTarget);
     const newData = Object.fromEntries(data.entries());
     newData.totalEmployees = parseInt(newData.totalEmployees, 10);
+
+    if (logoUrl) {
+      newData.logo = logoUrl;
+    }
+
     const res = await editCompany(_id, newData);
+
     if (res.matchedCount) {
       toast.success("Company edited successfully");
       setTimeout(() => {
         window.location.reload();
       }, 700);
+      setLogoUrl("");
     } else {
       toast.error("Something went wrong");
     }
@@ -207,7 +214,7 @@ const RecruiterEditCompanyModal = ({ company }) => {
                     <div className="flex flex-col sm:flex-row gap-5">
                       <TextField
                         isRequired
-                        className="w-full"
+                        className="flex-1"
                         name="totalEmployees"
                         variant="secondary"
                         type="number"
@@ -226,18 +233,10 @@ const RecruiterEditCompanyModal = ({ company }) => {
                         />
                         <FieldError />
                       </TextField>
-                      <TextField
-                        className="w-full"
-                        name="logo"
-                        variant="secondary"
-                        isDisabled
-                      >
+                      <div className="flex-1">
                         <Label>Company Logo</Label>
-                        <Input
-                          placeholder="*under construction*"
-                          className={inputClassName}
-                        />
-                      </TextField>
+                        <ImageUpload onImageUpload={setLogoUrl} />
+                      </div>
                     </div>
                     <TextField
                       isRequired

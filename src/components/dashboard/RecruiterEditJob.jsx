@@ -1,6 +1,6 @@
 "use client";
 
-import { createJob } from "@/lib/actions/jobs";
+import { editJob } from "@/lib/actions/jobs";
 import { Check } from "@gravity-ui/icons";
 import {
   Button,
@@ -18,103 +18,104 @@ import {
 } from "@heroui/react";
 import React, { useState } from "react";
 import { toast } from "sonner";
-import RecruiterAddCompanyModal from "./RecruiterAddCompanyModal";
 import { useRouter } from "next/navigation";
 
-const RecruiterPostJob = ({ userId, companies }) => {
-  const [jobType, setJobType] = useState("");
+const RecruiterEditJob = ({ job }) => {
   const router = useRouter();
+  const [jobType, setJobType] = useState(job.jobType || "");
 
-  const onSubmit = async (e) => {
+  const {
+    _id,
+    companyName,
+    jobTitle,
+    jobCategory,
+    currency,
+    salaryMin,
+    salaryMax,
+    city,
+    country,
+    deadline,
+    responsibilities,
+    requirements,
+    benefits,
+  } = job;
+
+  const inputClassName =
+    "rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 bg-white dark:bg-black/40";
+
+  const handleForm = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const newJobData = Object.fromEntries(formData.entries());
-    newJobData.salaryMin = parseInt(newJobData.salaryMin, 10);
-    newJobData.salaryMax = parseInt(newJobData.salaryMax, 10);
-    newJobData.userId = userId;
-    const company = companies.find((c) => c._id === newJobData.companyId);
-    newJobData.companyName = company.companyName;
+    const data = new FormData(e.currentTarget);
+    const newData = Object.fromEntries(data.entries());
+    newData.salaryMin = parseInt(newData.salaryMin, 10);
+    newData.salaryMax = parseInt(newData.salaryMax, 10);
 
-    const res = await createJob(newJobData);
+    if (newData.jobType === "remote") {
+      newData.city = null;
+      newData.country = null;
+    }
 
-    if (res.insertedId) {
-      toast.success("Job created");
+    const res = await editJob(_id, newData);
+
+    if (res.modifiedCount || res.matchedCount) {
+      toast.success("Job updated successfully");
       router.push("/dashboard/recruiter/jobs");
     } else {
       toast.error("Something went wrong");
     }
   };
 
-  const inputClassName =
-    "rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 bg-white dark:bg-black/40";
-
-  if (!companies.length) {
-    return (
-      <div className="sm:px-10">
-        <div className="bg-foreground/5 rounded-md text-center py-12">
-          <p className="text-4xl font-medium">Create a Company First</p>
-          <p className="text-muted mt-2 mb-8">
-            You need to create a company before posting or managing jobs.
-          </p>
-          <RecruiterAddCompanyModal />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="md:pl-5">
       <div>
-        <h1 className="text-3xl font-bold">Post a New Job</h1>
-        <p className=" mt-2 opacity-70">
-          Fill in the details below to create a job listing and find the perfect
-          candidate for your team.
+        <h1 className="text-3xl font-bold">Edit Job Posting</h1>
+        <p className="mt-2 opacity-70">
+          Update the details below to modify your job listing.
         </p>
       </div>
 
       <div className="flex items-center justify-center mt-6">
         <Form
-          onSubmit={onSubmit}
-          className=" relative p-6 w-full sm:w-lg lg:w-3xl rounded-lg bg-foreground/5"
+          onSubmit={handleForm}
+          className="relative p-6 w-full sm:w-lg lg:w-3xl rounded-lg bg-foreground/5"
         >
-          <Fieldset className=" w-full mb-8 sm:border-l-3 border-indigo-500 sm:pl-6">
+          <Fieldset className="w-full mb-8 sm:border-l-3 border-indigo-500 sm:pl-6">
             <Fieldset.Legend>Job Information</Fieldset.Legend>
-            <Description>Enter the basic job details.</Description>
+            <Description>Edit the basic job details.</Description>
             <Select
-              isRequired
-              name="companyId"
+              isDisabled
               placeholder="Select one"
+              defaultValue={companyName}
               className="sm:absolute top-6 right-7"
             >
-              <Label>Select Company</Label>
+              <Label>Company</Label>
               <Select.Trigger
-                className={"rounded-md  bg-white dark:bg-black/40 shadow-none"}
+                className={"rounded-md bg-white dark:bg-black/40 shadow-none"}
               >
                 <Select.Value />
                 <Select.Indicator />
               </Select.Trigger>
               <Select.Popover className={"rounded-lg"}>
                 <ListBox>
-                  {companies.map((comp) => (
-                    <ListBox.Item
-                      key={comp._id}
-                      id={comp._id}
-                      textValue={comp.companyName}
-                      className="rounded-lg focus:ring-indigo-500"
-                    >
-                      {comp.companyName}
-                      <ListBox.ItemIndicator />
-                    </ListBox.Item>
-                  ))}
+                  <ListBox.Item
+                    id={companyName}
+                    textValue={companyName}
+                    className="rounded-lg focus:ring-indigo-500"
+                  >
+                    {companyName}
+                    <ListBox.ItemIndicator />
+                  </ListBox.Item>
                 </ListBox>
               </Select.Popover>
             </Select>
+
             <Fieldset.Group>
               <div className="flex flex-col sm:flex-row gap-4">
                 <TextField
                   isRequired
                   name="jobTitle"
                   className="w-full flex-1"
+                  defaultValue={jobTitle}
                   validate={(value) => {
                     if (value.length < 3) {
                       return "Job title must be at least 3 characters";
@@ -126,7 +127,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   <Input
                     placeholder="e.g., Senior React Developer"
                     variant="secondary"
-                    className={`${inputClassName}`}
+                    className={inputClassName}
                   />
                   <FieldError />
                 </TextField>
@@ -136,14 +137,13 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   name="jobCategory"
                   placeholder="Select job category"
                   className="flex-1"
+                  defaultValue={jobCategory}
                 >
                   <Label>Job Category</Label>
-
                   <Select.Trigger className={`${inputClassName} shadow-none`}>
                     <Select.Value />
                     <Select.Indicator />
                   </Select.Trigger>
-
                   <Select.Popover className="rounded-lg">
                     <ListBox>
                       <ListBox.Item
@@ -154,7 +154,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Technology
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="design"
                         textValue="Design"
@@ -163,7 +162,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Design
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="marketing"
                         textValue="Marketing"
@@ -172,7 +170,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Marketing
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="sales"
                         textValue="Sales"
@@ -181,7 +178,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Sales
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="customer-support"
                         textValue="Customer Support"
@@ -190,7 +186,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Customer Support
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="human-resources"
                         textValue="Human Resources"
@@ -199,7 +194,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Human Resources
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="finance"
                         textValue="Finance"
@@ -208,7 +202,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Finance
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="engineering"
                         textValue="Engineering"
@@ -217,7 +210,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Engineering
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="data-analytics"
                         textValue="Data & Analytics"
@@ -226,7 +218,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Data & Analytics
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="product-management"
                         textValue="Product Management"
@@ -235,7 +226,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Product Management
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="operations"
                         textValue="Operations"
@@ -244,7 +234,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Operations
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="healthcare"
                         textValue="Healthcare"
@@ -253,7 +242,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Healthcare
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="education"
                         textValue="Education"
@@ -262,7 +250,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Education
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-
                       <ListBox.Item
                         id="other"
                         textValue="Other"
@@ -282,6 +269,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   name="jobType"
                   placeholder="Select job type"
                   className="flex-1"
+                  defaultValue={job.jobType}
                   onChange={setJobType}
                 >
                   <Label>Job Type</Label>
@@ -339,6 +327,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   name="currency"
                   placeholder="Select currency"
                   className="flex-1"
+                  defaultValue={currency}
                 >
                   <Label>Currency</Label>
                   <Select.Trigger className={`${inputClassName} shadow-none`}>
@@ -382,6 +371,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   name="salaryMin"
                   type="number"
                   className="flex-1"
+                  defaultValue={salaryMin}
                   validate={(value) => {
                     const salary = Number(value);
 
@@ -414,6 +404,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   name="salaryMax"
                   type="number"
                   className="flex-1"
+                  defaultValue={salaryMax}
                   validate={(value) => {
                     const maxSalary = Number(value);
 
@@ -427,14 +418,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
 
                     if (!Number.isInteger(maxSalary)) {
                       return "Salary must be a whole number";
-                    }
-
-                    const minSalary = Number(
-                      document.querySelector('[name="salaryMin"]')?.value,
-                    );
-
-                    if (!Number.isNaN(minSalary) && maxSalary <= minSalary) {
-                      return "Max salary must be greater than min salary";
                     }
 
                     return null;
@@ -453,25 +436,26 @@ const RecruiterPostJob = ({ userId, companies }) => {
               {jobType !== "remote" && (
                 <div className="flex flex-col sm:flex-row gap-4">
                   <TextField
-                    isRequired={!jobType}
+                    isRequired={jobType !== "remote"}
                     name="city"
                     className="w-full"
+                    defaultValue={city || ""}
                     validate={(value) => {
-                      const city = value.trim();
+                      const cityVal = value.trim();
 
-                      if (!city) {
+                      if (!cityVal) {
                         return "City is required";
                       }
 
-                      if (city.length < 2) {
+                      if (cityVal.length < 2) {
                         return "City is too short";
                       }
 
-                      if (city.length > 80) {
+                      if (cityVal.length > 80) {
                         return "City name is too long";
                       }
 
-                      if (!/^[a-zA-Z\s.'-]+$/.test(city)) {
+                      if (!/^[a-zA-Z\s.'-]+$/.test(cityVal)) {
                         return "City contains invalid characters";
                       }
 
@@ -488,25 +472,26 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   </TextField>
 
                   <TextField
-                    isRequired={!jobType}
+                    isRequired={jobType !== "remote"}
                     name="country"
                     className="w-full"
+                    defaultValue={country || ""}
                     validate={(value) => {
-                      const country = value.trim();
+                      const countryVal = value.trim();
 
-                      if (!country) {
+                      if (!countryVal) {
                         return "Country is required";
                       }
 
-                      if (country.length < 2) {
+                      if (countryVal.length < 2) {
                         return "Country is too short";
                       }
 
-                      if (country.length > 60) {
+                      if (countryVal.length > 60) {
                         return "Country name is too long";
                       }
 
-                      if (!/^[a-zA-Z\s.'-]+$/.test(country)) {
+                      if (!/^[a-zA-Z\s.'-]+$/.test(countryVal)) {
                         return "Country contains invalid characters";
                       }
 
@@ -555,12 +540,13 @@ const RecruiterPostJob = ({ userId, companies }) => {
           <Fieldset className="w-full sm:border-l-3 border-green-700 sm:pl-6">
             <Fieldset.Legend>Job Description</Fieldset.Legend>
             <Description>
-              Provide detailed information about the role.
+              Update detailed information about the role.
             </Description>
             <Fieldset.Group>
               <TextField
                 isRequired
                 name="responsibilities"
+                defaultValue={responsibilities}
                 validate={(value) => {
                   if (value.length < 20) {
                     return "Responsibilities must be at least 20 characters";
@@ -582,6 +568,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
               <TextField
                 isRequired
                 name="requirements"
+                defaultValue={requirements}
                 validate={(value) => {
                   if (value.length < 20) {
                     return "Requirements must be at least 20 characters";
@@ -602,7 +589,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
                 <FieldError />
               </TextField>
 
-              <TextField name="benefits">
+              <TextField name="benefits" defaultValue={benefits || ""}>
                 <Label>Benefits (Optional)</Label>
                 <TextArea
                   placeholder="e.g., Health insurance, Remote work..."
@@ -623,7 +610,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
                 className="rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600"
               >
                 <Check />
-                Post Job
+                Update Job
               </Button>
               <Button
                 type="reset"
@@ -644,4 +631,4 @@ const RecruiterPostJob = ({ userId, companies }) => {
   );
 };
 
-export default RecruiterPostJob;
+export default RecruiterEditJob;

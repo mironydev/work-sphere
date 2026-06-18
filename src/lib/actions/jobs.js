@@ -44,13 +44,24 @@ export async function deleteJob(jobId) {
   return res.json();
 }
 
-export async function editCompany(companyId, editedData) {
+export async function editCompany(companyId, companyData) {
   const res = await fetch(`${url}/companies/${companyId}`, {
     method: "PATCH",
     headers: {
       "content-type": "application/json",
     },
-    body: JSON.stringify(editedData),
+    body: JSON.stringify(companyData),
+  });
+  return res.json();
+}
+
+export async function editJob(jobId, jobData) {
+  const res = await fetch(`${url}/jobs/${jobId}`, {
+    method: "PATCH",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(jobData),
   });
   return res.json();
 }

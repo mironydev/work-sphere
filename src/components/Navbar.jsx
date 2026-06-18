@@ -79,7 +79,15 @@ export default function Navbar() {
           <div className="flex gap-6">
             <ul className="hidden items-center gap-4 lg:flex">
               <li>
-                <Link href="#" className="p-2 active:text-stone-500">
+                <Link
+                  href="/dashboard/recruiter"
+                  className="p-2 active:text-stone-500"
+                >
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link href="/jobs" className="p-2 active:text-stone-500">
                   Browse Jobs
                 </Link>
               </li>
