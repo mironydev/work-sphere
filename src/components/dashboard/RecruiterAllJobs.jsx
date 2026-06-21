@@ -61,24 +61,21 @@ const RecruiterAllJobs = ({ allJobs }) => {
           </Button>
         </Link>
       </div>
-      <Table className="rounded-lg p-0 border border-foreground/15 mt-6">
+      <Table
+        className="rounded-lg p-0 border border-foreground/15 mt-6 bg-background dark:bg-foreground/3"
+        variant="secondary"
+      >
         <Table.ScrollContainer>
           <Table.Content aria-label="Team members">
-            <Table.Header
-              style={{
-                border: "1px solid rgb(220, 38, 38)",
-                padding: "2.5rem",
-                margin: "2.5rem",
-              }}
-            >
-              <Table.Column isRowHeader className={"py-4"}>
+            <Table.Header>
+              <Table.Column isRowHeader className={"py-4 rounded-none"}>
                 Job Title
               </Table.Column>
               <Table.Column>Company</Table.Column>
               <Table.Column>Location</Table.Column>
               <Table.Column>Job Type</Table.Column>
               <Table.Column>Deadline</Table.Column>
-              <Table.Column>Actions</Table.Column>
+              <Table.Column className={"rounded-none"}>Actions</Table.Column>
             </Table.Header>
             <Table.Body>
               {allJobs.map((job) => (

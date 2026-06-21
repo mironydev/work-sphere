@@ -6,7 +6,7 @@ import { MapPin, Clock, Briefcase, CircleDollar } from "@gravity-ui/icons";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 
-const JobDetails = ({ job, companyLocation }) => {
+const JobDetails = ({ job }) => {
   const { data: session } = useSession();
   const userRole = session?.user?.role;
 
@@ -15,6 +15,8 @@ const JobDetails = ({ job, companyLocation }) => {
     benefits,
     city,
     companyName,
+    companyLocation,
+    companyLogo,
     country,
     currency,
     deadline,
@@ -41,44 +43,46 @@ const JobDetails = ({ job, companyLocation }) => {
       usd: "$",
       eur: "€",
       gbp: "£",
-      bdt: "৳",
     }[currency] || currency.toUpperCase();
 
   const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
   return (
-    <div className="px-0 sm:px-10 pb-10">
-      <div className="bg-background/95 backdrop-blur-sm px-5 py-3 rounded-lg mb-6 border-b border-foreground/10">
+    <div>
+      <div className="bg-background dark:bg-foreground/5 backdrop-blur-sm px-5 py-3 rounded-lg mb-6 border-b border-foreground/10">
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold">{jobTitle}</h1>
-            <p className="hidden sm:block text-sm text-muted">{companyName}</p>
+            <p className="text-sm text-muted">{companyName}</p>
           </div>
 
           {userRole === "recruiter" ? (
             <Link
               href={`/dashboard/recruiter/jobs/edit/${_id}`}
-              className="px-8 py-2 active:opacity-70 bg-foreground/10 dark:bg-foreground/15 rounded-md"
+              className="px-8 py-2 active:opacity-70 bg-foreground/5 font-medium dark:bg-foreground/10 rounded-md"
             >
               Edit
             </Link>
           ) : (
-            <Button className="bg-indigo-600 hover:bg-indigo-700 rounded-lg">
+            <Link
+              href={`/jobs/${_id}/apply`}
+              className="hidden sm:block bg-indigo-600 hover:bg-indigo-700 rounded-lg px-4 py-2 active:scale-95 duration-100 text-white"
+            >
               Apply Now
-            </Button>
+            </Link>
           )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="border rounded-lg p-4 flex items-center gap-3">
+        <div className="border rounded-lg p-4 flex items-center gap-3 bg-background/70 dark:bg-foreground/2">
           <Briefcase className="w-5 h-5 text-muted" />
           <div>
             <p className="text-xs text-muted mb-1">Job Type</p>
             <p className="font-medium capitalize">{jobType}</p>
           </div>
         </div>
-        <div className="border rounded-lg p-4 flex items-center gap-3">
+        <div className="border rounded-lg p-4 flex items-center gap-3 bg-background/70 dark:bg-foreground/2">
           <CircleDollar className="w-5 h-5 text-muted" />
           <div>
             <p className="text-xs text-muted mb-1">Salary Range</p>
@@ -89,7 +93,7 @@ const JobDetails = ({ job, companyLocation }) => {
             </p>
           </div>
         </div>
-        <div className="border rounded-lg p-4 flex items-center gap-3">
+        <div className="border rounded-lg p-4 flex items-center gap-3 bg-background/70 dark:bg-foreground/2">
           <MapPin className="w-5 h-5 text-muted" />
           <div>
             <p className="text-xs text-muted mb-1">Location</p>
@@ -102,7 +106,7 @@ const JobDetails = ({ job, companyLocation }) => {
             </p>
           </div>
         </div>
-        <div className="border rounded-lg p-4 flex items-center gap-3">
+        <div className="border rounded-lg p-4 flex items-center gap-3 bg-background/70 dark:bg-foreground/2">
           <Clock className="w-5 h-5 text-muted" />
           <div>
             <p className="text-xs text-muted mb-1">Deadline</p>
@@ -145,17 +149,20 @@ const JobDetails = ({ job, companyLocation }) => {
           <div
             className={`mt-12 justify-center pt-8 border-t border-foreground/10 ${userRole === "recruiter" ? "hidden" : "flex"}`}
           >
-            <Button className="bg-indigo-600 hover:bg-indigo-700 rounded-lg px-12 py-6 text-base ">
+            <Link
+              href={`/jobs/${_id}/apply`}
+              className="bg-indigo-600 hover:bg-indigo-700 rounded-lg px-12 py-4 text-white font-bold text-lg active:scale-95 duration-100"
+            >
               Apply Now
-            </Button>
+            </Link>
           </div>
         </div>
 
         <div className="lg:col-span-1">
-          <div className="border rounded-lg p-5">
+          <div className="border bg-background/70 dark:bg-background/20 rounded-lg p-5">
             <div className="flex items-center gap-3 mb-4">
-              <Avatar className="rounded-lg">
-                <Avatar.Image alt={companyName} src="/" />
+              <Avatar className="rounded-lg bg-transparent">
+                <Avatar.Image alt={companyName} src={companyLogo} />
                 <Avatar.Fallback className="rounded-lg">
                   {companyName.charAt(0).toUpperCase()}
                 </Avatar.Fallback>
@@ -168,7 +175,7 @@ const JobDetails = ({ job, companyLocation }) => {
                 </div>
               </div>
             </div>
-            <Button variant="tertiary" className="w-   rounded-lg ">
+            <Button variant="tertiary" className="rounded-lg ">
               Visit Company
             </Button>
           </div>

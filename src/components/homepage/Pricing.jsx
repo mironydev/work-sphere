@@ -45,7 +45,7 @@ const Pricing = () => {
         </Button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-7 md:gap-4 lg:gap-7">
-        <div className="border rounded-2xl px-5 py-8 flex flex-col justify-between inset-shadow-[0_1px_30px_rgba(0,0,0,.1)] dark:inset-shadow-[0_1px_40px_rgba(255,255,255,.1)] dark:bg-foreground/10">
+        <div className="border rounded-2xl px-5 py-8 flex flex-col justify-between inset-shadow-[0_1px_30px_rgba(255,255,255,1)] dark:inset-shadow-[0_1px_40px_rgba(255,255,255,.1)] dark:bg-foreground/10">
           <div>
             <div className="flex flex-wrap gap-3 justify-between">
               <div className="flex items-end gap-3">
@@ -164,7 +164,7 @@ const Pricing = () => {
             <ArrowRight className="text-indigo-500 dark:text-white" />
           </Button>
         </div>
-        <div className="border rounded-2xl px-5 py-8 flex flex-col justify-between inset-shadow-[0_1px_30px_rgba(0,0,0,.1)] dark:inset-shadow-[0_1px_40px_rgba(255,255,255,.1)] dark:bg-foreground/10">
+        <div className="border rounded-2xl px-5 py-8 flex flex-col justify-between inset-shadow-[0_1px_30px_rgba(255,255,255,1)] dark:inset-shadow-[0_1px_40px_rgba(255,255,255,.1)] dark:bg-foreground/10">
           <div>
             <div className="flex flex-wrap gap-3 justify-between">
               <div className="flex items-end gap-3">

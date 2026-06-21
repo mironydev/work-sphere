@@ -24,10 +24,10 @@ import RecruiterEditCompanyModal from "./RecruiterEditCompanyModal";
 const RecruiterCompany = ({ companies }) => {
   const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
-  const handleCompanyDelete = async (companyId) => {
+  const handleCompanyDelete = async (companyId, companyName) => {
     const res = await deleteCompany(companyId);
     if (res.companyDeleted.deletedCount) {
-      toast.error("Company & all of its jobs has been deleted", {
+      toast.error(`${companyName} & all of its jobs has been deleted`, {
         duration: 5000,
         icon: (
           <div className="p-px bg-red-600 text-white text-sm rounded-full ">
@@ -68,12 +68,12 @@ const RecruiterCompany = ({ companies }) => {
         {companies.map((comp) => (
           <div
             key={comp._id}
-            className="p-4 rounded-md border border-foreground/5 bg-foreground/6 flex flex-col justify-between"
+            className="p-4 rounded-md border border-foreground/5 bg-background dark:bg-foreground/6 flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between ">
                 <div className="flex items-center gap-3">
-                  <Avatar className="rounded-lg">
+                  <Avatar className="rounded-lg bg-transparent">
                     <Avatar.Image alt={comp.companyName} src={comp.logo} />
                     <Avatar.Fallback className="rounded-lg">
                       {comp.companyName.charAt(0).toUpperCase()}
@@ -146,7 +146,10 @@ const RecruiterCompany = ({ companies }) => {
                                       variant="danger"
                                       className="rounded-lg"
                                       onClick={() => {
-                                        handleCompanyDelete(comp._id);
+                                        handleCompanyDelete(
+                                          comp._id,
+                                          comp.companyName,
+                                        );
                                       }}
                                     >
                                       Delete Company

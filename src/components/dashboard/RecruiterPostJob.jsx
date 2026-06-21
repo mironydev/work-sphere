@@ -34,6 +34,8 @@ const RecruiterPostJob = ({ userId, companies }) => {
     newJobData.userId = userId;
     const company = companies.find((c) => c._id === newJobData.companyId);
     newJobData.companyName = company.companyName;
+    newJobData.companyLogo = company.logo;
+    newJobData.companyLocation = company.location;
 
     const res = await createJob(newJobData);
 
@@ -75,7 +77,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
       <div className="flex items-center justify-center mt-6">
         <Form
           onSubmit={onSubmit}
-          className=" relative p-6 w-full sm:w-lg lg:w-3xl rounded-lg bg-foreground/5"
+          className=" relative p-6 w-full sm:w-lg lg:w-3xl rounded-lg bg-background dark:bg-foreground/5"
         >
           <Fieldset className=" w-full mb-8 sm:border-l-3 border-indigo-500 sm:pl-6">
             <Fieldset.Legend>Job Information</Fieldset.Legend>
@@ -552,7 +554,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
             </Fieldset.Group>
           </Fieldset>
 
-          <Fieldset className="w-full sm:border-l-3 border-green-700 sm:pl-6">
+          <Fieldset className="w-full sm:border-l-3 border-green-600 dark:border-green-700 sm:pl-6">
             <Fieldset.Legend>Job Description</Fieldset.Legend>
             <Description>
               Provide detailed information about the role.

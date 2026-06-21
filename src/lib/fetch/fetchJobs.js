@@ -4,11 +4,16 @@ import { auth } from "../auth";
 const url = process.env.SERVER_URL;
 
 export const getAllJobs = async () => {
+  const res = await fetch(`${url}/jobs`);
+  return res.json();
+};
+
+export const getRecruiterJobs = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
   const userid = session?.user?.id;
-  const res = await fetch(`${url}/jobs`, {
+  const res = await fetch(`${url}/recruiter/jobs`, {
     headers: { userid },
   });
   return res.json();

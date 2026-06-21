@@ -110,7 +110,7 @@ const RecruiterAddCompanyModal = () => {
                       >
                         <Label>Industry / Category</Label>
                         <Select.Trigger
-                          className={`${inputClassName} bg-[#EBEBEC] hover:bg-[#E1E1E2  ] dark:bg-[#27272A] dark:hover:bg-[#2E2E31] shadow-none`}
+                          className={`${inputClassName} bg-[#EBEBEC] hover:bg-[#E1E1E2] dark:bg-[#27272A] dark:hover:bg-[#2E2E31] shadow-none`}
                         >
                           <Select.Value />
                           <Select.Indicator />

@@ -65,3 +65,15 @@ export async function editJob(jobId, jobData) {
   });
   return res.json();
 }
+
+export async function submitApplication(data) {
+  const res = await fetch(`${url}/applications`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return res.json();
+}

@@ -28,7 +28,7 @@ export default function Navbar() {
 
   return (
     <div className="p-4 fixed w-full top-0 z-40">
-      <nav className=" w-full bg-background/70 backdrop-blur-lg max-w-6xl mx-auto rounded-lg border">
+      <nav className=" w-full bg-background/50 backdrop-blur-lg max-w-6xl mx-auto rounded-lg border border-foreground/4 dark:border-foreground/15">
         <header className=" flex py-3.5 sm:py-0 sm:h-16 gap-3 items-center justify-between px-3 md:px-6 flex-wrap ">
           <div className="flex items-center gap-4">
             <button
@@ -61,7 +61,14 @@ export default function Navbar() {
                 )}
               </svg>
             </button>
-            <Link href="/" className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="flex items-center gap-3"
+              style={{
+                boxShadow: "none",
+                outline: "none",
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1.16em"

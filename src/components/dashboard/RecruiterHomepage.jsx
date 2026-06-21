@@ -25,9 +25,9 @@ const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
       <div>
         <p className="text-2xl font-semibold">Dashboard</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-5 gap-4">
-          <div className="bg-foreground/5 dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
+          <div className="bg-background dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
             <div className="flex items-center justify-between">
-              <div className="p-2 bg-foreground/10 w-fit rounded-md">
+              <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
                 <File />
               </div>
               <Link
@@ -40,22 +40,22 @@ const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
             <p className="text-sm font-medium pt-4 pb-1">Total Job Posts</p>
             <p className="text-2xl font-bold">{totalJobs.length}</p>
           </div>
-          <div className="bg-foreground/5 dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
-            <div className="p-2 bg-foreground/10 w-fit rounded-md">
+          <div className="bg-background dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
+            <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
               <Persons />
             </div>
             <p className="text-sm font-medium pt-4 pb-1">Total Applicants</p>
             <p className="text-2xl font-bold">0</p>
           </div>
-          <div className="bg-foreground/5 dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
-            <div className="p-2 bg-foreground/10 w-fit rounded-md">
+          <div className="bg-background dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
+            <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
               <Thunderbolt />
             </div>
             <p className="text-sm font-medium pt-4 pb-1">Active Jobs</p>
             <p className="text-2xl font-bold">0</p>
           </div>
-          <div className="bg-foreground/5 dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
-            <div className="p-2 bg-foreground/10 w-fit rounded-md">
+          <div className="bg-background dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
+            <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
               <SquareXmark />
             </div>
             <p className="text-sm font-medium pt-4 pb-1">Jobs Closed</p>
@@ -126,11 +126,11 @@ const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
             topCompanies.map((comp) => (
               <div
                 key={comp._id}
-                className="rounded-lg border border-foreground/15 mt-3 p-6 bg-foreground/5"
+                className="rounded-lg border border-foreground/15 mt-3 p-6 bg-background dark:bg-foreground/5"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Avatar className="rounded-lg">
+                    <Avatar className="rounded-lg bg-transparent">
                       <Avatar.Image alt={comp.companyName} src={comp.logo} />
                       <Avatar.Fallback className="rounded-lg">
                         {comp.companyName.charAt(0).toUpperCase()}

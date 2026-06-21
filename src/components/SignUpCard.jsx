@@ -15,7 +15,7 @@ import {
   RadioGroup,
 } from "@heroui/react";
 import { Eye, EyeSlash } from "@gravity-ui/icons";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -24,9 +24,11 @@ const SignUpCard = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
-
   const [show, setShow] = useState(false);
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
   const clearMessage = () => setMessage("");
 
@@ -51,7 +53,7 @@ const SignUpCard = () => {
       setMessage("Account created successfully.");
       setIsSuccess(true);
       setTimeout(() => {
-        router.push("/");
+        router.push(redirect);
       }, 1000);
     } else {
       setMessage(error.message);
@@ -281,7 +283,7 @@ const SignUpCard = () => {
           <div className="text-center text-sm mt-2">
             Already have an account?{" "}
             <Link
-              href={"/login"}
+              href={!redirect ? "/login" : `/login?redirect=${redirect}`}
               className="cursor-pointer underline hover:text-blue-700 active:text-blue-800 dark:hover:text-indigo-200 dark:active:text-indigo-300"
             >
               Log in

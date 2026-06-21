@@ -77,7 +77,7 @@ const RecruiterEditJob = ({ job }) => {
       <div className="flex items-center justify-center mt-6">
         <Form
           onSubmit={handleForm}
-          className="relative p-6 w-full sm:w-lg lg:w-3xl rounded-lg bg-foreground/5"
+          className="relative p-6 w-full sm:w-lg lg:w-3xl rounded-lg bg-background dark:bg-foreground/5"
         >
           <Fieldset className="w-full mb-8 sm:border-l-3 border-indigo-500 sm:pl-6">
             <Fieldset.Legend>Job Information</Fieldset.Legend>

@@ -12,7 +12,7 @@ import {
   TextField,
 } from "@heroui/react";
 import { Eye, EyeSlash } from "@gravity-ui/icons";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -23,6 +23,9 @@ const LoginCard = () => {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [show, setShow] = useState(false);
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
   const clearMessage = () => setMessage("");
 
@@ -44,7 +47,7 @@ const LoginCard = () => {
       setMessage("Login successful.");
       setIsSuccess(true);
       setTimeout(() => {
-        router.push("/");
+        router.push(redirect);
       }, 1000);
     } else {
       setMessage(error.message);
@@ -206,7 +209,7 @@ const LoginCard = () => {
           <div className="text-center text-sm mt-2">
             Don&apos;t have an account?{" "}
             <Link
-              href={"/signup"}
+              href={!redirect ? "/signup" : `/signup?redirect=${redirect}`}
               className="cursor-pointer underline hover:text-blue-700 active:text-blue-800 dark:hover:text-indigo-200 dark:active:text-indigo-300"
             >
               Create one

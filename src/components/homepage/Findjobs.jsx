@@ -26,7 +26,7 @@ const Findjobs = () => {
         <Magnifier className="absolute left-4 top-1/2 -translate-y-1/2" />
         <Input
           aria-label="Name"
-          className="w-full border border-black/20 dark:border-white/20 rounded-xl py-4 pr-15 pl-11"
+          className="w-full border border-black/20 dark:border-white/20 rounded-xl py-4 pr-15 pl-11 focus:ring-1 ring-indigo-500"
           placeholder="Enter job title, skill or company"
         />
 
@@ -37,13 +37,13 @@ const Findjobs = () => {
       <div className="flex flex-col sm:flex-row justify-center items-center gap-3">
         <p className="opacity-60">Trending Position</p>
         <div className="space-y-2 sm:space-y-0 sm:flex flex-row items-center justify-center gap-1">
-          <p className="bg-stone-200 dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
+          <p className="bg-background dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
             UX Designer
           </p>
-          <p className="bg-stone-200 dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
+          <p className="bg-background dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
             Marketing Coordinator
           </p>
-          <p className="bg-stone-200 dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
+          <p className="bg-background dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
             DevOps Engineer
           </p>
         </div>

@@ -1,9 +1,9 @@
-import { getAllJobs } from "@/lib/fetch/fetchJobs";
+import { getRecruiterJobs } from "@/lib/fetch/fetchJobs";
 import React from "react";
 import RecruiterAllJobs from "@/components/dashboard/RecruiterAllJobs";
 
 const RecruiterJobsPage = async () => {
-  const allJobs = await getAllJobs();
+  const allJobs = await getRecruiterJobs();
 
   return <RecruiterAllJobs allJobs={allJobs} />;
 };
