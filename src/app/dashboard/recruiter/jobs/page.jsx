@@ -1,6 +1,6 @@
 import { getRecruiterJobs } from "@/lib/fetch/fetchJobs";
 import React from "react";
-import RecruiterAllJobs from "@/components/dashboard/RecruiterAllJobs";
+import RecruiterAllJobs from "@/components/dashboard/recruiter/RecruiterAllJobs";
 
 const RecruiterJobsPage = async () => {
   const allJobs = await getRecruiterJobs();

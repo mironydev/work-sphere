@@ -22,11 +22,11 @@ import {
 import { toast } from "sonner";
 import { submitApplication } from "@/lib/actions/jobs";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-const Apply = ({ job, user }) => {
+const Apply = ({ job, user, totalApplications, plan }) => {
   const { _id, jobTitle, companyName } = job;
-  const { name, email } = user;
-
+  const { name, email, id } = user;
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -35,6 +35,8 @@ const Apply = ({ job, user }) => {
     const applicationData = Object.fromEntries(formData.entries());
 
     applicationData.jobId = _id;
+    applicationData.jobTitle = jobTitle;
+    applicationData.userId = id;
     applicationData.userName = name;
     applicationData.userEmail = email;
     applicationData.companyName = companyName;
@@ -51,12 +53,71 @@ const Apply = ({ job, user }) => {
   const inputClassName =
     "rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 bg-white dark:bg-black/40";
 
+  if (totalApplications >= plan.maxApplicationsPerMonth) {
+    return (
+      <div className="flex items-center justify-center pt-12">
+        <div className="max-w-2xl w-full text-center">
+          <div className="mb-8">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+              Quota Reached
+            </h1>
+            <p className="text-lg text-muted mb-2">
+              You&apos;ve applied to the maximum number of jobs.
+            </p>
+            <p className="text-sm text-muted mb-8">
+              You have 5 active applications. Check back later to apply to more
+              positions.
+            </p>
+          </div>
+
+          <div className="mb-10 p-8 rounded-xl bg-linear-to-r from-red-600/10 via-red-500/5 to-red-400/5 border border-red-200/30 dark:border-red-400/20">
+            <p className="text-sm text-muted mb-2">Your Applications</p>
+            <p className="text-5xl font-bold text-red-500">5 / 5</p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+            <Link
+              href="/pricing"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-lg active:scale-95 duration-100"
+            >
+              Upgrade Plan
+            </Link>
+            <Link
+              href="/dashboard/seeker/applications"
+              className="bg-foreground/10 hover:bg-foreground/20 text-foreground font-semibold px-8 py-3 rounded-lg active:scale-95 duration-100"
+            >
+              View My Applications
+            </Link>
+          </div>
+
+          {/* Info Box */}
+          <div className="p-4 rounded-lg bg-foreground/5 shadow-sm dark:border border-foreground/10">
+            <p className="text-sm text-muted">
+              Upgrade your plan to apply to more jobs and unlock premium
+              features.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="">
       <div className="max-w-3xl mx-auto">
-        <div className="mb-4">
-          <h1 className="text-4xl font-bold mb-2">Apply Now</h1>
-          <p className="text-muted text-lg">Join our team and make an impact</p>
+        <div className="mb-4 flex justify-between items-end">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Apply Now</h1>
+            <p className="text-muted text-lg">
+              Join our team and make an impact
+            </p>
+          </div>
+          <div className={plan.name === "seeker_starter" ? "" : "hidden"}>
+            Applications left:{" "}
+            <span className="font-semibold text-red-500">
+              {5 - totalApplications} / 5
+            </span>
+          </div>
         </div>
 
         <div className="mb-10 p-8 rounded-xl bg-linear-to-r from-indigo-600/10 via-indigo-500/5 to-indigo-400/5 border border-indigo-200/30 dark:border-indigo-400/20">
@@ -87,7 +148,6 @@ const Apply = ({ job, user }) => {
             </div>
           </div>
         </div>
-
         <Form
           onSubmit={handleSubmit}
           className="space-y-8 p-5 sm:p-8 rounded-xl bg-white/50 dark:bg-black/20 backdrop-blur-sm border border-foreground/10"

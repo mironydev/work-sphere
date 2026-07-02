@@ -1,7 +1,8 @@
+import RecruiterApplications from "@/components/dashboard/recruiter/RecruiterApplications";
 import React from "react";
 
 const ApplicationsPage = () => {
-  return <div>ApplicationsPage</div>;
+  return <RecruiterApplications />;
 };
 
 export default ApplicationsPage;

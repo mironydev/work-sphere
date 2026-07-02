@@ -74,14 +74,14 @@ const Pricing = () => {
                   <span className="text-indigo-500">
                     <Check />
                   </span>
-                  <p className="text-sm opacity-60">Save up to 20 jobs</p>
+                  <p className="text-sm opacity-60">Save up to 10 jobs</p>
                 </div>
                 <div className="flex items-end gap-2">
                   <span className="text-indigo-500">
                     <Check />
                   </span>
                   <p className="text-sm opacity-60">
-                    Apply to 10 jobs per month
+                    Apply up to 5 jobs per month
                   </p>
                 </div>
                 <div className="flex items-end gap-2">
@@ -103,7 +103,7 @@ const Pricing = () => {
           </Button>
         </div>
         <div className="relative  rounded-2xl px-5 py-8 flex flex-col justify-between inset-shadow-[0_0_40px_rgba(99,102,241,0.5)] bg-indigo-600 text-white dark:bg-indigo-600/30 mt-5 sm:mt-0">
-          <div className="bg-linear-to-b from-white to-stone-300 dark:from-black dark:to-indigo-600 border-t  dark:border-gray-500 text-indigo-600 dark:text-white py-1.5 px-4 font-medium rounded-full absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm whitespace-nowrap">
+          <div className="bg-linear-to-b from-white to-stone-300 dark:from-indigo-500 dark:to-indigo-700 border-t  dark:border-0 text-indigo-600 dark:text-white py-1.5 px-4 font-medium rounded-full absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm whitespace-nowrap">
             MOST POPULAR
           </div>
           <div>

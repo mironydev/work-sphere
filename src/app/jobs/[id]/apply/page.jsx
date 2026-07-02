@@ -3,7 +3,11 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
 import Apply from "./Apply";
-import { getJobDetails } from "@/lib/fetch/fetchJobs";
+import {
+  getApplications,
+  getJobDetails,
+  getPlans,
+} from "@/lib/fetch/fetchJobs";
 
 const ApplyPage = async ({ params }) => {
   const { id } = await params;
@@ -11,6 +15,11 @@ const ApplyPage = async ({ params }) => {
     headers: await headers(),
   });
   const user = session?.user;
+
+  const plan = await getPlans(user?.plan);
+
+  const applications = await getApplications(user?.id);
+  const totalApplications = applications.length;
 
   if (!user) {
     redirect(`/login?redirect=jobs/${id}/apply`);
@@ -36,7 +45,12 @@ const ApplyPage = async ({ params }) => {
 
   return (
     <div className="mt-26 px-4">
-      <Apply job={job} user={user} />
+      <Apply
+        job={job}
+        user={user}
+        totalApplications={totalApplications}
+        plan={plan}
+      />
     </div>
   );
 };

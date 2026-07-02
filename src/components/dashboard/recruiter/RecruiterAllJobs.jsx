@@ -1,22 +1,14 @@
 "use client";
 import { deleteJob } from "@/lib/actions/jobs";
 import { Plus, Eye, TrashBin, Pencil } from "@gravity-ui/icons";
-import { Button, Table, AlertDialog } from "@heroui/react";
+import { Button, Table, AlertDialog, Spinner } from "@heroui/react";
 import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
+import IfNotRecruiter from "./IfNotRecruiter";
+import { capitalize, formatDate, useSessionClient } from "@/lib/helpers";
 
 const RecruiterAllJobs = ({ allJobs }) => {
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  };
-  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
-
   const handleJobDelete = async (jobId) => {
     const res = await deleteJob(jobId);
     if (res.deletedCount) {
@@ -25,6 +17,18 @@ const RecruiterAllJobs = ({ allJobs }) => {
       toast.error("Something went wrong");
     }
   };
+
+  const { user, isPending } = useSessionClient();
+  if (isPending) {
+    return (
+      <div className="flex justify-center items-center mt-10 md:mt-16">
+        <Spinner color="current" size="xl" />
+      </div>
+    );
+  }
+  if (user?.role !== "recruiter") {
+    return <IfNotRecruiter />;
+  }
 
   if (!allJobs.length) {
     return (

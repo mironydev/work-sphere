@@ -1,4 +1,4 @@
-import JobDetails from "@/components/dashboard/JobDetails";
+import JobDetails from "@/components/jobs/JobDetails";
 import { getJobDetails } from "@/lib/fetch/fetchJobs";
 import React from "react";
 

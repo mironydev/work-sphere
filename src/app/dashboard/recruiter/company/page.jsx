@@ -1,4 +1,4 @@
-import RecruiterCompany from "@/components/dashboard/RecruiterCompany";
+import RecruiterCompany from "@/components/dashboard/recruiter/RecruiterCompany";
 import { getAllCompanies } from "@/lib/fetch/fetchJobs";
 import React from "react";
 

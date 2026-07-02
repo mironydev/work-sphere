@@ -8,6 +8,7 @@ import {
   Modal,
   Popover,
   Separator,
+  Spinner,
 } from "@heroui/react";
 import Link from "next/link";
 import {
@@ -20,10 +21,10 @@ import {
 import { deleteCompany } from "@/lib/actions/jobs";
 import { toast } from "sonner";
 import RecruiterEditCompanyModal from "./RecruiterEditCompanyModal";
+import IfNotRecruiter from "./IfNotRecruiter";
+import { capitalize, useSessionClient } from "@/lib/helpers";
 
 const RecruiterCompany = ({ companies }) => {
-  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
-
   const handleCompanyDelete = async (companyId, companyName) => {
     const res = await deleteCompany(companyId);
     if (res.companyDeleted.deletedCount) {
@@ -39,6 +40,19 @@ const RecruiterCompany = ({ companies }) => {
       toast.error("Something went wrong");
     }
   };
+
+  const { user, isPending } = useSessionClient();
+  if (isPending) {
+    return (
+      <div className="flex justify-center items-center mt-10 md:mt-16">
+        <Spinner color="current" size="xl" />
+      </div>
+    );
+  }
+  if (user?.role !== "recruiter") {
+    return <IfNotRecruiter />;
+  }
+
   if (companies.length <= 0) {
     return (
       <div className="sm:px-10">

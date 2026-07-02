@@ -1,7 +1,8 @@
+import RecruiterSettings from "@/components/dashboard/recruiter/RecruiterSettings";
 import React from "react";
 
 const SettingsPage = () => {
-  return <div>SettingsPage</div>;
+  return <RecruiterSettings />;
 };
 
 export default SettingsPage;

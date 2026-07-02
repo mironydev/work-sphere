@@ -28,7 +28,7 @@ const SignUpCard = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect");
+  const redirect = searchParams.get("redirect") || "/";
 
   const clearMessage = () => setMessage("");
 
@@ -40,11 +40,15 @@ const SignUpCard = () => {
     const formData = new FormData(e.currentTarget);
     const user = Object.fromEntries(formData.entries());
 
+    const plan =
+      user.role === "seeker" ? "seeker_starter" : "recruiter_starter";
+
     const { error } = await signUp.email({
       name: user.name,
       email: user.email,
       password: user.password,
       role: user.role,
+      plan: plan,
     });
 
     setIsLoading(false);
@@ -77,7 +81,7 @@ const SignUpCard = () => {
 
   return (
     <div className="px-4">
-      <div className="mt-24 sm:mt-28 dark:border-2 bg-stone-100 dark:bg-black p-7 max-w-sm mx-auto rounded-xl">
+      <div className="mt-24 sm:mt-28 dark:border-2 bg-stone-100 dark:bg-black/50 p-7 max-w-sm mx-auto rounded-xl">
         <h2 className="text-center text-3xl font-semibold">Create Account</h2>
         <p className="text-sm text-center opacity-60 pt-1.5 pb-5">
           Your next opportunity starts here.
@@ -102,7 +106,7 @@ const SignUpCard = () => {
             <Label>Name</Label>
             <Input
               placeholder="Enter your name"
-              className="rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500"
+              className="rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/20"
             />
             <FieldError />
           </TextField>
@@ -121,7 +125,7 @@ const SignUpCard = () => {
             <Label>Email</Label>
             <Input
               placeholder="Enter your email"
-              className="rounded-md  focus:ring-indigo-500 aria-invalid:focus:ring-red-500"
+              className="rounded-md  focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/20"
             />
             <FieldError />
           </TextField>
@@ -148,12 +152,12 @@ const SignUpCard = () => {
             <Label>Password</Label>
             <Input
               placeholder="Enter your password"
-              className="rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 pr-10"
+              className="rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 pr-10 shadow-none border border-foreground/20"
             />
             <button
               type="button"
               onClick={() => setShow((prev) => !prev)}
-              className="absolute right-3 top-8 opacity-70 hover:opacity-100 cursor-pointer"
+              className="absolute right-3 top-9 sm:top-8 opacity-50 hover:opacity-70 cursor-pointer"
             >
               {show ? (
                 <EyeSlash className="w-5 h-5" />
@@ -181,7 +185,7 @@ const SignUpCard = () => {
                   <Radio.Indicator />
                 </Radio.Control>
                 <Radio.Content>
-                  <Label>Job Seeker</Label>
+                  <Label className="-mb-1 sm:mb-0">Job Seeker</Label>
                 </Radio.Content>
               </Radio>
               <Radio value="recruiter" className={"flex items-center"}>
@@ -189,7 +193,7 @@ const SignUpCard = () => {
                   <Radio.Indicator />
                 </Radio.Control>
                 <Radio.Content>
-                  <Label>Recruiter</Label>
+                  <Label className="-mb-1 sm:mb-0">Recruiter</Label>
                 </Radio.Content>
               </Radio>
             </div>
@@ -211,7 +215,7 @@ const SignUpCard = () => {
           <div className="flex gap-2">
             <Button
               type="submit"
-              className="rounded-md w-25 bg-indigo-600"
+              className="rounded-md w-25 bg-indigo-600 text-base"
               isLoading={isLoading}
               isDisabled={isLoading || googleLoading}
             >
@@ -220,7 +224,7 @@ const SignUpCard = () => {
             <Button
               type="reset"
               variant="secondary"
-              className="rounded-md text-black dark:text-white"
+              className="rounded-md text-black dark:text-white text-base"
               isDisabled={isLoading || googleLoading}
               onClick={clearMessage}
             >

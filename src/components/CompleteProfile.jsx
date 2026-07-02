@@ -25,8 +25,11 @@ const CompleteProfile = () => {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
+    const role = data.role;
+
     const { error } = await updateUser({
-      role: data.role,
+      role,
+      plan: role === "seeker" ? "seeker_starter" : "recruiter_starter",
     });
 
     setIsLoading(false);

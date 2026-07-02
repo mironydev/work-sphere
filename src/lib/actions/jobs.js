@@ -77,3 +77,15 @@ export async function submitApplication(data) {
 
   return res.json();
 }
+
+export async function createSubscription(data) {
+  const res = await fetch(`${url}/subscriptions`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  return res.json();
+}

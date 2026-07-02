@@ -1,4 +1,4 @@
-import RecruiterPostJob from "@/components/dashboard/RecruiterPostJob";
+import RecruiterPostJob from "@/components/dashboard/recruiter/RecruiterPostJob";
 import { auth } from "@/lib/auth";
 import { getAllCompanies } from "@/lib/fetch/fetchJobs";
 import { headers } from "next/headers";

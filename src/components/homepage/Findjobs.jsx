@@ -37,13 +37,13 @@ const Findjobs = () => {
       <div className="flex flex-col sm:flex-row justify-center items-center gap-3">
         <p className="opacity-60">Trending Position</p>
         <div className="space-y-2 sm:space-y-0 sm:flex flex-row items-center justify-center gap-1">
-          <p className="bg-background dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
+          <p className="bg-white/70 dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
             UX Designer
           </p>
-          <p className="bg-background dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
+          <p className="bg-white/70 dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
             Marketing Coordinator
           </p>
-          <p className="bg-background dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
+          <p className="bg-white/70 dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
             DevOps Engineer
           </p>
         </div>

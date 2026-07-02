@@ -39,3 +39,13 @@ export const getJobDetails = async (jobId) => {
   const res = await fetch(`${url}/jobs/${jobId}`);
   return res.json();
 };
+
+export const getApplications = async (userId) => {
+  const res = await fetch(`${url}/applications?userId=${userId}`);
+  return res.json();
+};
+
+export const getPlans = async (planName) => {
+  const res = await fetch(`${url}/plans?planName=${planName}`);
+  return res.json();
+};

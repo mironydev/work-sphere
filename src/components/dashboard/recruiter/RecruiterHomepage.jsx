@@ -8,17 +8,32 @@ import {
   File,
   Plus,
 } from "@gravity-ui/icons";
-import { Avatar, Chip, Table } from "@heroui/react";
+import { Avatar, Chip, Spinner, Table } from "@heroui/react";
 import Link from "next/link";
 import RecruiterAddCompanyModal from "./RecruiterAddCompanyModal";
+import { capitalize, useSessionClient } from "@/lib/helpers";
+import IfNotRecruiter from "./IfNotRecruiter";
 
 const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
-  const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
   const getJobCount = (companyId) => {
     return totalJobs.filter(
       (job) => String(job.companyId) === String(companyId),
     ).length;
   };
+
+  const { user, isPending } = useSessionClient();
+
+  if (isPending) {
+    return (
+      <div className="flex justify-center items-center mt-10 md:mt-16">
+        <Spinner color="current" size="xl" />
+      </div>
+    );
+  }
+
+  if (user?.role !== "recruiter") {
+    return <IfNotRecruiter />;
+  }
 
   return (
     <div className="md:pl-5">

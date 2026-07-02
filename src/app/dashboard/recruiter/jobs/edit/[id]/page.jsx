@@ -1,4 +1,4 @@
-import RecruiterEditJob from "@/components/dashboard/RecruiterEditJob";
+import RecruiterEditJob from "@/components/dashboard/recruiter/RecruiterEditJob";
 import { getJobDetails } from "@/lib/fetch/fetchJobs";
 
 const RecruiterEditJobPage = async ({ params }) => {
