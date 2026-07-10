@@ -5,6 +5,7 @@ import {
   AlertDialog,
   Avatar,
   Button,
+  Chip,
   Modal,
   Popover,
   Separator,
@@ -13,6 +14,7 @@ import {
 import Link from "next/link";
 import {
   Check,
+  ClockFill,
   Ellipsis,
   MapPin,
   Persons,
@@ -82,11 +84,11 @@ const RecruiterCompany = ({ companies }) => {
         {companies.map((comp) => (
           <div
             key={comp._id}
-            className="p-4 rounded-md border border-foreground/5 bg-background dark:bg-foreground/6 flex flex-col justify-between"
+            className="relative p-4 rounded-md border border-foreground/5 bg-background dark:bg-foreground/6 flex flex-col justify-between"
           >
             <div>
-              <div className="flex items-center justify-between ">
-                <div className="flex items-center gap-3">
+              <div className="flex justify-between">
+                <div className="flex gap-3">
                   <Avatar className="rounded-lg bg-transparent">
                     <Avatar.Image alt={comp.companyName} src={comp.logo} />
                     <Avatar.Fallback className="rounded-lg">
@@ -94,13 +96,17 @@ const RecruiterCompany = ({ companies }) => {
                     </Avatar.Fallback>
                   </Avatar>
                   <div className="text-xl font-medium flex flex-col gap-1">
-                    <p>{comp.companyName}</p>
+                    <p className="leading-none">{comp.companyName}</p>
                     <span className="text-xs text-muted">
                       {capitalize(comp.industry)}
                     </span>
                   </div>
                 </div>
-
+                {comp.status === "pending" ? (
+                  <ClockFill className="text-yellow-500 dark:text-yellow-600 absolute scale-150 -top-1.5 -right-1.5" />
+                ) : (
+                  ""
+                )}
                 <Modal>
                   <Button
                     variant="ghost"

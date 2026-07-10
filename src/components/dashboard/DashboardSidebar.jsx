@@ -9,6 +9,7 @@ import {
   FileText,
   Circles4Square,
   Persons,
+  CircleDollar,
 } from "@gravity-ui/icons";
 import { Avatar, Button, Drawer } from "@heroui/react";
 import Link from "next/link";
@@ -27,7 +28,7 @@ export default function DashboardSidebar() {
     },
     {
       icon: Factory,
-      label: "My Company",
+      label: "My Companies",
       href: "/dashboard/recruiter/company",
     },
     {
@@ -93,7 +94,7 @@ export default function DashboardSidebar() {
       href: "/dashboard/admin/jobs",
     },
     {
-      icon: Briefcase,
+      icon: CircleDollar,
       label: "Payments",
       href: "/dashboard/admin/payments",
     },

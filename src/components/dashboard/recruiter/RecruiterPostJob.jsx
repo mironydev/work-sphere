@@ -1,7 +1,7 @@
 "use client";
 
 import { createJob } from "@/lib/actions/jobs";
-import { Check } from "@gravity-ui/icons";
+import { Check, CircleExclamationFill, Clock } from "@gravity-ui/icons";
 import {
   Button,
   Description,
@@ -64,6 +64,43 @@ const RecruiterPostJob = ({ userId, companies }) => {
     );
   }
 
+  const allPending = companies.every((company) => company.status === "pending");
+
+  if (allPending) {
+    return (
+      <div className="flex items-center justify-center md:pl-4 mt-5">
+        <div className="max-w-2xl w-full text-center">
+          {/* Icon */}
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-yellow-100 dark:bg-yellow-600/20 mb-4">
+            <Clock className="w-8 h-8 text-yellow-600" />
+          </div>
+
+          {/* Message */}
+          <h2 className="text-3xl font-bold mb-3">Companies Pending</h2>
+          <p className="text-lg text-muted mb-2">
+            Your companies are awaiting approval.
+          </p>
+          <p className="text-sm text-muted mb-8">
+            We&apos;re reviewing your company information. This usually takes
+            24-48 hours.
+          </p>
+
+          {/* Info Box */}
+          <div className="p-6 rounded-lg bg-yellow-50 dark:bg-yellow-600/10 border border-yellow-200/50 dark:border-yellow-400/20">
+            <div className="flex items-start gap-2">
+              <CircleExclamationFill className="w-6 h-6 text-yellow-600" />
+              <p className="text-sm text-yellow-800 dark:text-yellow-500">
+                You&apos;ll be notified via email once your companies are
+                approved. In the meantime, you can review and update your
+                company details.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="md:pl-5">
       <div>
@@ -103,8 +140,14 @@ const RecruiterPostJob = ({ userId, companies }) => {
                       id={comp._id}
                       textValue={comp.companyName}
                       className="rounded-lg focus:ring-indigo-500"
+                      isDisabled={comp.status === "pending"}
                     >
                       {comp.companyName}
+                      {comp.status === "pending" ? (
+                        <p className="text-xs text-muted">(pending)</p>
+                      ) : (
+                        ""
+                      )}
                       <ListBox.ItemIndicator />
                     </ListBox.Item>
                   ))}

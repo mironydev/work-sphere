@@ -43,13 +43,14 @@ const SignUpCard = () => {
     const plan =
       user.role === "seeker" ? "seeker_starter" : "recruiter_starter";
 
-    const { error } = await signUp.email({
+    const { data, error } = await signUp.email({
       name: user.name,
       email: user.email,
       password: user.password,
-      role: user.role,
+      requestedRole: user.role,
       plan: plan,
     });
+    console.log("data:", data, "error:", error);
 
     setIsLoading(false);
 

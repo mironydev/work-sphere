@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
           <main className="max-w-7xl mx-auto">{children}</main>
           <Footer />
           <Toaster
-            position="top-right"
+            position="bottom-right"
             richColors
             gap={12}
             visibleToasts={3}

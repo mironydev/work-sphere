@@ -1,6 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { getUserToken } from "../session";
+import { authorizationCodeRequest } from "better-auth";
 
 const url = process.env.SERVER_URL;
 
@@ -87,5 +89,41 @@ export async function createSubscription(data) {
     body: JSON.stringify(data),
   });
 
+  return res.json();
+}
+
+export const authHeader = async () => {
+  const token = await getUserToken();
+  const header = token
+    ? {
+        authorization: `Bearer ${token}`,
+      }
+    : {};
+  return header;
+};
+
+export async function reviewCompany(companyId, companyData) {
+  const res = await fetch(`${url}/admin/company/${companyId}`, {
+    method: "PATCH",
+    headers: {
+      "content-type": "application/json",
+      ...(await authHeader()),
+    },
+    body: JSON.stringify(companyData),
+  });
+  revalidatePath("/dashboard/admin/companies");
+  return res.json();
+}
+
+export async function updatePlan(userId, plan) {
+  const res = await fetch(`${url}/plans?userId=${userId}`, {
+    method: "PATCH",
+    headers: {
+      "content-type": "application/json",
+      ...(await authHeader()),
+    },
+    body: JSON.stringify({ plan }),
+  });
+  revalidatePath("/dashboard/admin/users");
   return res.json();
 }

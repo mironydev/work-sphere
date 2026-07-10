@@ -65,7 +65,7 @@ const AdminLayoutPage = async ({ children }) => {
     );
   }
 
-  return children;
+  return <div className="md:pl-4">{children}</div>;
 };
 
 export default AdminLayoutPage;

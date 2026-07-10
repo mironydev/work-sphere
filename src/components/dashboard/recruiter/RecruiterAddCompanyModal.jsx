@@ -33,10 +33,10 @@ const RecruiterAddCompanyModal = () => {
     const newData = Object.fromEntries(data.entries());
     newData.totalEmployees = parseInt(newData.totalEmployees, 10);
     newData.userId = userId;
-
     if (logoUrl) {
       newData.logo = logoUrl;
     }
+    newData.status = "pending";
 
     const res = await createCompany(newData);
     if (res.insertedId) {

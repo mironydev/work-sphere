@@ -30,7 +30,6 @@ export default async function Success({ searchParams }) {
       planName: metadata.planName,
     };
     const res = await createSubscription(subscribedUserInfo);
-    console.log(res);
 
     return (
       <div className="flex items-center justify-center px-4 mt-32">

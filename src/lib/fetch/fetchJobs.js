@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { auth } from "../auth";
+import { authHeader } from "../actions/jobs";
 
 const url = process.env.SERVER_URL;
 
@@ -19,14 +20,17 @@ export const getRecruiterJobs = async () => {
   return res.json();
 };
 
-export const getAllCompanies = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  const userid = session?.user?.id;
-  const res = await fetch(`${url}/companies`, {
-    headers: { userid },
-  });
+export const getCompanies = async (userid = null) => {
+  let res;
+  if (userid) {
+    res = await fetch(`${url}/companies`, {
+      headers: { userid },
+    });
+  } else {
+    res = await fetch(`${url}/companies`, {
+      headers: await authHeader(),
+    });
+  }
   return res.json();
 };
 
@@ -48,4 +52,15 @@ export const getApplications = async (userId) => {
 export const getPlans = async (planName) => {
   const res = await fetch(`${url}/plans?planName=${planName}`);
   return res.json();
+};
+
+export const listAllUsers = async () => {
+  const users = await auth.api.listUsers({
+    query: {
+      sortBy: "createdAt",
+      sortDirection: "desc",
+    },
+    headers: await headers(),
+  });
+  return users;
 };
