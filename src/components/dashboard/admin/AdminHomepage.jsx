@@ -1,6 +1,4 @@
 import {
-  ArrowChevronUp,
-  ArrowShapeUp,
   ArrowUp,
   Briefcase,
   Calendar,
@@ -22,14 +20,14 @@ const stats = [
 const AdminHomepage = () => {
   return (
     <div>
-      <div className="flex justify-between mb-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between mb-4">
         <div>
           <p className="text-3xl font-semibold">Dashboard Overview</p>
           <p className="text-sm text-muted mt-1">
             Real-time platform performance and growth metrics.
           </p>
         </div>
-        <div className="flex flex-row items-center justify-center gap-4">
+        <div className="flex flex-row items-center gap-4">
           <button className=" flex items-center justify-center gap-1 bg-foreground/10 rounded-md px-4 py-1.5 text-sm cursor-pointer hover:bg-foreground/15 active:bg-foreground/15 font-medium duration-100">
             <Calendar />
             Last 30 Days
@@ -39,27 +37,26 @@ const AdminHomepage = () => {
           </button>
         </div>
       </div>
-      <div className="flex gap-2">
+      <div className="grid grid-cols-2  sm:grid-cols-3  lg:grid-cols-5 gap-2">
         {stats.map((stat, i) => {
           const Icons = stat.icon;
           return (
-            <div
-              key={i}
-              className="bg-foreground/5 border p-4 rounded-sm flex-1 flex justify-between"
-            >
+            <div key={i} className="bg-foreground/5 border p-4 rounded-sm">
               <div>
-                <div className="bg-foreground/10 p-1.5 rounded-sm w-fit">
-                  <Icons />
+                <div className="flex justify-between">
+                  <div className="bg-foreground/10 p-1.5 rounded-sm w-fit">
+                    <Icons />
+                  </div>
+                  <div className="flex text-xs text-emerald-500 dark:text-green-500">
+                    <ArrowUp className="scale-75" />
+                    <p className="leading- font-bold">+10%</p>
+                  </div>
                 </div>
                 <p className="text-xs text-muted mt-2">{stat.text}</p>
                 <p className="text-xl font-medium">
                   {stat.text === "Platform Revenue" ? "$" : ""}
                   {stat.number}
                 </p>
-              </div>
-              <div className="flex text-xs text-emerald-500 dark:text-green-500">
-                <ArrowUp className="scale-75" />
-                <p className="leading- font-bold">+10%</p>
               </div>
             </div>
           );

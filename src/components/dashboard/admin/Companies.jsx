@@ -33,8 +33,8 @@ const Companies = ({ allCompanies }) => {
               <Table.Column className={"rounded-none"}>Actions</Table.Column>
             </Table.Header>
             <Table.Body>
-              {allCompanies.map((comp) => (
-                <Table.Row key={comp._id}>
+              {allCompanies.map((comp, i) => (
+                <Table.Row key={i}>
                   <Table.Cell className={"rounded-none py-5 font-medium"}>
                     {comp.companyName}
                   </Table.Cell>

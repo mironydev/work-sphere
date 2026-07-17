@@ -1,4 +1,4 @@
-import Users from "@/components/dashboard/admin/Users";
+import Users from "@/components/dashboard/admin/users/Users";
 import { getPlans, listAllUsers } from "@/lib/fetch/fetchJobs";
 import React from "react";
 
@@ -7,7 +7,7 @@ const UsersPage = async () => {
   const allPlans = await getPlans();
   return (
     <div>
-      <Users users={users} allPlans={allPlans} />
+      <Users allUsers={users} allPlans={allPlans} />
     </div>
   );
 };

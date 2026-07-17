@@ -112,6 +112,7 @@ export async function reviewCompany(companyId, companyData) {
     body: JSON.stringify(companyData),
   });
   revalidatePath("/dashboard/admin/companies");
+  console.log("clicked");
   return res.json();
 }
 

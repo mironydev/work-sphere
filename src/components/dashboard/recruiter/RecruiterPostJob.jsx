@@ -15,6 +15,7 @@ import {
   TextField,
   ListBox,
   DateField,
+  Checkbox,
 } from "@heroui/react";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -23,6 +24,8 @@ import { useRouter } from "next/navigation";
 
 const RecruiterPostJob = ({ userId, companies }) => {
   const [jobType, setJobType] = useState("");
+  const [isRemote, setIsRemote] = useState(false);
+
   const router = useRouter();
 
   const onSubmit = async (e) => {
@@ -36,6 +39,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
     newJobData.companyName = company.companyName;
     newJobData.companyLogo = company.logo;
     newJobData.companyLocation = company.location;
+    newJobData.isRemote = isRemote;
 
     const res = await createJob(newJobData);
 
@@ -76,7 +80,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
           </div>
 
           {/* Message */}
-          <h2 className="text-3xl font-bold mb-3">Companies Pending</h2>
+          <h2 className="text-3xl font-bold mb-3">Please Wait</h2>
           <p className="text-lg text-muted mb-2">
             Your companies are awaiting approval.
           </p>
@@ -320,7 +324,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   </Select.Popover>
                 </Select>
               </div>
-
               <div className="flex gap-4">
                 <Select
                   isRequired
@@ -352,14 +355,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
                         Part-time
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
-                      <ListBox.Item
-                        id="remote"
-                        textValue="Remote"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Remote
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
+
                       <ListBox.Item
                         id="contract"
                         textValue="Contract"
@@ -420,7 +416,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   </Select.Popover>
                 </Select>
               </div>
-
               <div className="flex flex-col sm:flex-row gap-4">
                 <TextField
                   isRequired
@@ -494,11 +489,24 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   <FieldError />
                 </TextField>
               </div>
-
-              {jobType !== "remote" && (
+              <Checkbox isSelected={isRemote} onChange={setIsRemote}>
+                <Checkbox.Content className="flex flex-row items-center gap-2 ">
+                  <Checkbox.Control
+                    className="dark:bg-foreground/15 shadow-none ring-0"
+                    style={{
+                      boxShadow: "none",
+                      outline: "none",
+                    }}
+                  >
+                    <Checkbox.Indicator />
+                  </Checkbox.Control>
+                  It&apos;s a remote job
+                </Checkbox.Content>
+              </Checkbox>
+              {!isRemote && (
                 <div className="flex flex-col sm:flex-row gap-4">
                   <TextField
-                    isRequired={!jobType}
+                    isRequired={!isRemote}
                     name="city"
                     className="w-full"
                     validate={(value) => {
@@ -533,7 +541,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   </TextField>
 
                   <TextField
-                    isRequired={!jobType}
+                    isRequired={!isRemote}
                     name="country"
                     className="w-full"
                     validate={(value) => {
@@ -568,7 +576,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
                   </TextField>
                 </div>
               )}
-
               <DateField
                 isRequired
                 name="deadline"

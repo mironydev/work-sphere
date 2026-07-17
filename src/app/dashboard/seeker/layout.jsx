@@ -17,8 +17,8 @@ const SeekerLayoutPage = async ({ children }) => {
     return (
       <div>
         <div className="md:pl-4 flex justify-center items-center min-h-[40vh] sm:min-h-[60vh]">
-          <div className="max-w-lg text-center rounded-xl shadow-xs dark:shadow-none border border-white dark:border-foreground/15 bg-background p-8">
-            <h1 className="text-2xl font-semibold mb-3 text-red-400">
+          <div className="max-w-lg text-center rounded-xl shadow-xs border border-white dark:border-foreground/15 bg-white/70 dark:bg-foreground/5 p-8">
+            <h1 className="text-2xl font-semibold mb-3 text-red-500">
               Job Seeker Account Required
             </h1>
             <p className="text-foreground/70">

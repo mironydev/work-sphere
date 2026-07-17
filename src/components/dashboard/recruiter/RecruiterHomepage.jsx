@@ -138,9 +138,9 @@ const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
             </Link>
           </div>
           {topCompanies.length ? (
-            topCompanies.map((comp) => (
+            topCompanies.map((comp, i) => (
               <div
-                key={comp._id}
+                key={i}
                 className="rounded-lg border border-foreground/15 mt-3 p-6 bg-background dark:bg-foreground/5"
               >
                 <div className="flex items-center justify-between">

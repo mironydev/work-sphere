@@ -19,6 +19,7 @@ import {
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const RecruiterEditJob = ({ job }) => {
   const router = useRouter();
@@ -612,17 +613,18 @@ const RecruiterEditJob = ({ job }) => {
                 <Check />
                 Update Job
               </Button>
-              <Button
-                type="reset"
-                variant="tertiary"
-                className="rounded-lg bg-foreground/10"
-                style={{
-                  boxShadow: "none",
-                  outline: "none",
-                }}
-              >
-                Clear
-              </Button>
+              <Link href={"/dashboard/recruiter/jobs"}>
+                <Button
+                  variant="tertiary"
+                  className="rounded-lg bg-foreground/10"
+                  style={{
+                    boxShadow: "none",
+                    outline: "none",
+                  }}
+                >
+                  Cancel
+                </Button>
+              </Link>
             </Fieldset.Actions>
           </Fieldset>
         </Form>

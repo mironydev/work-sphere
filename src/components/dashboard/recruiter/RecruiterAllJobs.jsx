@@ -1,7 +1,7 @@
 "use client";
 import { deleteJob } from "@/lib/actions/jobs";
 import { Plus, Eye, TrashBin, Pencil } from "@gravity-ui/icons";
-import { Button, Table, AlertDialog, Spinner } from "@heroui/react";
+import { Button, Table, AlertDialog, Spinner, Separator } from "@heroui/react";
 import Link from "next/link";
 import React from "react";
 import { toast } from "sonner";
@@ -54,8 +54,8 @@ const RecruiterAllJobs = ({ allJobs }) => {
   return (
     <div className="sm:px-10">
       <div className="flex flex-col gap-5 sm:flex-row justify-between">
-        <p className="text-3xl font-semibold">Manage Your Jobs</p>
-
+        <p className="text-3xl font-semibold">Manage Your Jobs</p>total jobs:{" "}
+        {allJobs.length}
         <Link href={"/dashboard/recruiter/jobs/new"} className="">
           <Button
             className={"bg-foreground text-background"}
@@ -73,6 +73,9 @@ const RecruiterAllJobs = ({ allJobs }) => {
           <Table.Content aria-label="Team members">
             <Table.Header>
               <Table.Column isRowHeader className={"py-4 rounded-none"}>
+                #
+              </Table.Column>
+              <Table.Column isRowHeader className={"py-4 rounded-none"}>
                 Job Title
               </Table.Column>
               <Table.Column>Company</Table.Column>
@@ -82,26 +85,37 @@ const RecruiterAllJobs = ({ allJobs }) => {
               <Table.Column className={"rounded-none"}>Actions</Table.Column>
             </Table.Header>
             <Table.Body>
-              {allJobs.map((job) => (
+              {allJobs.map((job, i) => (
                 <Table.Row key={job._id}>
-                  <Table.Cell className={"rounded-none py-5 font-medium"}>
+                  <Table.Cell className={"rounded-none py-5 text-muted"}>
+                    {i + 1}
+                  </Table.Cell>
+
+                  <Table.Cell className={"font-medium text-nowrap"}>
                     {job.jobTitle}
                   </Table.Cell>
                   <Table.Cell>{job.companyName}</Table.Cell>
                   <Table.Cell>
-                    {job.jobType === "remote"
-                      ? "Remote"
-                      : `${job.city}, ${job.country}`}
+                    {job.isRemote ? (
+                      "Remote"
+                    ) : (
+                      <span>
+                        {job.city}{" "}
+                        <span className="text-nowrap">{job.country}</span>
+                      </span>
+                    )}
                   </Table.Cell>
                   <Table.Cell>
                     <div className="flex flex-col">
                       <p className="font-medium">{capitalize(job.jobType)}</p>
-                      <p className="text-xs text-muted">
+                      <p className="text-xs text-muted text-nowrap">
                         {capitalize(job.jobCategory)}
                       </p>
                     </div>
                   </Table.Cell>
-                  <Table.Cell>{formatDate(job.deadline)}</Table.Cell>
+                  <Table.Cell className={"text-nowrap"}>
+                    {formatDate(job.deadline)}
+                  </Table.Cell>
                   <Table.Cell className={"rounded-none"}>
                     <div className="flex gap-1">
                       <Link

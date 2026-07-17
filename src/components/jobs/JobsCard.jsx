@@ -51,16 +51,20 @@ const JobsCard = ({ job }) => {
           {truncate(responsibilities, 80)}
         </p>
         <div className="flex flex-wrap gap-1 space-y-0.5 my-6 text-xs">
-          {city && (
+          {
             <div className="bg-white dark:bg-[#2c2c2e] px-2.5 py-1.5 rounded-full flex items-center gap-1">
               <span>
                 <MapPin />
               </span>
-              <p>
-                {city}, {country}
-              </p>
+              {city ? (
+                <p>
+                  {city}, {country}
+                </p>
+              ) : (
+                "Remote"
+              )}
             </div>
-          )}
+          }
           <div className="bg-white dark:bg-[#2c2c2e] px-2.5 py-1.5 rounded-full flex items-center gap-1">
             <span>
               <Briefcase />

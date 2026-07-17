@@ -101,7 +101,7 @@ export default function Navbar() {
                 </Link>
               </li>
               <li>
-                <Link href="/jobs" className="p-2 active:text-stone-500">
+                <Link href="/jobs?page=1" className="p-2 active:text-stone-500">
                   Browse Jobs
                 </Link>
               </li>
@@ -169,7 +169,7 @@ export default function Navbar() {
           <div className="border-t border-separator md:hidden">
             <ul className="flex flex-col gap-4 p-2 pt-5">
               <li>
-                <Link href="#" className="p-2 active:text-stone-500">
+                <Link href="/jobs?page=1" className="p-2 active:text-stone-500">
                   Browse Jobs
                 </Link>
               </li>

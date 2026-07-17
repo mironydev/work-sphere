@@ -14,6 +14,7 @@ import {
   TextField,
   FieldGroup,
   Form,
+  EmptyState,
 } from "@heroui/react";
 import Image from "next/image";
 import { capitalize, formatDate } from "@/lib/helpers";
@@ -22,9 +23,16 @@ import { useRouter } from "next/navigation";
 import { TrashBin } from "@gravity-ui/icons";
 import { toast } from "sonner";
 import { updatePlan } from "@/lib/actions/jobs";
+import UserStats from "./UserStats";
+import { useState } from "react";
+import { PackageOpen } from "lucide-react";
 
-const Users = ({ users, allPlans }) => {
+const Users = ({ allUsers, allPlans }) => {
   const router = useRouter();
+
+  const users = allUsers.filter((user) => user.role !== "admin");
+
+  const [filteredUsers, setFilteredUsers] = useState(users);
 
   const formatPlanName = (planName) => {
     return planName
@@ -102,25 +110,34 @@ const Users = ({ users, allPlans }) => {
   };
 
   return (
-    <Table
-      className="rounded-lg p-0 border border-foreground/15 mt-6 bg-background dark:bg-foreground/3"
-      variant="secondary"
-    >
-      <Table.ScrollContainer>
-        <Table.Content aria-label="Users">
-          <Table.Header>
-            <Table.Column isRowHeader className="py-4 rounded-none">
-              Name
-            </Table.Column>
-            <Table.Column>Email</Table.Column>
-            <Table.Column>Role</Table.Column>
-            <Table.Column>Joined</Table.Column>
-            <Table.Column className="rounded-none">Actions</Table.Column>
-          </Table.Header>
-          <Table.Body>
-            {users
-              .filter((user) => user.role !== "admin")
-              .map((user) => {
+    <div>
+      <UserStats
+        users={users}
+        filteredUsers={filteredUsers}
+        setFilteredUsers={setFilteredUsers}
+      />
+      <Table className="rounded-lg p-0 border border-foreground/15 mt-6 bg-background dark:bg-foreground/3">
+        <Table.ScrollContainer>
+          <Table.Content aria-label="Users">
+            <Table.Header>
+              <Table.Column isRowHeader className="py-4 rounded-none">
+                Name
+              </Table.Column>
+              <Table.Column>Email</Table.Column>
+              <Table.Column>Role</Table.Column>
+              <Table.Column>Joined</Table.Column>
+              <Table.Column>Banned</Table.Column>
+              <Table.Column className="rounded-none">Actions</Table.Column>
+            </Table.Header>
+            <Table.Body
+              renderEmptyState={() => (
+                <EmptyState className="flex h-full w-full flex-col items-center justify-center gap-4 text-center py-16">
+                  <PackageOpen />
+                  <span className="text-sm text-muted">No results found</span>
+                </EmptyState>
+              )}
+            >
+              {filteredUsers.map((user) => {
                 const filteredPlans = allPlans.filter((plan) =>
                   plan.name.startsWith(user.role),
                 );
@@ -170,6 +187,9 @@ const Users = ({ users, allPlans }) => {
                     <Table.Cell className="text-xs text-muted whitespace-nowrap">
                       {formatDate(user.createdAt)}
                     </Table.Cell>
+
+                    {/* Suspended */}
+                    <Table.Cell>{user.banned ? "Yes" : "No"}</Table.Cell>
 
                     {/* Actions */}
                     <Table.Cell className="rounded-none">
@@ -390,15 +410,11 @@ const Users = ({ users, allPlans }) => {
                                               isDisabled={
                                                 user.plan === plan.name
                                               }
-                                              style={{
-                                                boxShadow: "none",
-                                                outline: "none",
-                                              }}
                                               id={plan.name}
                                               textValue={formatPlanName(
                                                 plan.name,
                                               )}
-                                              className="rounded-lg"
+                                              className="rounded-lg ring-black ring-0"
                                             >
                                               {formatPlanName(plan.name)}
                                               {user.plan === plan.name && (
@@ -666,10 +682,11 @@ const Users = ({ users, allPlans }) => {
                   </Table.Row>
                 );
               })}
-          </Table.Body>
-        </Table.Content>
-      </Table.ScrollContainer>
-    </Table>
+            </Table.Body>
+          </Table.Content>
+        </Table.ScrollContainer>
+      </Table>
+    </div>
   );
 };
 

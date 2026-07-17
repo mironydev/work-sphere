@@ -1,22 +1,38 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { SearchField, Select, ListBox, Checkbox } from "@heroui/react";
+import { useRouter } from "next/navigation";
 
-const JobsFilter = ({ onFilterChange }) => {
-  const [search, setSearch] = useState("");
-  const [jobType, setJobType] = useState("");
-  const [category, setCategory] = useState("");
-  const [isRemote, setIsRemote] = useState(false);
+const JobsFilter = ({ searchQuery, jobs, page, setPage, total }) => {
+  const [search, setSearch] = useState(searchQuery.search);
+  const [jobType, setJobType] = useState(searchQuery.jobType);
+  const [category, setCategory] = useState(searchQuery.jobCategory);
+  const [isRemote, setIsRemote] = useState(searchQuery.isRemote === "true");
+
+  const router = useRouter();
+
+  const isFirstRender = useRef(true);
+
+  // Effect 1: whenever a FILTER changes, reset to page 1
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return; // don't reset page on initial mount
+    }
+    setPage(1);
+  }, [search, jobType, category, isRemote, setPage]);
 
   useEffect(() => {
-    onFilterChange({
-      search,
-      jobType,
-      category,
-      isRemote,
-    });
-  }, [search, jobType, category, isRemote, onFilterChange]);
+    const searchParam = new URLSearchParams();
+    if (search) searchParam.set("search", search);
+    if (jobType) searchParam.set("jobType", jobType);
+    if (category) searchParam.set("jobCategory", category);
+    if (isRemote) searchParam.set("isRemote", isRemote);
+    if (page) searchParam.set("page", page);
+
+    router.push(`?${searchParam}`);
+  }, [search, jobType, category, isRemote, page, router]);
 
   const selectStyle = "ring-0  rounded-sm ring-offset-0";
 
@@ -48,6 +64,7 @@ const JobsFilter = ({ onFilterChange }) => {
               className="flex-1 rounded-md border bg-white dark:bg-[#18181B]"
               onChange={(value) => setJobType(value)}
               variant="secondary"
+              value={jobType}
             >
               <Select.Trigger className={`${selectStyle} bg-transparent `}>
                 <Select.Value />
@@ -61,6 +78,7 @@ const JobsFilter = ({ onFilterChange }) => {
                     className={selectStyle}
                   >
                     All Job Types
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
                   <ListBox.Item
                     id="full-time"
@@ -68,6 +86,7 @@ const JobsFilter = ({ onFilterChange }) => {
                     className={selectStyle}
                   >
                     Full-time
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
                   <ListBox.Item
                     id="part-time"
@@ -75,13 +94,16 @@ const JobsFilter = ({ onFilterChange }) => {
                     className={selectStyle}
                   >
                     Part-time
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
+
                   <ListBox.Item
                     id="contract"
                     textValue="Contract"
                     className={selectStyle}
                   >
                     Contract
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
                   <ListBox.Item
                     id="internship"
@@ -89,6 +111,7 @@ const JobsFilter = ({ onFilterChange }) => {
                     className={selectStyle}
                   >
                     Internship
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
                 </ListBox>
               </Select.Popover>
@@ -100,6 +123,7 @@ const JobsFilter = ({ onFilterChange }) => {
               className="flex-1 rounded-md border bg-white dark:bg-[#18181B]"
               onChange={(value) => setCategory(value)}
               variant="secondary"
+              value={category}
             >
               <Select.Trigger className={`${selectStyle} bg-transparent `}>
                 <Select.Value />
@@ -113,6 +137,7 @@ const JobsFilter = ({ onFilterChange }) => {
                     className={selectStyle}
                   >
                     All Categories
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
                   <ListBox.Item
                     id="technology"
@@ -120,6 +145,7 @@ const JobsFilter = ({ onFilterChange }) => {
                     className={selectStyle}
                   >
                     Technology
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
                   <ListBox.Item
                     id="design"
@@ -127,6 +153,7 @@ const JobsFilter = ({ onFilterChange }) => {
                     className={selectStyle}
                   >
                     Design
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
                   <ListBox.Item
                     id="marketing"
@@ -134,6 +161,7 @@ const JobsFilter = ({ onFilterChange }) => {
                     className={selectStyle}
                   >
                     Marketing
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
                   <ListBox.Item
                     id="sales"
@@ -141,6 +169,7 @@ const JobsFilter = ({ onFilterChange }) => {
                     className={selectStyle}
                   >
                     Sales
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
                   <ListBox.Item
                     id="healthcare"
@@ -148,6 +177,7 @@ const JobsFilter = ({ onFilterChange }) => {
                     className={selectStyle}
                   >
                     Healthcare
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
                   <ListBox.Item
                     id="finance"
@@ -155,6 +185,7 @@ const JobsFilter = ({ onFilterChange }) => {
                     className={selectStyle}
                   >
                     Finance
+                    <ListBox.ItemIndicator />
                   </ListBox.Item>
                 </ListBox>
               </Select.Popover>

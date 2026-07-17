@@ -4,33 +4,27 @@ import { authHeader } from "../actions/jobs";
 
 const url = process.env.SERVER_URL;
 
-export const getAllJobs = async () => {
-  const res = await fetch(`${url}/jobs`);
+export const getAllJobs = async (query) => {
+  const res = await fetch(`${url}/jobs?${query}`);
   return res.json();
 };
 
 export const getRecruiterJobs = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  const userid = session?.user?.id;
   const res = await fetch(`${url}/recruiter/jobs`, {
-    headers: { userid },
+    headers: await authHeader(),
   });
   return res.json();
 };
 
-export const getCompanies = async (userid = null) => {
-  let res;
-  if (userid) {
-    res = await fetch(`${url}/companies`, {
-      headers: { userid },
-    });
-  } else {
-    res = await fetch(`${url}/companies`, {
-      headers: await authHeader(),
-    });
-  }
+export const getCompanies = async () => {
+  const res = await fetch(`${url}/companies`);
+  return res.json();
+};
+
+export const getMyCompanies = async () => {
+  const res = await fetch(`${url}/mycompanies`, {
+    headers: await authHeader(),
+  });
   return res.json();
 };
 
