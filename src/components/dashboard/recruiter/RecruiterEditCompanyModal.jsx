@@ -1,4 +1,4 @@
-import { editCompany } from "@/lib/actions/jobs";
+import { editCompany } from "@/lib/actions/company";
 import {
   Button,
   FieldError,

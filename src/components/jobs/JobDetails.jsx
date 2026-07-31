@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { Avatar, Button, Spinner } from "@heroui/react";
+import { Avatar, Button } from "@heroui/react";
 import { MapPin, Clock, Briefcase, CircleDollar } from "@gravity-ui/icons";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
-import { capitalize } from "@/lib/helpers";
+import { capitalize, currencySymbol, formatDate } from "@/lib/helpers";
 
-const JobDetails = ({ job }) => {
+const JobDetails = ({ job, hasApplied }) => {
   const { data: session, isPending } = useSession();
   const userRole = session?.user?.role;
 
@@ -30,22 +30,6 @@ const JobDetails = ({ job }) => {
     salaryMin,
   } = job;
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  };
-
-  const currencySymbol =
-    {
-      usd: "$",
-      eur: "€",
-      gbp: "£",
-    }[currency] || currency.toUpperCase();
-
   return (
     <div>
       <div className="bg-background dark:bg-foreground/5 backdrop-blur-sm px-5 py-3 rounded-lg mb-6 border-b border-foreground/10">
@@ -66,10 +50,14 @@ const JobDetails = ({ job }) => {
             </Link>
           ) : (
             <Link
-              href={`/jobs/${_id}/apply`}
-              className="hidden sm:block bg-indigo-600 hover:bg-indigo-700 rounded-lg px-4 py-2 active:scale-95 duration-100 text-white"
+              href={
+                hasApplied
+                  ? `/dashboard/seeker/applications/${_id}`
+                  : `/jobs/${_id}/apply`
+              }
+              className={`hidden sm:block ${hasApplied ? "bg-foreground text-background" : "bg-indigo-600 hover:bg-indigo-700 text-white"} dark:font-medium rounded-lg px-4 py-2 active:scale-95 duration-100`}
             >
-              Apply Now
+              {hasApplied ? "View Application" : "Apply Now"}
             </Link>
           )}
         </div>
@@ -88,8 +76,8 @@ const JobDetails = ({ job }) => {
           <div>
             <p className="text-xs text-muted mb-1">Salary Range</p>
             <p className="font-medium">
-              {currencySymbol}
-              {salaryMin} - {currencySymbol}
+              {currencySymbol(currency)}
+              {salaryMin} - {currencySymbol(currency)}
               {salaryMax} {currency.toUpperCase()}
             </p>
           </div>
@@ -154,10 +142,14 @@ const JobDetails = ({ job }) => {
               className={`mt-12 justify-center pt-8 border-t border-foreground/10 ${userRole === "recruiter" ? "hidden" : "flex"}`}
             >
               <Link
-                href={`/jobs/${_id}/apply`}
-                className="bg-indigo-600 hover:bg-indigo-700 rounded-lg px-12 py-4 text-white font-bold text-lg active:scale-95 duration-100"
+                href={
+                  hasApplied
+                    ? `/dashboard/seeker/applications/${_id}`
+                    : `/jobs/${_id}/apply`
+                }
+                className={`${hasApplied ? "bg-foreground text-background" : "bg-indigo-600 hover:bg-indigo-700 text-white"} rounded-lg px-12 py-4 font-bold text-lg active:scale-95 duration-100`}
               >
-                Apply Now
+                {hasApplied ? "View Application" : "Apply Now"}
               </Link>
             </div>
           )}
@@ -174,8 +166,10 @@ const JobDetails = ({ job }) => {
               </Avatar>
               <div>
                 <h3 className="font-bold text-lg">{companyName}</h3>
-                <div className="flex items-end gap-1 text-sm text-muted">
-                  <MapPin />
+                <div className="flex items-start gap-0.75 text-sm text-muted">
+                  <div className=" mt-0.5 scale-90">
+                    <MapPin />
+                  </div>
                   <p>{companyLocation}</p>
                 </div>
               </div>

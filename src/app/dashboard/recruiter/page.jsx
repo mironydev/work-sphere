@@ -1,6 +1,7 @@
 import RecruiterHomepage from "@/components/dashboard/recruiter/RecruiterHomepage";
 import { auth } from "@/lib/auth";
-import { getCompanies, getRecruiterJobs } from "@/lib/fetch/fetchJobs";
+import { getCompanies } from "@/lib/fetch/fetchCompanies";
+import { getRecruiterJobs } from "@/lib/fetch/fetchJobs";
 import { headers } from "next/headers";
 import React from "react";
 

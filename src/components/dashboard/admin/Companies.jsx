@@ -2,7 +2,7 @@
 import { TrashBin } from "@gravity-ui/icons";
 import { AlertDialog, Button, Table } from "@heroui/react";
 import { capitalize, formatDate } from "@/lib/helpers";
-import { deleteCompany, reviewCompany } from "@/lib/actions/jobs";
+import { deleteCompany, reviewCompany } from "@/lib/actions/company";
 
 const Companies = ({ allCompanies }) => {
   const approveButtonStyle =
@@ -38,7 +38,9 @@ const Companies = ({ allCompanies }) => {
                   <Table.Cell className={"rounded-none py-5 font-medium"}>
                     {comp.companyName}
                   </Table.Cell>
-                  <Table.Cell className="text-muted">email</Table.Cell>
+                  <Table.Cell className="text-muted">
+                    {comp.userEmail}
+                  </Table.Cell>
                   <Table.Cell>
                     <p className="text-xs w-fit px-3 py-1 rounded-full bg-white dark:bg-stone-800">
                       {capitalize(comp.industry)}

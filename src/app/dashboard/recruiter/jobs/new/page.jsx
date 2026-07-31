@@ -1,6 +1,6 @@
 import RecruiterPostJob from "@/components/dashboard/recruiter/RecruiterPostJob";
 import { auth } from "@/lib/auth";
-import { getCompanies } from "@/lib/fetch/fetchJobs";
+import { getCompanies } from "@/lib/fetch/fetchCompanies";
 import { headers } from "next/headers";
 
 export default async function AddJobPage() {

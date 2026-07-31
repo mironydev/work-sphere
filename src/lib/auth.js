@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { admin } from "better-auth/plugins";
+import { getUserForMail } from "./sendEmail";
 
 const client = new MongoClient(process.env.MONGO_DB_URI);
 const db = client.db(process.env.DB_NAME);
@@ -10,6 +11,7 @@ const ALLOWED_ROLES = ["seeker", "recruiter"];
 const ALLOWED_PLANS = ["seeker_starter", "recruiter_starter"];
 
 export const auth = betterAuth({
+  trustedOrigins: [process.env.BASE_URL, process.env.ALT_URL],
   emailAndPassword: {
     enabled: true,
   },
@@ -59,6 +61,10 @@ export const auth = betterAuth({
               requestedRole: undefined, // don't persist the scratch field
             },
           };
+        },
+        after: async (user) => {
+          //send welcome email to the user's email
+          await getUserForMail(user.name, user.email);
         },
       },
     },

@@ -20,7 +20,7 @@ import {
   Globe,
 } from "@gravity-ui/icons";
 import { toast } from "sonner";
-import { submitApplication } from "@/lib/actions/jobs";
+import { submitApplication } from "@/lib/actions/submitapplication";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -34,12 +34,22 @@ const Apply = ({ job, user, totalApplications, plan }) => {
     const formData = new FormData(e.currentTarget);
     const applicationData = Object.fromEntries(formData.entries());
 
-    applicationData.jobId = _id;
-    applicationData.jobTitle = jobTitle;
-    applicationData.userId = id;
-    applicationData.userName = name;
-    applicationData.userEmail = email;
-    applicationData.companyName = companyName;
+    applicationData.user = {
+      id,
+      name,
+      email,
+    };
+
+    applicationData.job = {
+      id: _id,
+      title: jobTitle,
+    };
+
+    applicationData.company = {
+      name: companyName,
+    };
+
+    applicationData.status = "applied";
 
     const res = await submitApplication(applicationData);
     if (res.insertedId) {

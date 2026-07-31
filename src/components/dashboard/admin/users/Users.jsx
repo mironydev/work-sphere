@@ -22,7 +22,7 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { TrashBin } from "@gravity-ui/icons";
 import { toast } from "sonner";
-import { updatePlan } from "@/lib/actions/jobs";
+import { updatePlan } from "@/lib/actions/plan";
 import UserStats from "./UserStats";
 import { useState } from "react";
 import { PackageOpen } from "lucide-react";

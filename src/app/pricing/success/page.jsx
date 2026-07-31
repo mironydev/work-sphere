@@ -2,7 +2,7 @@ import { stripe } from "@/lib/stripe";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Check, Circles4Square, Briefcase, File } from "@gravity-ui/icons";
-import { createSubscription } from "@/lib/actions/jobs";
+import { createSubscription } from "@/lib/actions/createsubscription";
 
 export default async function Success({ searchParams }) {
   const { session_id } = await searchParams;

@@ -1,4 +1,6 @@
+import { Chip, Tooltip } from "@heroui/react";
 import UserFilter from "./UserFilter";
+import { Wrench } from "@gravity-ui/icons";
 
 const UserStats = ({ users, filteredUsers, setFilteredUsers }) => {
   const activeUsers = filteredUsers.filter((user) => !user.banned);
@@ -44,9 +46,22 @@ const UserStats = ({ users, filteredUsers, setFilteredUsers }) => {
         </div>
         <div className="flex items-end gap-2">
           <UserFilter users={users} setFilteredUsers={setFilteredUsers} />
-          <button className="px-4 py-2 rounded-sm bg-foreground text-background text-sm font-medium whitespace-nowrap">
-            Export List
-          </button>
+
+          <Tooltip delay={0} closeDelay={0}>
+            <Tooltip.Trigger aria-label="Export button">
+              <button className="px-4 py-2 rounded-sm bg-foreground text-background text-sm font-medium whitespace-nowrap cursor-not-allowed select-none">
+                Export List
+              </button>
+            </Tooltip.Trigger>
+            <Tooltip.Content
+              showArrow
+              className="flex items-center gap-1.5 cursor-not-allowed select-none rounded-md"
+            >
+              <Tooltip.Arrow />
+              <Wrench className="opacity-60" />
+              <p className="opacity-60">This feature is under construction</p>
+            </Tooltip.Content>
+          </Tooltip>
         </div>
       </div>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">

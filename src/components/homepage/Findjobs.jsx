@@ -5,7 +5,7 @@ import { Magnifier, Briefcase } from "@gravity-ui/icons";
 const Findjobs = () => {
   return (
     <div className="text-center space-y-5 mt-32 px-4">
-      <div className="bg-linear-to-b from-white to-stone-300 dark:from-stone-900 dark:to-black rounded-full px-5 py-2 w-fit mx-auto border-t dark:border-foreground/30">
+      <div className="bg-linear-to-b from-white to-stone-200 dark:from-stone-900 dark:to-black rounded-full px-5 py-2 w-fit mx-auto border-b dark:border-b-0 border-black/20 dark:border-t dark:border-foreground/30">
         <p className="flex flex-wrap justify-center items-center gap-2 ">
           <span>
             <Briefcase />

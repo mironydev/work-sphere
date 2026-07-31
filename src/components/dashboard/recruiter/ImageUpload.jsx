@@ -4,7 +4,7 @@ import { useState } from "react";
 import { CloudArrowUpIn } from "@gravity-ui/icons";
 import { toast } from "sonner";
 import Image from "next/image";
-import { uploadToImgBB } from "@/lib/actions/uploadImage";
+import { uploadToImgBB } from "@/lib/uploadImage";
 
 export default function ImageUpload({ onImageUpload }) {
   const [preview, setPreview] = useState(null);

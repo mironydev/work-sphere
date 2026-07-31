@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { SearchField, Select, ListBox, Checkbox } from "@heroui/react";
 import { useRouter } from "next/navigation";
 
-const JobsFilter = ({ searchQuery, jobs, page, setPage, total }) => {
+const JobsFilter = ({ searchQuery, page, setPage }) => {
   const [search, setSearch] = useState(searchQuery.search);
   const [jobType, setJobType] = useState(searchQuery.jobType);
   const [category, setCategory] = useState(searchQuery.jobCategory);

@@ -28,7 +28,7 @@ export default function Navbar() {
 
   return (
     <div className="p-4 fixed w-full top-0 z-40">
-      <nav className=" w-full bg-background/50 backdrop-blur-lg max-w-6xl mx-auto rounded-lg border border-foreground/4 dark:border-foreground/15">
+      <nav className=" w-full bg-background/50 backdrop-blur-lg max-w-6xl mx-auto rounded-lg border border-foreground/5 dark:border-foreground/15">
         <header className=" flex py-3.5 sm:py-0 sm:h-16 gap-3 items-center justify-between px-3 md:px-6 flex-wrap ">
           <div className="flex items-center gap-4">
             <button
@@ -95,7 +95,7 @@ export default function Navbar() {
                         ? "/dashboard/admin"
                         : "/dashboard/seeker"
                   }
-                  className="p-2 active:text-stone-500"
+                  className={`${!user ? "hidden" : "block"} p-2 active:text-stone-500`}
                 >
                   Dashboard
                 </Link>
@@ -143,7 +143,7 @@ export default function Navbar() {
                   onClick={handleSignout}
                   className="bg-transparent rounded-md p-0 ring-0"
                 >
-                  <ArrowRightFromSquare className="w-7 h-7 text-black dark:text-white" />
+                  <ArrowRightFromSquare className="w-7 h-7 text-black dark:text-white shrink" />
                 </Button>
               </div>
             ) : (

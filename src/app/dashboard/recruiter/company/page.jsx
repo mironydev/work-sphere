@@ -1,5 +1,5 @@
 import RecruiterCompany from "@/components/dashboard/recruiter/RecruiterCompany";
-import { getMyCompanies } from "@/lib/fetch/fetchJobs";
+import { getMyCompanies } from "@/lib/fetch/fetchCompanies";
 import React from "react";
 
 const CompanyPage = async () => {

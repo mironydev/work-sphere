@@ -1,10 +1,19 @@
 import SeekerSavedJobs from "@/components/dashboard/seeker/SeekerSavedJobs";
-import React from "react";
+import { auth } from "@/lib/auth";
+import { getSavedJobs } from "@/lib/fetch/fetchJobs";
+import { headers } from "next/headers";
 
-const SavedJobsPage = () => {
+const SavedJobsPage = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const user = session?.user;
+  const savedJobs = await getSavedJobs(user?.id);
+  const data = savedJobs.result;
+
   return (
     <div>
-      <SeekerSavedJobs />
+      <SeekerSavedJobs savedJobs={data} />
     </div>
   );
 };

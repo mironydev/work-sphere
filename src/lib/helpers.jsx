@@ -23,3 +23,14 @@ export const formatDate = (dateString) =>
     month: "short",
     year: "numeric",
   });
+
+//convert to money symbol
+export const currencySymbol = (currency) => {
+  const symbol =
+    {
+      usd: "$",
+      eur: "€",
+      gbp: "£",
+    }[currency] || currency.toUpperCase();
+  return symbol;
+};

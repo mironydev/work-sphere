@@ -10,6 +10,7 @@ const ApplicationsPage = async () => {
   });
   const user = session?.user;
   const applications = await getApplications(user?.id);
+
   return (
     <div>
       <SeekerApplications applications={applications} />

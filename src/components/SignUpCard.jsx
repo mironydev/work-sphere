@@ -50,7 +50,6 @@ const SignUpCard = () => {
       requestedRole: user.role,
       plan: plan,
     });
-    console.log("data:", data, "error:", error);
 
     setIsLoading(false);
 

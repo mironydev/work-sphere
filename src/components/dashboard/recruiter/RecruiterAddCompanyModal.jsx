@@ -15,7 +15,7 @@ import {
   Form,
   FieldError,
 } from "@heroui/react";
-import { createCompany } from "@/lib/actions/jobs";
+import { createCompany } from "@/lib/actions/company";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import ImageUpload from "./ImageUpload";

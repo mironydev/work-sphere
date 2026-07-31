@@ -1,6 +1,8 @@
+"use server";
+
 import { headers } from "next/headers";
 import { auth } from "../auth";
-import { authHeader } from "../actions/jobs";
+import { authHeader } from "../authHeader";
 
 const url = process.env.SERVER_URL;
 
@@ -13,23 +15,6 @@ export const getRecruiterJobs = async () => {
   const res = await fetch(`${url}/recruiter/jobs`, {
     headers: await authHeader(),
   });
-  return res.json();
-};
-
-export const getCompanies = async () => {
-  const res = await fetch(`${url}/companies`);
-  return res.json();
-};
-
-export const getMyCompanies = async () => {
-  const res = await fetch(`${url}/mycompanies`, {
-    headers: await authHeader(),
-  });
-  return res.json();
-};
-
-export const getCompanyDetails = async (companyId) => {
-  const res = await fetch(`${url}/companies/${companyId}`);
   return res.json();
 };
 
@@ -57,4 +42,9 @@ export const listAllUsers = async () => {
     headers: await headers(),
   });
   return users;
+};
+
+export const getSavedJobs = async (userId) => {
+  const res = await fetch(`${url}/savedjobs?userId=${userId}`);
+  return res.json();
 };

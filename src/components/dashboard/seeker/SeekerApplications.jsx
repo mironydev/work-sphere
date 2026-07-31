@@ -1,8 +1,15 @@
 "use client";
 
-import { formatDate, useSessionClient } from "@/lib/helpers";
-import { FileLetterX, ArrowRight } from "@gravity-ui/icons";
-import { EmptyState, Spinner, Table } from "@heroui/react";
+import { capitalize, formatDate, useSessionClient } from "@/lib/helpers";
+import {
+  FileLetterX,
+  ArrowRight,
+  Clock,
+  CircleCheckFill,
+  PersonPencil,
+  Xmark,
+} from "@gravity-ui/icons";
+import { Chip, EmptyState, Spinner, Table } from "@heroui/react";
 import Link from "next/link";
 import React from "react";
 
@@ -17,28 +24,83 @@ const SeekerApplications = ({ applications }) => {
     );
   }
 
+  const statusMap = {
+    applied: {
+      color: "default",
+      icon: null,
+    },
+    reviewing: {
+      color: "warning",
+      icon: <Clock width={12} />,
+    },
+    shortlisted: {
+      color: "default",
+      icon: <CircleCheckFill width={12} />,
+    },
+    interviewing: {
+      color: "accent",
+      icon: <PersonPencil width={12} />,
+    },
+    offered: {
+      color: "success",
+      icon: <CircleCheckFill width={12} />,
+    },
+    rejected: {
+      color: "danger",
+      icon: <Xmark width={12} />,
+    },
+  };
+
   return (
-    <div className="md:pl-5">
-      <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5 text-xs">
+    <div>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-5 text-xs">
         <p className="text-3xl font-semibold">My Applications</p>
-        <div className="shadow-[inset_0_0_5px_rgba(0,0,0,0.3)] dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.3)] px-3 py-1 rounded-sm">
+        <div className="dark:shadow-[inset_0_0_5px_rgba(255,255,255,0.3)] px-3 py-1 rounded-sm">
           Total applications:{" "}
           <span className="font-medium">{applications.length}</span>
         </div>
       </div>
       <Table
-        className="rounded-lg p-0 border border-foreground/15 mt-6 bg-background dark:bg-foreground/3"
+        className="rounded-lg p-0 border-t border-x dark:border-foreground/15 mt-6 bg-background dark:bg-foreground/5 shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
         variant="secondary"
       >
         <Table.ScrollContainer>
           <Table.Content aria-label="Job applications">
             <Table.Header>
-              <Table.Column isRowHeader className={"py-4 rounded-none"}>
+              <Table.Column
+                isRowHeader
+                className={
+                  "py-4 rounded-none dark:bg-foreground/5 border-b dark:border-0"
+                }
+              >
                 Job Title
               </Table.Column>
-              <Table.Column>Company</Table.Column>
-              <Table.Column>Applied Date</Table.Column>
-              <Table.Column className={"rounded-none"}>Actions</Table.Column>
+              <Table.Column
+                className={"dark:bg-foreground/5 border-b dark:border-0"}
+              >
+                Company
+              </Table.Column>
+              <Table.Column
+                className={
+                  "dark:bg-foreground/5 border-b dark:border-0 text-center"
+                }
+              >
+                Applied
+              </Table.Column>
+              <Table.Column
+                className={
+                  "dark:bg-foreground/5 border-b dark:border-0 text-center"
+                }
+              >
+                Status
+              </Table.Column>
+              <Table.Column
+                className={
+                  "rounded-none dark:bg-foreground/5 border-b dark:border-0 text-center"
+                }
+              >
+                Actions
+              </Table.Column>
             </Table.Header>
             <Table.Body
               renderEmptyState={() => (
@@ -54,25 +116,45 @@ const SeekerApplications = ({ applications }) => {
                 </EmptyState>
               )}
             >
-              {applications.map((application) => (
-                <Table.Row key={application._id}>
-                  <Table.Cell className={"rounded-none py-5 font-medium"}>
-                    {application.jobTitle}
-                  </Table.Cell>
-                  <Table.Cell>{application.companyName}</Table.Cell>
-                  <Table.Cell>{formatDate(application.createdAt)}</Table.Cell>
-                  <Table.Cell className={"rounded-none"}>
-                    <div className="flex gap-1">
-                      <Link
-                        href={`/dashboard/seeker/applications/${application._id}`}
-                        className="cursor-pointer p-2 hover:bg-foreground/5 rounded-sm duration-75"
-                      >
-                        View
-                      </Link>
-                    </div>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
+              {applications.map((app) => {
+                const status = statusMap[app.status.toLowerCase()] || {
+                  color: "default",
+                  icon: null,
+                };
+                return (
+                  <Table.Row key={app._id}>
+                    <Table.Cell className={"rounded-none py-"}>
+                      <p className="text-lg">{app.job.title || "Not found"}</p>
+                      <p className="font-light text-stone-300">
+                        {capitalize(app.job.jobType) || "Not found"} •{" "}
+                        {app.job.isRemote ? "Remote" : "On-site" || "Not found"}
+                      </p>
+                    </Table.Cell>
+                    <Table.Cell>{app.company.name || "Not found"}</Table.Cell>
+                    <Table.Cell className={"text-center"}>
+                      {formatDate(app.createdAt) || "Not found"}
+                    </Table.Cell>
+                    <Table.Cell className={"text-center"}>
+                      <Chip color={status.color}>
+                        {status.icon}
+                        <Chip.Label>
+                          {capitalize(app.status) || "Not found"}
+                        </Chip.Label>
+                      </Chip>
+                    </Table.Cell>
+                    <Table.Cell className={"rounded-none"}>
+                      <div className="flex gap-1 justify-center">
+                        <Link
+                          href={`/dashboard/seeker/applications/${app._id}`}
+                          className="cursor-pointer px-6 py-2 hover:bg-foreground/5 active:bg-foreground/10 rounded-sm duration-75 font-medium"
+                        >
+                          Details
+                        </Link>
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                );
+              })}
             </Table.Body>
           </Table.Content>
         </Table.ScrollContainer>

@@ -20,7 +20,7 @@ import {
   Persons,
   PlanetEarth,
 } from "@gravity-ui/icons";
-import { deleteCompany } from "@/lib/actions/jobs";
+import { deleteCompany } from "@/lib/actions/company";
 import { toast } from "sonner";
 import RecruiterEditCompanyModal from "./RecruiterEditCompanyModal";
 import IfNotRecruiter from "./IfNotRecruiter";

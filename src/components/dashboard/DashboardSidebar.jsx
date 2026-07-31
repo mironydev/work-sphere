@@ -53,7 +53,7 @@ export default function DashboardSidebar() {
     {
       icon: Briefcase,
       label: "Browse Jobs",
-      href: "/jobs",
+      href: "/jobs?page=1",
     },
     {
       icon: FileText,
@@ -147,7 +147,7 @@ export default function DashboardSidebar() {
                 <Link
                   key={item.label}
                   href={item.href}
-                  className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-foreground transition-colors hover:bg-background/50 dark:hover:bg-default/40 ${isActive ? "bg-background dark:bg-default" : ""}`}
+                  className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm text-foreground transition-colors ${isActive ? "hover:bg-none bg-white/80 dark:bg-default" : "hover:bg-white/50 dark:hover:bg-default/40"}`}
                   type="button"
                 >
                   <item.icon className="size-5 text-muted" />
