@@ -33,25 +33,25 @@ const SeekerSvdJobCard = ({ job }) => {
   };
 
   return (
-    <div className="rounded-lg border-t border-white dark:border dark:border-foreground/10 bg-linear-to-r from-white to-foreground/3 dark:from-foreground/10 dark:to-foreground/5 overflow-hidden shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
-      <div className="p-6">
+    <div className="rounded-lg border-t-2 border-white dark:border dark:border-foreground/10 bg-white/80 dark:bg-foreground/5 overflow-hidden shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+      <div className="px-5 py-4">
         <div className="flex justify-between items-start">
           <div>
-            <h2 className="text-2xl font-bold">{job.jobTitle}</h2>
-            <p className="text-lg text-muted">{job.companyName}</p>
+            <h2 className="text-2xl font-medium">{job.jobTitle}</h2>
+            <p className="text-muted">{job.companyName}</p>
           </div>
           <div>
             <p className="text-xs uppercase text-muted font-semibold">
               Apply By
             </p>
-            <p className="text-lg font-semibold">{formatDate(job.deadline)}</p>
+            <p>{formatDate(job.deadline)}</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-6 pt-6 mt-6 border-t border-foreground/10">
+        <div className="grid grid-cols-3 gap-6 pt-4 mt-4 border-t border-foreground/10">
           <div>
             <p className="text-xs uppercase text-muted font-semibold">Salary</p>
-            <p className="text-lg font-medium">
+            <p>
               {currencySymbol(job.currency)}
               {job.salaryMin} - {currencySymbol(job.currency)}
               {job.salaryMax}
@@ -61,20 +61,20 @@ const SeekerSvdJobCard = ({ job }) => {
             <p className="text-xs uppercase text-muted font-semibold">
               Location
             </p>
-            <div className="text-lg font-semibold">
+            <div>
               {job.isRemote ? "Remote" : ` ${job.city}, ${job.country}`}
             </div>
           </div>
-          <div className="flex justify-between gap-5">
-            <Link href={`/jobs/${job.jobId}`} className="block w-full">
-              <button className="w-full py-3 px-6 bg-foreground/95 text-background rounded-lg font-medium text-lg hover:bg-foreground active:bg-foreground cursor-pointer">
+          <div className="flex justify-end items-center gap-3">
+            <Link href={`/jobs/${job.jobId}`} className="">
+              <button className="py-2 px-5 bg-foreground/95 text-background rounded-lg font-medium hover:bg-foreground active:bg-foreground cursor-pointer">
                 View Job
               </button>
             </Link>
 
             <AlertDialog>
               <AlertDialog.Trigger>
-                <button className="text-red-500 hover:bg-red-600/10 p-3 rounded-lg cursor-pointer">
+                <button className="text-red-500 hover:bg-red-600/10 p-2.5 rounded-lg cursor-pointer">
                   <Trash2 className="w-6 h-6" />
                 </button>
               </AlertDialog.Trigger>

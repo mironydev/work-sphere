@@ -57,7 +57,7 @@ export default function DashboardSidebar() {
     },
     {
       icon: FileText,
-      label: "My Applications",
+      label: "Applications",
       href: "/dashboard/seeker/applications",
     },
     {

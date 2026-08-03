@@ -12,7 +12,7 @@ const Jobs = ({ jobs, total, searchQuery, savedJobs }) => {
 
   return (
     <div>
-      <p className="text-5xl font-semibold text-center">Browse Jobs</p>
+      <p className="text-5xl font-semibold text-center py-5">Browse Jobs</p>
       <JobsFilter searchQuery={searchQuery} page={page} setPage={setPage} />
       <p className="text-sm text-muted mb-3">
         Showing {startItem}-{endItem} of

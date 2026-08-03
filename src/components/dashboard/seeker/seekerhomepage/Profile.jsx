@@ -1,5 +1,6 @@
 import { useSessionClient } from "@/lib/helpers";
 import { Avatar } from "@heroui/react";
+import Link from "next/link";
 import React from "react";
 
 const Profile = () => {
@@ -105,9 +106,12 @@ const Profile = () => {
         </div>
       </div>
 
-      <button className="border border-foreground/20 dark:border-white/10 px-5 py-2 rounded-sm cursor-pointer bg-black hover:bg-black/80 dark:bg-white dark:hover:bg-white/80 text-background w-full duration-75 active:scale-95 text-sm font-medium">
+      <Link
+        href={"/dashboard/seeker/settings"}
+        className="border border-foreground/20 dark:border-white/10 px-5 py-2 rounded-sm cursor-pointer bg-black hover:bg-black/80 dark:bg-white dark:hover:bg-white/80 text-background w-full duration-75 active:scale-95 text-sm font-medium text-center"
+      >
         Edit Profile
-      </button>
+      </Link>
     </div>
   );
 };

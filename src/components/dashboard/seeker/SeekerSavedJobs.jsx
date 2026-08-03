@@ -8,7 +8,7 @@ const SeekerSavedJobs = ({ savedJobs }) => {
   return (
     <div>
       {savedJobs.length > 0 ? (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
           <div>
             <h1 className="text-3xl font-semibold">Saved Jobs</h1>
             <p className="text-muted mt-2">{savedJobs.length} jobs saved</p>

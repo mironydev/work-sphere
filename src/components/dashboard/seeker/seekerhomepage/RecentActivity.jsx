@@ -65,7 +65,10 @@ const RecentActivity = () => {
     <div className="rounded-lg border-t-2 dark:border-t border-white dark:border-foreground/15 overflow-hidden mt-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
       {/* Header */}
       <div className="bg-white/80 dark:bg-foreground/2 p-6 border-b border-foreground/10 flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Recent Activity</h3>
+        <h3 className="text-lg font-semibold">
+          Recent Activity{" "}
+          <span className="text-xs text-muted font-normal">[dummy data]</span>
+        </h3>
         <Link
           href="#"
           className="text-sm hover:underline cursor-pointer"

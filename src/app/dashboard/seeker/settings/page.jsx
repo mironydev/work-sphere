@@ -1,4 +1,4 @@
-import SeekerSettings from "@/components/dashboard/seeker/SeekerSettings";
+import SeekerSettings from "@/components/dashboard/seeker/seekersettings/SeekerSettings";
 import React from "react";
 
 const SettingsPage = () => {

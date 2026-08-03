@@ -58,75 +58,69 @@ const RecentApplications = ({ applications }) => {
       </div>
 
       {/* Body */}
-      {!app.length > 0 ? (
+      {app.length > 0 ? (
         <div className="bg-white/80 dark:bg-foreground/5 divide-y divide-foreground/10 h-full">
-          {
-            !app.slice(0, 10).map((app) => {
-              const status = statusMap[app.status.toLowerCase()] || {
-                color: "default",
-                icon: null,
-              };
-              return (
-                <div
-                  key={app._id}
-                  className="px-6 py-4.25 hover:bg-foreground/2 transition-colors"
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    {/* Left: Job Info */}
-                    <div className="flex-1">
-                      <div className="flex flex-col sm:flex-row xl:flex-col sm:gap-3 xl:gap-0">
-                        <div>
-                          <p className="font-semibold text-sm">
-                            {app.job.title}
-                          </p>
-                          <p className="text-sm text-muted">
-                            {app.company.name}
-                          </p>
-                        </div>
-                        <span className="text-muted hidden sm:block xl:hidden">
-                          •
-                        </span>
-                        <p className="text-xs text-gray-300 text-nowrap mt-1 xl:mt-0">
-                          {formatDate(app.createdAt)}
-                        </p>
+          {app.slice(0, 10).map((app) => {
+            const status = statusMap[app.status.toLowerCase()] || {
+              color: "default",
+              icon: null,
+            };
+            return (
+              <div
+                key={app._id}
+                className="px-6 py-4.25 hover:bg-foreground/2 transition-colors"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  {/* Left: Job Info */}
+                  <div className="flex-1">
+                    <div className="flex flex-col sm:flex-row xl:flex-col sm:gap-3 xl:gap-0">
+                      <div>
+                        <p className="font-semibold text-sm">{app.job.title}</p>
+                        <p className="text-sm text-muted">{app.company.name}</p>
                       </div>
-                    </div>
-
-                    {/* Middle: Status */}
-                    <div>
-                      <Chip color={status.color}>
-                        {status.icon}
-                        <Chip.Label>{capitalize(app.status)}</Chip.Label>
-                      </Chip>
-                    </div>
-
-                    {/* Right: Actions */}
-                    <div className="flex gap-2">
-                      <Tooltip delay={500} closeDelay={0}>
-                        <Tooltip.Trigger>
-                          <Link
-                            href={`/dashboard/seeker/applications/${app._id}`}
-                            className="p-2 hover:bg-foreground/5 rounded-sm cursor-pointer transition-colors"
-                          >
-                            {" "}
-                            <Eye className="w-4 h-4" />
-                          </Link>
-                        </Tooltip.Trigger>
-                        <Tooltip.Content
-                          showArrow
-                          offset={8}
-                          className={"px-2 rounded-md"}
-                        >
-                          <Tooltip.Arrow />
-                          <p>View</p>
-                        </Tooltip.Content>
-                      </Tooltip>
+                      <span className="text-muted hidden sm:block xl:hidden">
+                        •
+                      </span>
+                      <p className="text-xs text-muted text-nowrap mt-1 xl:mt-0">
+                        {formatDate(app.createdAt)}
+                      </p>
                     </div>
                   </div>
+
+                  {/* Middle: Status */}
+                  <div>
+                    <Chip color={status.color}>
+                      {status.icon}
+                      <Chip.Label>{capitalize(app.status)}</Chip.Label>
+                    </Chip>
+                  </div>
+
+                  {/* Right: Actions */}
+                  <div className="flex gap-2">
+                    <Tooltip delay={500} closeDelay={0}>
+                      <Tooltip.Trigger>
+                        <Link
+                          href={`/dashboard/seeker/applications/${app._id}`}
+                          className="p-2 hover:bg-foreground/5 rounded-sm cursor-pointer transition-colors"
+                        >
+                          {" "}
+                          <Eye className="w-4 h-4" />
+                        </Link>
+                      </Tooltip.Trigger>
+                      <Tooltip.Content
+                        showArrow
+                        offset={8}
+                        className={"px-2 rounded-md"}
+                      >
+                        <Tooltip.Arrow />
+                        <p>View</p>
+                      </Tooltip.Content>
+                    </Tooltip>
+                  </div>
                 </div>
-              );
-            })
-          }
+              </div>
+            );
+          })}
         </div>
       ) : (
         <div className="px-8 flex py-14 xl:pt-28 text-sm text-muted bg-white/80 dark:bg-foreground/5 h-full">
