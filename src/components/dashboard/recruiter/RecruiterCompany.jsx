@@ -57,12 +57,13 @@ const RecruiterCompany = ({ companies }) => {
 
   if (companies.length <= 0) {
     return (
-      <div className="sm:px-10">
-        <div className="bg-foreground/5 rounded-md text-center py-12">
-          <p className="text-4xl font-medium">No Companies Found</p>
-          <p className="text-muted mt-2 mb-8">
-            You haven&apos;t created any companies yet. Create your first
-            company to start posting jobs.
+      <div>
+        <div className="bg-white/80 dark:bg-foreground/5 rounded-md text-center px-3 py-12">
+          <p className="text-2xl sm:text-4xl font-medium text-muted">
+            No Companies Found
+          </p>
+          <p className="text-muted mt-2 mb-4 sm:mb-6">
+            You haven&apos;t created any companies yet.
           </p>
           <RecruiterAddCompanyModal />
         </div>
@@ -70,7 +71,7 @@ const RecruiterCompany = ({ companies }) => {
     );
   }
   return (
-    <div className="sm:px-10">
+    <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
         <div>
           <p className="text-3xl font-semibold">My Companies</p>

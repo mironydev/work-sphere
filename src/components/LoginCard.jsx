@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "@/lib/auth-client";
+import { getSession, signIn } from "@/lib/auth-client";
 import {
   Button,
   FieldError,
@@ -18,14 +18,13 @@ import Link from "next/link";
 
 const LoginCard = () => {
   const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [show, setShow] = useState(false);
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/";
+  const redirect = searchParams.get("redirect");
 
   const clearMessage = () => setMessage("");
 
@@ -44,14 +43,23 @@ const LoginCard = () => {
     setIsLoading(false);
 
     if (!error) {
-      setMessage("Login successful.");
-      setIsSuccess(true);
-      setTimeout(() => {
+      if (redirect) {
         router.push(redirect);
-      }, 1000);
+        return;
+      }
+
+      const { data: session } = await getSession();
+      const role = session?.user?.role;
+
+      if (role === "admin") {
+        router.push("/dashboard/admin");
+      } else if (role === "recruiter") {
+        router.push("/dashboard/recruiter");
+      } else {
+        router.push("/dashboard/seeker");
+      }
     } else {
       setMessage(error.message);
-      setIsSuccess(false);
     }
   };
 
@@ -72,15 +80,14 @@ const LoginCard = () => {
 
   return (
     <div className="px-4">
-      <div className="mt-24 sm:mt-28 dark:border-2 bg-stone-100 dark:bg-black/50 p-7 max-w-sm mx-auto rounded-xl">
+      <div className="mt-24 sm:mt-28 border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-black/20 p-6 max-w-sm mx-auto rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
         <h2 className="text-center text-3xl font-semibold">Log In</h2>
         <p className="text-sm text-center opacity-60 pt-1.5 pb-5">
           Welcome back, continue your journey.
         </p>
-        <Separator className="mb-5" />
+        <Separator className="mb-5 dark:bg-foreground/15" />
         <Form className="flex mx-auto flex-col gap-4" onSubmit={onSubmit}>
           <TextField
-            isRequired
             name="email"
             type="email"
             onChange={clearMessage}
@@ -94,21 +101,27 @@ const LoginCard = () => {
             <Label>Email</Label>
             <Input
               placeholder="Enter your email"
-              className="rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/20"
+              className="rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15"
             />
             <FieldError />
           </TextField>
           <TextField
-            isRequired
             name="password"
             type={show ? "text" : "password"}
             onChange={clearMessage}
             className="relative"
+            validate={(value) => {
+              if (!value) {
+                return "Enter your password";
+              }
+
+              return null;
+            }}
           >
             <Label>Password</Label>
             <Input
               placeholder="Enter your password"
-              className="rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 pr-10 shadow-none border border-foreground/20"
+              className="rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 pr-10 shadow-none border border-foreground/15"
             />
             <button
               type="button"
@@ -124,43 +137,28 @@ const LoginCard = () => {
             <FieldError />
           </TextField>
           {message && (
-            <div
-              className={`rounded-md px-4 py-1.5 border w-fit${
-                isSuccess
-                  ? "border dark:border-green-700 bg-green-600 dark:bg-green-950 text-white dark:text-green-200 text-sm w-fit mb-1"
-                  : "border dark:border-red-700 bg-red-400 dark:bg-red-950 text-white dark:text-red-200 text-sm w-fit mb-1"
-              }`}
-            >
+            <div className="text-red-500 dark:text-red-400 text-sm">
               {message}
             </div>
           )}
           <div className="flex gap-2 mt-2">
             <Button
               type="submit"
-              className="rounded-md w-25 bg-indigo-600 text-base"
+              className="rounded-md w-full bg-indigo-600 text-base mt-2"
               isLoading={isLoading}
               isDisabled={isLoading || googleLoading}
             >
               {isLoading ? <Spinner color="current" /> : <>Log in</>}
             </Button>
-            <Button
-              type="reset"
-              variant="secondary"
-              className="rounded-md text-black dark:text-white text-base"
-              isDisabled={isLoading || googleLoading}
-              onClick={clearMessage}
-            >
-              Clear
-            </Button>
           </div>
           <div className="flex justify-center items-center gap-5">
             <div className="border w-1/2"></div>
-            <div className="opacity-40">OR</div>
+            <div className="opacity-40 font-medium text-xs">OR</div>
             <div className="border w-1/2"></div>
           </div>
           <div
             onClick={loginWithGoogle}
-            className="relative select-none bg-white border dark:border-0 dark:bg-gray-800 rounded-md py-2 cursor-pointer"
+            className="relative select-none bg-white border dark:border-gray-700 dark:bg-gray-800 rounded-md py-2 cursor-pointer"
           >
             <div className={googleLoading ? "opacity-20" : "opacity-100"}>
               <div className="flex items-center justify-center gap-2">
@@ -206,11 +204,11 @@ const LoginCard = () => {
               </div>
             )}
           </div>
-          <div className="text-center text-sm mt-2">
-            Don&apos;t have an account?{" "}
+          <div className="text-sm mt-1 flex justify-center gap-1">
+            <p>Don&apos;t have an account?</p>
             <Link
               href={!redirect ? "/signup" : `/signup?redirect=${redirect}`}
-              className="cursor-pointer underline hover:text-blue-700 active:text-blue-800 dark:hover:text-indigo-200 dark:active:text-indigo-300"
+              className="cursor-pointer hover:underline active:underline"
             >
               Create one
             </Link>

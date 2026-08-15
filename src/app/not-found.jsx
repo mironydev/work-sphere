@@ -32,8 +32,8 @@ const GlobalNotFoundPage = () => {
             Go Home
           </Link>
           <Link
-            href="/jobs"
-            className="flex items-center justify-center gap-2 bg-foreground/10 hover:bg-foreground/20 text-foreground font-semibold px-8 py-3 rounded-lg active:scale-95 duration-100"
+            href="/jobs?page=1"
+            className="flex items-center justify-center gap-2 border dark:border-0 bg-white dark:bg-foreground/10 dark:hover:bg-foreground/15 text-foreground font-semibold px-8 py-3 rounded-lg active:scale-95 duration-75"
           >
             Browse Jobs
           </Link>

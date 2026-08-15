@@ -81,7 +81,7 @@ const Pricing = () => {
                 className={`relative rounded-2xl px-5 py-8 flex flex-col justify-between transition-transform hover:scale-105 ${
                   plan.popular
                     ? "inset-shadow-[0_0_40px_rgba(99,102,241,0.5)] bg-indigo-600 text-white dark:bg-indigo-600/30 md:scale-105"
-                    : "border inset-shadow-[0_1px_30px_rgba(255,255,255,1)] dark:inset-shadow-[0_1px_40px_rgba(255,255,255,.1)] dark:bg-foreground/10"
+                    : "border dark:inset-shadow-[0_1px_40px_rgba(255,255,255,.1)] bg-white dark:bg-foreground/10"
                 }`}
               >
                 {plan.popular && (
@@ -93,7 +93,7 @@ const Pricing = () => {
                 <div>
                   <div className="flex flex-wrap gap-3 justify-between mb-6">
                     <div className="flex items-end gap-3">
-                      <div className="bg-foreground/5 dark:bg-foreground/10 p-2 rounded-md">
+                      <div className="bg-foreground/7 p-2 rounded-md">
                         <IconComponent />
                       </div>
                       <p className="text-2xl font-semibold">{plan.name}</p>

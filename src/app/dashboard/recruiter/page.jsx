@@ -1,6 +1,6 @@
 import RecruiterHomepage from "@/components/dashboard/recruiter/RecruiterHomepage";
 import { auth } from "@/lib/auth";
-import { getCompanies } from "@/lib/fetch/fetchCompanies";
+import { getMyCompanies } from "@/lib/fetch/fetchCompanies";
 import { getRecruiterJobs } from "@/lib/fetch/fetchJobs";
 import { headers } from "next/headers";
 import React from "react";
@@ -12,7 +12,7 @@ const RecruiterPage = async () => {
   const userid = session?.user?.id;
 
   const totalJobs = await getRecruiterJobs();
-  const companies = await getCompanies(userid);
+  const companies = await getMyCompanies();
   const topCompanies = companies.slice(0, 3);
 
   return (

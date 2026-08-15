@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Providers from "./providers";
 import { Toaster } from "sonner";
+import DashboardDrawer from "@/components/dashboard/DashboardDrawer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
       <body>
         <Providers>
           <Navbar />
+          <DashboardDrawer />
           <main className="max-w-7xl mx-auto">{children}</main>
           <Footer />
           <Toaster

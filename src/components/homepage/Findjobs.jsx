@@ -5,7 +5,7 @@ import { Magnifier, Briefcase } from "@gravity-ui/icons";
 const Findjobs = () => {
   return (
     <div className="text-center space-y-5 mt-32 px-4">
-      <div className="bg-linear-to-b from-white to-stone-200 dark:from-stone-900 dark:to-black rounded-full px-5 py-2 w-fit mx-auto border-b dark:border-b-0 border-black/20 dark:border-t dark:border-foreground/30">
+      <div className="bg-linear-to-b from-white via-white to-stone-200 dark:from-stone-900 dark:via-stone-950 dark:to-black rounded-full px-5 py-2 w-fit mx-auto border-b-2 dark:border-b-0 dark:border-t dark:border-foreground/25">
         <p className="flex flex-wrap justify-center items-center gap-2 ">
           <span>
             <Briefcase />
@@ -26,7 +26,7 @@ const Findjobs = () => {
         <Magnifier className="absolute left-4 top-1/2 -translate-y-1/2" />
         <Input
           aria-label="Name"
-          className="w-full border border-black/20 dark:border-white/20 rounded-xl py-4 pr-15 pl-11 focus:ring-1 ring-indigo-500"
+          className="w-full border border-black/20 dark:border-white/20 rounded-xl py-4 pr-15 pl-11 focus:ring-1 ring-indigo-500 shadow-none "
           placeholder="Enter job title, skill or company"
         />
 
@@ -37,13 +37,13 @@ const Findjobs = () => {
       <div className="flex flex-col sm:flex-row justify-center items-center gap-3">
         <p className="opacity-60">Trending Position</p>
         <div className="space-y-2 sm:space-y-0 sm:flex flex-row items-center justify-center gap-1">
-          <p className="bg-white/70 dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
+          <p className="bg-white/80 dark:bg-foreground/5 py-1.5 px-4 rounded-full border border-white dark:border-white/20 shadow">
             UX Designer
           </p>
-          <p className="bg-white/70 dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
+          <p className="bg-white/80 dark:bg-foreground/5 py-1.5 px-4 rounded-full border border-white dark:border-white/20 shadow">
             Marketing Coordinator
           </p>
-          <p className="bg-white/70 dark:bg-stone-900 py-1.5 px-4 rounded-full border border-white/70 dark:border-white/20">
+          <p className="bg-white/80 dark:bg-foreground/5 py-1.5 px-4 rounded-full border border-white dark:border-white/20 shadow">
             DevOps Engineer
           </p>
         </div>

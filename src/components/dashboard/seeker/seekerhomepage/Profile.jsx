@@ -8,14 +8,35 @@ const Profile = () => {
 
   // Calculate profile completion percentage
   const getProfileCompletion = () => {
-    let completed = 0;
-    const fields = ["name", "email", "image"];
+    const requiredFields = ["name", "email"];
+    const importantFields = [
+      "image",
+      "headline",
+      "phone",
+      "bio",
+      "linkedin",
+      "portfolio",
+      "skills",
+      "yearsOfExperience",
+      "resumeLink",
+      "city",
+      "country",
+    ];
 
-    fields.forEach((field) => {
-      if (user[field]) completed++;
+    let completed = 0;
+    const totalFields = requiredFields.length + importantFields.length;
+
+    // Check required fields
+    requiredFields.forEach((field) => {
+      if (user?.[field]) completed++;
     });
 
-    return Math.round((completed / fields.length) * 100);
+    // Check important fields
+    importantFields.forEach((field) => {
+      if (user?.[field]) completed++;
+    });
+
+    return Math.round((completed / totalFields) * 100);
   };
 
   // Format plan name
@@ -47,23 +68,27 @@ const Profile = () => {
   const profileCompletion = getProfileCompletion();
 
   return (
-    <div className="bg-white/80 dark:bg-foreground/5 p-5 rounded-lg border-t-2 dark:border-t border-white dark:border-white/10 shadow-[0_1px_2px_rgba(0,0,0,0.06)] flex flex-col justify-between gap-5 w-full md:w-fit flex-1">
+    <div className="bg-white/80 dark:bg-foreground/5 p-5 rounded-lg border-t-2 dark:border-t border-white dark:border-white/10 shadow-[0_1px_2px_rgba(0,0,0,0.06)] flex flex-col justify-between gap-5 w-full md:w-fit lg:max-w-60 xl:max-w-80 flex-1">
       <div className="flex gap-4">
         <Avatar className="rounded-lg bg-transparent">
-          <Avatar.Image alt={user.name} src={user.image} />
+          <Avatar.Image
+            alt={user?.name}
+            src={user?.image}
+            className="object-cover h-full w-full"
+          />
           <Avatar.Fallback className="rounded-lg">
-            {user.name.charAt(0).toUpperCase()}
+            {user?.name.charAt(0).toUpperCase()}
           </Avatar.Fallback>
         </Avatar>
         <div>
-          <p className="text-xl leading-4 mb-1">{user.name}</p>
-          <p className="text-sm text-muted">{user.email}</p>
+          <p className="text-xl leading-4 mb-1">{user?.name}</p>
+          <p className="text-sm text-muted">{user?.email}</p>
           <span
             className={`inline-block text-xs font-semibold px-3 py-1 rounded-md mt-1.5 ${getPlanColor(
-              user.plan,
+              user?.plan,
             )}`}
           >
-            {formatPlanName(user.plan)}
+            {formatPlanName(user?.plan)}
           </span>
         </div>
       </div>
@@ -107,7 +132,7 @@ const Profile = () => {
       </div>
 
       <Link
-        href={"/dashboard/seeker/settings"}
+        href={"/dashboard/seeker/profile/edit"}
         className="border border-foreground/20 dark:border-white/10 px-5 py-2 rounded-sm cursor-pointer bg-black hover:bg-black/80 dark:bg-white dark:hover:bg-white/80 text-background w-full duration-75 active:scale-95 text-sm font-medium text-center"
       >
         Edit Profile

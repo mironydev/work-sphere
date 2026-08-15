@@ -67,7 +67,7 @@ const RecruiterEditJob = ({ job }) => {
   };
 
   return (
-    <div className="md:pl-5">
+    <div>
       <div>
         <h1 className="text-3xl font-bold">Edit Job Posting</h1>
         <p className="mt-2 opacity-70">

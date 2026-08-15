@@ -23,6 +23,7 @@ const JobsPage = async ({ searchParams }) => {
         total={total}
         searchQuery={searchQuery}
         savedJobs={data}
+        user={user}
       />
     </div>
   );

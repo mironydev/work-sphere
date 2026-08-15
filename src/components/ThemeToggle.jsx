@@ -12,7 +12,13 @@ export default function ThemeToggle() {
     setMounted(true);
   }, []);
 
-  if (!mounted) return <button className="px-3 py-2 " />;
+  if (!mounted) {
+    return (
+      <div className="px-2.5 py-2">
+        <div className="size-5" />
+      </div>
+    );
+  }
 
   const isDark = resolvedTheme === "dark";
 

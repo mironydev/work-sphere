@@ -44,11 +44,13 @@ const JobsFilter = ({ searchQuery, page, setPage }) => {
           value={search}
           onChange={setSearch}
           className={
-            "flex-1 border focus-within:border-foreground/40 rounded-sm duration-100 w-full "
+            "flex-1 border focus-within:border-foreground/40 rounded-sm duration-100 w-full"
           }
         >
           <SearchField.Group
-            className={"shadow-none ring-0 rounded-sm py-5 sm:py-0"}
+            className={
+              "shadow-none ring-0 rounded-sm py-5 sm:py-0 dark:bg-foreground/5"
+            }
           >
             <SearchField.SearchIcon />
             <SearchField.Input placeholder="Search by company or job title..." />
@@ -61,7 +63,7 @@ const JobsFilter = ({ searchQuery, page, setPage }) => {
             <Select
               aria-label="Job type"
               placeholder="Select job type"
-              className="flex-1 rounded-md border bg-white dark:bg-[#18181B]"
+              className="flex-1 rounded-md border bg-white dark:bg-foreground/5 text-nowrap"
               onChange={(value) => setJobType(value)}
               variant="secondary"
               value={jobType}
@@ -120,7 +122,7 @@ const JobsFilter = ({ searchQuery, page, setPage }) => {
             <Select
               aria-label="Job category"
               placeholder="Select category"
-              className="flex-1 rounded-md border bg-white dark:bg-[#18181B]"
+              className="flex-1 rounded-md border bg-white dark:bg-foreground/5 text-nowrap"
               onChange={(value) => setCategory(value)}
               variant="secondary"
               value={category}

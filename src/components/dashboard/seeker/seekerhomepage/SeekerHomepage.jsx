@@ -9,7 +9,8 @@ import RecentApplications from "./RecentApplications";
 import RecentActivity from "./RecentActivity";
 
 const SeekerHomepage = ({ applications, savedJobsCount }) => {
-  const { isPending } = useSessionClient();
+  const { user, isPending } = useSessionClient();
+
   if (isPending) {
     return (
       <div className="flex justify-center items-center mt-10 md:mt-16">
@@ -19,9 +20,15 @@ const SeekerHomepage = ({ applications, savedJobsCount }) => {
   }
 
   return (
-    <div className="space-y-10">
+    <div>
+      <h1 className="text-3xl font-medium">
+        Hey there, {user?.name?.split(" ")[0]}!
+      </h1>
+      <p className="text-muted mb-4 mt-1">
+        View and manage everything from your dashboard
+      </p>
       <Stats savedJobsCount={savedJobsCount} applications={applications} />
-      <div className="flex flex-wrap justify-between gap-5">
+      <div className="flex flex-wrap justify-between gap-3 mt-5">
         <RecentApplications applications={applications} />
         <Profile />
         <ApplicationStatus applications={applications} />

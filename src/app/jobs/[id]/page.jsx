@@ -12,11 +12,18 @@ const JobsDetailsPage = async ({ params }) => {
   const user = session?.user;
   const job = await getJobDetails(id);
   const applications = await getApplications(user?.id);
-  const hasApplied = applications.some((a) => a.job.id === id);
+  const application = applications.find((a) => a.job.id === id);
+  const hasApplied = !!application;
+  const applicationId = application?._id;
 
   return (
     <div className="mt-26 px-4">
-      <JobDetails job={job} hasApplied={hasApplied} />
+      <JobDetails
+        job={job}
+        hasApplied={hasApplied}
+        applicationId={applicationId}
+        user={user}
+      />
     </div>
   );
 };

@@ -11,11 +11,10 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSessionClient } from "@/lib/helpers";
 import { toast } from "sonner";
 import { removeSavedJob, saveJob } from "@/lib/actions/jobs";
-import { getSavedJobs } from "@/lib/fetch/fetchJobs";
 export const JobCardMenu = ({ job, savedJobs }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -64,7 +63,6 @@ export const JobCardMenu = ({ job, savedJobs }) => {
         toast.success("Job saved");
       }
     } catch (error) {
-      console.error("Error toggling save job:", error);
       toast.error("Failed to save/remove job");
     } finally {
       setIsLoading(false);

@@ -6,7 +6,7 @@ const JobDetailsPage = async ({ params }) => {
   const { id } = await params;
   const job = await getJobDetails(id);
   return (
-    <div className="px-0 sm:px-10">
+    <div>
       <JobDetails job={job} />
     </div>
   );

@@ -226,7 +226,10 @@ const RecruiterAddCompanyModal = () => {
 
                       <div className="flex-1">
                         <Label>Company Logo</Label>
-                        <ImageUpload onImageUpload={setLogoUrl} />
+                        <ImageUpload
+                          onImageUpload={setLogoUrl}
+                          uploadText="Click to upload logo"
+                        />
                       </div>
                     </div>
                     <TextField

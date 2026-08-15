@@ -32,10 +32,12 @@ const RecruiterAllJobs = ({ allJobs }) => {
 
   if (!allJobs.length) {
     return (
-      <div className="sm:px-10">
-        <div className="bg-foreground/5 rounded-md text-center py-12">
-          <p className="text-4xl font-medium">No Jobs Found</p>
-          <p className="text-muted mt-2 mb-8">
+      <div>
+        <div className="bg-white/80 dark:bg-foreground/5 rounded-md text-center py-12">
+          <p className="text-2xl sm:text-4xl font-medium text-muted">
+            No Jobs Found
+          </p>
+          <p className="text-muted mt-2 mb-4 md:mb-6 px-3">
             Create a job posting to start attracting candidates.
           </p>
           <Link href={"/dashboard/recruiter/jobs/new"} className="">
@@ -52,7 +54,7 @@ const RecruiterAllJobs = ({ allJobs }) => {
   }
 
   return (
-    <div className="sm:px-10">
+    <div>
       <div className="flex flex-col gap-5 sm:flex-row justify-between">
         <p className="text-3xl font-semibold">Manage Your Jobs</p>total jobs:{" "}
         {allJobs.length}
@@ -94,7 +96,7 @@ const RecruiterAllJobs = ({ allJobs }) => {
                   <Table.Cell className={"font-medium text-nowrap"}>
                     {job.jobTitle}
                   </Table.Cell>
-                  <Table.Cell>{job.companyName}</Table.Cell>
+                  <Table.Cell>{job.company.companyName}</Table.Cell>
                   <Table.Cell>
                     {job.isRemote ? (
                       "Remote"

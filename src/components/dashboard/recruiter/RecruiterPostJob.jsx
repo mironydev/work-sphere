@@ -35,10 +35,6 @@ const RecruiterPostJob = ({ userId, companies }) => {
     newJobData.salaryMin = parseInt(newJobData.salaryMin, 10);
     newJobData.salaryMax = parseInt(newJobData.salaryMax, 10);
     newJobData.userId = userId;
-    const company = companies.find((c) => c._id === newJobData.companyId);
-    newJobData.companyName = company.companyName;
-    newJobData.companyLogo = company.logo;
-    newJobData.companyLocation = company.location;
     newJobData.isRemote = isRemote;
 
     const res = await createJob(newJobData);
@@ -56,23 +52,23 @@ const RecruiterPostJob = ({ userId, companies }) => {
 
   if (!companies.length) {
     return (
-      <div className="sm:px-10">
-        <div className="bg-foreground/5 rounded-md text-center py-12">
-          <p className="text-4xl font-medium">Create a Company First</p>
-          <p className="text-muted mt-2 mb-8">
-            You need to create a company before posting or managing jobs.
-          </p>
-          <RecruiterAddCompanyModal />
-        </div>
+      <div className="bg-foreground/5 rounded-md text-center py-12">
+        <p className="text-4xl font-medium">Create a Company First</p>
+        <p className="text-muted mt-2 mb-8">
+          You need to create a company before posting or managing jobs.
+        </p>
+        <RecruiterAddCompanyModal />
       </div>
     );
   }
 
-  const allPending = companies.every((company) => company.status === "pending");
+  const companiesPending = companies.every(
+    (company) => company.status === "pending",
+  );
 
-  if (allPending) {
+  if (companiesPending) {
     return (
-      <div className="flex items-center justify-center md:pl-4 mt-5">
+      <div className="flex items-center justify-center mt-5">
         <div className="max-w-2xl w-full text-center">
           {/* Icon */}
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-yellow-100 dark:bg-yellow-600/20 mb-4">
@@ -106,7 +102,7 @@ const RecruiterPostJob = ({ userId, companies }) => {
   }
 
   return (
-    <div className="md:pl-5">
+    <div>
       <div>
         <h1 className="text-3xl font-bold">Post a New Job</h1>
         <p className=" mt-2 opacity-70">

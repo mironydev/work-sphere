@@ -1,9 +1,9 @@
-import SeekerHomepage from "@/components/dashboard/seeker/seekerhomepage/SeekerHomepage";
+import SeekerHomepage from "@/components/dashboard/seeker/seekerHomepage/SeekerHomepage";
 import { auth } from "@/lib/auth";
 import { getApplications, getSavedJobs } from "@/lib/fetch/fetchJobs";
 import { headers } from "next/headers";
 
-const RecruiterPage = async () => {
+const SeekerPage = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -21,4 +21,4 @@ const RecruiterPage = async () => {
   );
 };
 
-export default RecruiterPage;
+export default SeekerPage;

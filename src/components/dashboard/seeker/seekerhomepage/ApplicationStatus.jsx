@@ -8,7 +8,7 @@ const ApplicationStatus = ({ applications }) => {
     return acc;
   }, {});
   return (
-    <div className="bg-white/80 dark:bg-foreground/5 border-t-2 dark:border-t border-white dark:border-white/10 p-6 rounded-lg shadow-[0_1px_2px_rgba(0,0,0,0.06)] w-full md:w-fit flex-1 min-w-56">
+    <div className="bg-white/80 dark:bg-foreground/5 border-t-2 dark:border-t border-white dark:border-white/10 p-6 rounded-lg shadow-[0_1px_2px_rgba(0,0,0,0.06)] w-full md:w-fit lg:flex-1 min-w-56 lg:max-w-min xl:max-w-80">
       <p className="text-xl font-medium mb-8">Application Status</p>
       <div className="space-y-2">
         <Meter

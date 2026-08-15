@@ -25,7 +25,6 @@ const SeekerSvdJobCard = ({ job }) => {
       toast.success("Job removed from saved");
       router.refresh();
     } catch (error) {
-      console.error("Error removing saved job:", error);
       toast.error("Failed to remove job");
     } finally {
       setIsRemoving(false);

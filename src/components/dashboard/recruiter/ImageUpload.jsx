@@ -6,7 +6,13 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { uploadToImgBB } from "@/lib/uploadImage";
 
-export default function ImageUpload({ onImageUpload }) {
+export default function ImageUpload({
+  onImageUpload,
+  uploadText = "Click to upload",
+  previewSize = "w-9 h-9",
+  mainTextSize = "text-xs",
+  subTextSize = "text-[10px]",
+}) {
   const [preview, setPreview] = useState(null);
   const [uploading, setUploading] = useState(false);
 
@@ -27,7 +33,7 @@ export default function ImageUpload({ onImageUpload }) {
       const url = await uploadToImgBB(file);
       onImageUpload(url);
     } catch (error) {
-      toast.error("Failed to upload logo");
+      toast.error("Failed to upload");
       setPreview(null);
     } finally {
       setUploading(false);
@@ -44,7 +50,7 @@ export default function ImageUpload({ onImageUpload }) {
               height={50}
               src={preview}
               alt="Preview"
-              className="w-9 h-9 object-cover rounded"
+              className={`${previewSize} object-cover rounded`}
             />
             <input
               type="file"
@@ -76,7 +82,9 @@ export default function ImageUpload({ onImageUpload }) {
       ) : (
         <div className="flex items-center gap-3">
           <label className="cursor-pointer shrink-0">
-            <CloudArrowUpIn className="w-9 h-9 bg-foreground/7 hover:bg-foreground/12 dark:bg-foreground/12 dark:hover:bg-foreground/16 p-2 rounded-lg" />
+            <CloudArrowUpIn
+              className={`${previewSize} bg-foreground/7 hover:bg-foreground/12 dark:bg-foreground/12 dark:hover:bg-foreground/16 p-2 rounded-lg`}
+            />
             <input
               type="file"
               accept="image/*"
@@ -86,10 +94,10 @@ export default function ImageUpload({ onImageUpload }) {
             />
           </label>
           <div>
-            <p className="text-xs font-medium text-foreground/70">
-              Click to upload logo
+            <p className={`${mainTextSize} font-medium text-foreground/70`}>
+              {uploadText}
             </p>
-            <p className="text-[10px] pt-0.5 text-muted">PNG, JPG, GIF</p>
+            <p className={`${subTextSize} pt-0.5 text-muted`}>Max 5 MB</p>
           </div>
         </div>
       )}

@@ -30,11 +30,72 @@ export const auth = betterAuth({
       // NOT "role" — that name is reserved/protected by the admin plugin
       requestedRole: {
         type: "string",
-        input: true, // explicitly allow this one from client input
+        input: true,
       },
+
       plan: {
         type: "string",
         default: "seeker_starter",
+      },
+
+      phone: {
+        type: "string",
+        input: true,
+        required: false,
+      },
+
+      city: {
+        type: "string",
+        input: true,
+        required: false,
+      },
+
+      country: {
+        type: "string",
+        input: true,
+        required: false,
+      },
+
+      headline: {
+        type: "string",
+        input: true,
+        required: false,
+      },
+
+      yearsOfExperience: {
+        type: "number",
+        input: true,
+        required: false,
+      },
+
+      resumeLink: {
+        type: "string",
+        input: true,
+        required: false,
+      },
+
+      bio: {
+        type: "string",
+        input: true,
+        required: false,
+      },
+
+      skills: {
+        type: "string",
+        input: true,
+        required: false,
+      },
+
+      portfolio: {
+        type: "string",
+        input: true,
+        required: false,
+      },
+
+      linkedin: {
+        type: "string",
+        input: true,
+        required: false,
       },
     },
   },

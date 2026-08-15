@@ -67,11 +67,13 @@ const RecentActivity = () => {
       <div className="bg-white/80 dark:bg-foreground/2 p-6 border-b border-foreground/10 flex justify-between items-center">
         <h3 className="text-lg font-semibold">
           Recent Activity{" "}
-          <span className="text-xs text-muted font-normal">[dummy data]</span>
+          <span className="text-xs text-muted font-normal text-nowrap">
+            [dummy data]
+          </span>
         </h3>
         <Link
           href="#"
-          className="text-sm hover:underline cursor-pointer"
+          className="text-sm hover:underline cursor-pointer text-nowrap gap-0.5"
           style={{ outline: "none", boxShadow: "none" }}
         >
           View all activity
@@ -79,7 +81,6 @@ const RecentActivity = () => {
         </Link>
       </div>
 
-      {/* Activities */}
       {/* Activities */}
       {activities.length > 0 ? (
         <div className="bg-white/50 dark:bg-black/30 divide-y divide-foreground/10">

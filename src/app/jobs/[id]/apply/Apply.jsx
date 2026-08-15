@@ -25,7 +25,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 const Apply = ({ job, user, totalApplications, plan }) => {
-  const { _id, jobTitle, companyName } = job;
+  const { _id, jobTitle } = job;
   const { name, email, id } = user;
   const router = useRouter();
 
@@ -46,7 +46,8 @@ const Apply = ({ job, user, totalApplications, plan }) => {
     };
 
     applicationData.company = {
-      name: companyName,
+      name: job.company.companyName,
+      url: job.company.url,
     };
 
     applicationData.status = "applied";
@@ -142,7 +143,7 @@ const Apply = ({ job, user, totalApplications, plan }) => {
               <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mb-2 uppercase tracking-wide">
                 Company
               </p>
-              <p className="text-2xl font-bold">{companyName}</p>
+              <p className="text-2xl font-bold">{job.company.companyName}</p>
             </div>
             <div>
               <p className="text-sm font-semibold text-muted mb-2 uppercase tracking-wide">

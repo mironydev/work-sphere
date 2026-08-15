@@ -36,11 +36,11 @@ const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
   }
 
   return (
-    <div className="md:pl-5">
+    <div>
       <div>
         <p className="text-2xl font-semibold">Dashboard</p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mt-5 gap-4">
-          <div className="bg-background dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 mt-5 gap-4">
+          <div className="bg-white/80 dark:bg-foreground/5 border-t-2 dark:border border-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:border-foreground/15 rounded-lg p-4">
             <div className="flex items-center justify-between">
               <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
                 <File />
@@ -55,21 +55,21 @@ const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
             <p className="text-sm font-medium pt-4 pb-1">Total Job Posts</p>
             <p className="text-2xl font-bold">{totalJobs.length}</p>
           </div>
-          <div className="bg-background dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
+          <div className="bg-white/80 dark:bg-foreground/5 border-t-2 dark:border border-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:border-foreground/15 rounded-lg p-4">
             <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
               <Persons />
             </div>
             <p className="text-sm font-medium pt-4 pb-1">Total Applicants</p>
             <p className="text-2xl font-bold">0</p>
           </div>
-          <div className="bg-background dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
+          <div className="bg-white/80 dark:bg-foreground/5 border-t-2 dark:border border-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:border-foreground/15 rounded-lg p-4">
             <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
               <Thunderbolt />
             </div>
             <p className="text-sm font-medium pt-4 pb-1">Active Jobs</p>
             <p className="text-2xl font-bold">0</p>
           </div>
-          <div className="bg-background dark:bg-foreground/3 border border-foreground/15 rounded-lg p-4">
+          <div className="bg-white/80 dark:bg-foreground/5 border-t-2 dark:border border-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:border-foreground/15 rounded-lg p-4">
             <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
               <SquareXmark />
             </div>
@@ -85,13 +85,12 @@ const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
 
             <Link
               href={"/dashboard/recruiter"}
-              className="rounded-md hover:bg-foreground/10 active:bg-foreground/10 px-4 py-2 text-sm duration-100"
-              variant="ghost"
+              className="rounded-md hover:bg-foreground/5 active:bg-foreground/5 px-4 py-1.5 text-sm duration-100"
             >
               View all
             </Link>
           </div>
-          <Table className="rounded-lg p-0 border border-foreground/15 mt-3">
+          <Table className="rounded-lg p-0 border-t dark:border dark:border-foreground/15 mt-3 shadow-xs">
             <Table.ScrollContainer>
               <Table.Content aria-label="Team members">
                 <Table.Header
@@ -101,21 +100,27 @@ const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
                     margin: "2.5rem",
                   }}
                 >
-                  <Table.Column isRowHeader className={"py-4"}>
+                  <Table.Column isRowHeader className="py-4 text-nowrap">
                     Candidate Name
                   </Table.Column>
                   <Table.Column>Role</Table.Column>
-                  <Table.Column>Date Applied</Table.Column>
+                  <Table.Column className="text-nowrap">
+                    Date Applied
+                  </Table.Column>
                   <Table.Column>Experience</Table.Column>
                   <Table.Column>Status</Table.Column>
                 </Table.Header>
                 <Table.Body>
                   <Table.Row>
-                    <Table.Cell className={"rounded-none py-5 font-bold"}>
+                    <Table.Cell
+                      className={"rounded-none py-5 font-bold text-nowrap"}
+                    >
                       Kate Moore
                     </Table.Cell>
                     <Table.Cell>SWE</Table.Cell>
-                    <Table.Cell>Jan 01, 2026</Table.Cell>
+                    <Table.Cell className="text-nowrap">
+                      Jan 01, 2026
+                    </Table.Cell>
                     <Table.Cell>5 years</Table.Cell>
                     <Table.Cell className={"rounded-none"}>
                       <Chip color="warning">Reviewing</Chip>
@@ -131,19 +136,18 @@ const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
             <p className="text-xl font-semibold">My Top Companies</p>
             <Link
               href={"/dashboard/recruiter/company"}
-              className="rounded-md hover:bg-foreground/10 active:bg-foreground/10 px-4 py-2 text-sm duration-100"
-              variant="ghost"
+              className="rounded-md hover:bg-foreground/5 active:bg-foreground/5 px-4 py-1.5 text-sm duration-100"
             >
               View all
             </Link>
           </div>
-          {topCompanies.length ? (
+          {topCompanies.length > 0 ? (
             topCompanies.map((comp, i) => (
               <div
                 key={i}
-                className="rounded-lg border border-foreground/15 mt-3 p-6 bg-background dark:bg-foreground/5"
+                className="rounded-lg mt-3 p-4 bg-white/80 dark:bg-foreground/5 border-t-2 dark:border border-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:border-foreground/15"
               >
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-3">
                     <Avatar className="rounded-lg bg-transparent">
                       <Avatar.Image alt={comp.companyName} src={comp.logo} />
@@ -166,7 +170,7 @@ const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
               </div>
             ))
           ) : (
-            <div className="flex flex-col items-center gap-2 pt-3 justify-center">
+            <div className="flex flex-col items-center gap-3 rounded-lg mt-3 p-6 bg-white/80 dark:bg-foreground/5 border border-b-0 dark:border-0 shadow-xs">
               <p className="text-lg text-foreground/50">
                 You don&apos;t have any company
               </p>

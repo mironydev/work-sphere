@@ -13,8 +13,6 @@ import { JobCardMenu } from "./JobCardMenu";
 const JobsCard = ({ job, savedJobs }) => {
   const {
     _id,
-    companyName,
-    companyLogo,
     jobTitle,
     jobType,
     salaryMax,
@@ -31,12 +29,15 @@ const JobsCard = ({ job, savedJobs }) => {
         <div className="flex justify-between items-start">
           <div className="flex items-center gap-2 mb-3">
             <Avatar size="sm" className="rounded-lg bg-transparent">
-              <Avatar.Image alt={companyName} src={companyLogo} />
+              <Avatar.Image
+                alt={job.company.companyName}
+                src={job.company.logo}
+              />
               <Avatar.Fallback className="rounded-lg">
-                {companyName.charAt(0).toUpperCase()}
+                {job.company.companyName.charAt(0).toUpperCase()}
               </Avatar.Fallback>
             </Avatar>
-            <p>{companyName}</p>
+            <p>{job.company.companyName}</p>
           </div>
           <JobCardMenu job={job} savedJobs={savedJobs} />
         </div>
@@ -77,7 +78,7 @@ const JobsCard = ({ job, savedJobs }) => {
           </div>{" "}
         </div>
       </div>
-      <Link href={`/jobs/${_id}`}>
+      <Link href={`/jobs/${_id}`} className="w-fit">
         <Button
           variant="ghost"
           style={{

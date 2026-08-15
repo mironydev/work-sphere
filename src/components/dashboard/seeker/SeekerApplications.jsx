@@ -56,12 +56,14 @@ const SeekerApplications = ({ applications }) => {
 
   return (
     <div>
-      <div className="">
-        <h2 className="text-3xl font-semibold">My Applications</h2>
-        <p className="text-muted mt-1">{applications.length} applications</p>
+      <div>
+        <h1 className="text-3xl font-semibold">My Applications</h1>
+        <p className="text-muted mt-1 mb-4">
+          {applications.length} applications
+        </p>
       </div>
       <Table
-        className="rounded-lg p-0 border-t border-x dark:border-foreground/15 mt-6 bg-background dark:bg-foreground/5 shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
+        className="rounded-lg p-0 border-t border-x dark:border-foreground/15  bg-background dark:bg-foreground/5 shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
         variant={isDark ? "secondary" : "primary"}
       >
         <Table.ScrollContainer>
@@ -70,7 +72,7 @@ const SeekerApplications = ({ applications }) => {
               <Table.Column
                 isRowHeader
                 className={
-                  "py-4 rounded-none bg-white/5 border-b dark:border-0"
+                  "py-4 rounded-none bg-white/5 border-b dark:border-0 text-nowrap"
                 }
               >
                 Job Title

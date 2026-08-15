@@ -44,7 +44,7 @@ const RecentApplications = ({ applications }) => {
   };
 
   return (
-    <div className="rounded-lg border-t-2 dark:border-t border-white dark:border-foreground/15 overflow-hidden shadow-[0_1px_2px_rgba(0,0,0,0.06)] w-full xl:w-fit">
+    <div className="rounded-lg border-t-2 dark:border-t border-white dark:border-foreground/15 overflow-hidden shadow-[0_1px_2px_rgba(0,0,0,0.06)] w-full xl:w-fit lg:flex-1">
       {/* Header */}
       <div className="bg-white dark:bg-foreground/10 p-6 border-b border-foreground/10 flex justify-between items-center">
         <h3 className="text-lg font-semibold">Recent Applications</h3>
@@ -68,17 +68,17 @@ const RecentApplications = ({ applications }) => {
             return (
               <div
                 key={app._id}
-                className="px-6 py-4.25 hover:bg-foreground/2 transition-colors"
+                className="p-4 pr-2 hover:bg-foreground/2 transition-colors"
               >
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center justify-between gap-3 lg:gap-1 xl:gap-3">
                   {/* Left: Job Info */}
                   <div className="flex-1">
-                    <div className="flex flex-col sm:flex-row xl:flex-col sm:gap-3 xl:gap-0">
+                    <div className="flex flex-col sm:flex-row lg:flex-col sm:gap-3 lg:gap-0">
                       <div>
                         <p className="font-semibold text-sm">{app.job.title}</p>
                         <p className="text-sm text-muted">{app.company.name}</p>
                       </div>
-                      <span className="text-muted hidden sm:block xl:hidden">
+                      <span className="text-muted hidden sm:block lg:hidden">
                         •
                       </span>
                       <p className="text-xs text-muted text-nowrap mt-1 xl:mt-0">
@@ -123,7 +123,7 @@ const RecentApplications = ({ applications }) => {
           })}
         </div>
       ) : (
-        <div className="px-8 flex py-14 xl:pt-28 text-sm text-muted bg-white/80 dark:bg-foreground/5 h-full">
+        <div className="px-8 flex py-14 lg:pt-28 text-sm text-muted bg-white/80 dark:bg-foreground/5 h-full">
           <p className="mx-auto">
             No applications yet. Start applying to jobs!
           </p>

@@ -5,6 +5,7 @@ import {
   PersonMagnifier,
   StarFill,
 } from "@gravity-ui/icons";
+import ShootingStars from "../ShootingStars";
 
 const Stats = () => {
   const stats = [
@@ -31,27 +32,21 @@ const Stats = () => {
   ];
 
   return (
-    <div className="relative px-4 pt-64 overflow-hidden">
-      <div className="absolute inset-0 bg-[url('/2.png')] lg:bg-[url('/1.png')] bg-no-repeat bg-size-[230%] md:bg-size-[120%] lg:bg-size-[100%] bg-position-[50%_0%] sm:bg-position-[50%_30%] lg:bg-position-[50%_18%] opacity-50 dark:opacity-100" />
-
+    <div className="relative overflow-hidden pt-32 pb-28 sm:pb-36 px-4">
+      <ShootingStars />
       <div className="relative z-10">
-        <div className="relative">
-          <h3 className="absolute inset-0 max-w-xl mx-auto blur-[10px] text-center text-4xl font-semibold mb-12 text-black translate-x-0.5 translate-y-0.5">
-            15,000+ job seekers have found opportunities through us.
-          </h3>
-
-          <h3 className="relative max-w-xl mx-auto text-center text-4xl font-semibold mb-12 text-white">
-            15,000+ job seekers have found opportunities through us.
-          </h3>
-        </div>
+        <h3 className="max-w-xl mx-auto text-center text-4xl font-semibold mb-12">
+          15,000+ job seekers have found opportunities through us.
+        </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {stats.map((stat) => {
             const IconComponent = stat.icon;
+
             return (
               <div
                 key={stat.label}
-                className="bg-linear-to-b from-white to-stone-200 dark:from-black dark:to-stone-800 p-5 rounded-xl border"
+                className="bg-white/70 dark:bg-white/5 backdrop-blur-[2px] p-6 rounded-xl border border-black/10 dark:border-white/10"
               >
                 <IconComponent />
                 <p className="text-6xl font-semibold mt-18 mb-4">

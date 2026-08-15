@@ -1,6 +1,6 @@
 "use client";
 
-import { getSession, signIn, signUp, useSession } from "@/lib/auth-client";
+import { getSession, signIn, signUp } from "@/lib/auth-client";
 import {
   Button,
   Description,
@@ -21,14 +21,13 @@ import Link from "next/link";
 
 const SignUpCard = () => {
   const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [show, setShow] = useState(false);
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/";
+  const redirect = searchParams.get("redirect");
 
   const clearMessage = () => setMessage("");
 
@@ -54,14 +53,21 @@ const SignUpCard = () => {
     setIsLoading(false);
 
     if (!error) {
-      setMessage("Account created successfully.");
-      setIsSuccess(true);
-      setTimeout(() => {
+      if (redirect) {
         router.push(redirect);
-      }, 1000);
+        return;
+      }
+
+      const { data: session } = await getSession();
+      const role = session?.user?.role;
+
+      if (role === "recruiter") {
+        router.push("/dashboard/recruiter");
+      } else {
+        router.push("/dashboard/seeker");
+      }
     } else {
       setMessage(error.message);
-      setIsSuccess(false);
     }
   };
 
@@ -81,15 +87,14 @@ const SignUpCard = () => {
 
   return (
     <div className="px-4">
-      <div className="mt-24 sm:mt-28 dark:border-2 bg-stone-100 dark:bg-black/50 p-7 max-w-sm mx-auto rounded-xl">
-        <h2 className="text-center text-3xl font-semibold">Create Account</h2>
-        <p className="text-sm text-center opacity-60 pt-1.5 pb-5">
-          Your next opportunity starts here.
-        </p>
-        <Separator className="mb-5" />
+      <div className="mt-24 sm:mt-28 border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-black/20 p-6 pb-5 max-w-sm mx-auto rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+        <h2 className="text-center text-3xl font-semibold pb-4">
+          Create Account
+        </h2>
+
+        <Separator className="mb-4 dark:bg-foreground/15" />
         <Form className="flex mx-auto flex-col gap-4" onSubmit={onSubmit}>
           <TextField
-            isRequired
             name="name"
             type="text"
             onChange={clearMessage}
@@ -106,12 +111,11 @@ const SignUpCard = () => {
             <Label>Name</Label>
             <Input
               placeholder="Enter your name"
-              className="rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/20"
+              className="rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15"
             />
             <FieldError />
           </TextField>
           <TextField
-            isRequired
             name="email"
             type="email"
             onChange={clearMessage}
@@ -125,12 +129,11 @@ const SignUpCard = () => {
             <Label>Email</Label>
             <Input
               placeholder="Enter your email"
-              className="rounded-md  focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/20"
+              className="rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15"
             />
             <FieldError />
           </TextField>
           <TextField
-            isRequired
             minLength={8}
             name="password"
             type={show ? "text" : "password"}
@@ -152,7 +155,7 @@ const SignUpCard = () => {
             <Label>Password</Label>
             <Input
               placeholder="Enter your password"
-              className="rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 pr-10 shadow-none border border-foreground/20"
+              className="rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 pr-10 shadow-none border border-foreground/15"
             />
             <button
               type="button"
@@ -166,7 +169,7 @@ const SignUpCard = () => {
               )}
             </button>
             <Description>
-              Must be at least 8 characters with 1 uppercase and 1 number
+              At least 8 characters with 1 uppercase and 1 number
             </Description>
             <FieldError />
           </TextField>
@@ -175,25 +178,31 @@ const SignUpCard = () => {
             name="role"
             orientation="horizontal"
             isRequired
-            className={"flex flex-col gap-1 mb-1"}
+            className={"flex items-center gap-1 mb-3"}
           >
-            <Label isRequired>Select your role</Label>
+            <Label>Select role:</Label>
 
-            <div className="flex items-center gap-5 mt-1">
-              <Radio value="seeker" className={"flex items-center"}>
-                <Radio.Control className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600 dark:bg-indigo-500">
+            <div className="flex items-center gap-5 ml-1">
+              <Radio value="seeker" className={"flex items-center gap-1"}>
+                <Radio.Control
+                  className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600 dark:bg-indigo-500 shadow-none"
+                  style={{ outline: "none", boxShadow: "none" }}
+                >
                   <Radio.Indicator />
                 </Radio.Control>
                 <Radio.Content>
-                  <Label className="-mb-1 sm:mb-0">Job Seeker</Label>
+                  <Label className="-mb-0.5 font-normal">Job Seeker</Label>
                 </Radio.Content>
               </Radio>
-              <Radio value="recruiter" className={"flex items-center"}>
-                <Radio.Control className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600">
+              <Radio value="recruiter" className={"flex items-center gap-1"}>
+                <Radio.Control
+                  className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600 shadow-none"
+                  style={{ outline: "none", boxShadow: "none" }}
+                >
                   <Radio.Indicator />
                 </Radio.Control>
                 <Radio.Content>
-                  <Label className="-mb-1 sm:mb-0">Recruiter</Label>
+                  <Label className="-mb-0.5 font-normal">Recruiter</Label>
                 </Radio.Content>
               </Radio>
             </div>
@@ -201,13 +210,7 @@ const SignUpCard = () => {
           </RadioGroup>
 
           {message && (
-            <div
-              className={`rounded-lg px-4 py-1.5 border w-fit${
-                isSuccess
-                  ? "border dark:border-green-700 bg-green-600 dark:bg-green-950 text-white dark:text-green-200 text-sm w-fit mb-1"
-                  : "border dark:border-red-700 bg-red-400 dark:bg-red-950 text-white dark:text-red-200 text-sm w-fit mb-1"
-              }`}
-            >
+            <div className="text-red-500 dark:text-red-400 text-sm">
               {message}
             </div>
           )}
@@ -215,30 +218,21 @@ const SignUpCard = () => {
           <div className="flex gap-2">
             <Button
               type="submit"
-              className="rounded-md w-25 bg-indigo-600 text-base"
+              className="rounded-md w-full bg-indigo-600 text-base"
               isLoading={isLoading}
               isDisabled={isLoading || googleLoading}
             >
-              {isLoading ? <Spinner color="current" /> : <>Create</>}
-            </Button>
-            <Button
-              type="reset"
-              variant="secondary"
-              className="rounded-md text-black dark:text-white text-base"
-              isDisabled={isLoading || googleLoading}
-              onClick={clearMessage}
-            >
-              Clear
+              {isLoading ? <Spinner color="current" /> : <>Create Account</>}
             </Button>
           </div>
           <div className="flex justify-center items-center gap-5">
             <div className="border w-1/2"></div>
-            <div className="opacity-40">OR</div>
+            <div className="opacity-40 font-medium text-xs">OR</div>
             <div className="border w-1/2"></div>
           </div>
           <div
             onClick={signUpWithGoogle}
-            className="relative select-none bg-white border dark:border-0 dark:bg-gray-800 rounded-md py-2 cursor-pointer"
+            className="relative select-none bg-white border dark:border-gray-700 dark:bg-gray-800 rounded-md py-2 cursor-pointer"
           >
             <div className={googleLoading ? "opacity-20" : "opacity-100"}>
               <div className="flex items-center justify-center gap-2">
@@ -284,11 +278,11 @@ const SignUpCard = () => {
               </div>
             )}
           </div>
-          <div className="text-center text-sm mt-2">
+          <div className="text-center text-sm">
             Already have an account?{" "}
             <Link
               href={!redirect ? "/login" : `/login?redirect=${redirect}`}
-              className="cursor-pointer underline hover:text-blue-700 active:text-blue-800 dark:hover:text-indigo-200 dark:active:text-indigo-300"
+              className="cursor-pointer hover:underline active:underline"
             >
               Log in
             </Link>

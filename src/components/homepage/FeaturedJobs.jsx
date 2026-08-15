@@ -11,7 +11,7 @@ import { capitalize, currencySymbol, truncate } from "@/lib/helpers";
 
 const FeaturedJobs = ({ jobs }) => {
   return (
-    <div className="mt-28 sm:mt-36 px-4">
+    <div className="px-4">
       <div className="text-center space-y-2">
         <div className="flex justify-center items-center gap-3">
           <span className="bg-indigo-500 h-2 w-2 rounded-xs"></span>
@@ -37,14 +37,14 @@ const FeaturedJobs = ({ jobs }) => {
                   <div className="flex items-center gap-2 mb-3">
                     <Avatar size="sm" className="rounded-lg bg-transparent">
                       <Avatar.Image
-                        alt={job.companyName}
-                        src={job.companyLogo}
+                        alt={job.company.companyName}
+                        src={job.company.logo}
                       />
                       <Avatar.Fallback className="rounded-lg">
-                        {job.companyName.charAt(0).toUpperCase()}
+                        {job.company.companyName.charAt(0).toUpperCase()}
                       </Avatar.Fallback>
                     </Avatar>
-                    <p>{job.companyName}</p>
+                    <p>{job.company.companyName}</p>
                   </div>
                 </div>
                 <h3 className="text-3xl">{job.jobTitle}</h3>
@@ -84,7 +84,7 @@ const FeaturedJobs = ({ jobs }) => {
                   </div>{" "}
                 </div>
               </div>
-              <Link href={`/jobs/${job._id}`}>
+              <Link href={`/jobs/${job._id}`} className="w-fit">
                 <Button
                   variant="ghost"
                   style={{
@@ -101,9 +101,12 @@ const FeaturedJobs = ({ jobs }) => {
       </div>
 
       <div className="text-center">
-        <Button className="rounded-lg bg-black dark:bg-white dark:text-black py-6 px-10 sm:px-20 text-base text-center">
+        <Link
+          href={"/jobs?page=1"}
+          className="py-3 px-10 rounded-lg bg-foreground text-background font-medium hover:opacity-90 active:opacity-90 active:text-sm duration-75"
+        >
           View All Jobs
-        </Button>
+        </Link>
       </div>
     </div>
   );
