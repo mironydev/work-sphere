@@ -36,23 +36,25 @@ const Stats = () => {
       <ShootingStars />
       <div className="relative z-10">
         <h3 className="max-w-xl mx-auto text-center text-4xl font-semibold mb-12">
-          15,000+ job seekers have found opportunities through us.
+          15,000+ job seekers found opportunities through us.
         </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
           {stats.map((stat) => {
             const IconComponent = stat.icon;
 
             return (
               <div
                 key={stat.label}
-                className="bg-white/70 dark:bg-white/5 backdrop-blur-[2px] p-6 rounded-xl border border-black/10 dark:border-white/10"
+                className="flex flex-col justify-between gap-5 sm:gap-16 bg-white dark:bg-white/5 backdrop-blur-[2px] p-6 rounded-xl border"
               >
                 <IconComponent />
-                <p className="text-6xl font-semibold mt-18 mb-4">
-                  {stat.number}
-                </p>
-                <p>{stat.label}</p>
+                <div>
+                  <p className="text-4xl sm:text-6xl font-bold">
+                    {stat.number}
+                  </p>
+                  <p className="text-nowrap">{stat.label}</p>
+                </div>
               </div>
             );
           })}

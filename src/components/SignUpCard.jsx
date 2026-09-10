@@ -18,6 +18,7 @@ import { Eye, EyeSlash } from "@gravity-ui/icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { toast } from "sonner";
 
 const SignUpCard = () => {
   const [message, setMessage] = useState("");
@@ -37,31 +38,34 @@ const SignUpCard = () => {
     setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
-    const user = Object.fromEntries(formData.entries());
+    const userData = Object.fromEntries(formData.entries());
 
     const plan =
-      user.role === "seeker" ? "seeker_starter" : "recruiter_starter";
+      userData.accountType === "seeker"
+        ? "seeker_starter"
+        : "recruiter_starter";
 
     const { data, error } = await signUp.email({
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      requestedRole: user.role,
+      name: userData.name,
+      email: userData.email,
+      password: userData.password,
+      accountType: userData.accountType,
       plan: plan,
     });
 
     setIsLoading(false);
 
     if (!error) {
+      toast.success("Signup successful");
       if (redirect) {
         router.push(redirect);
         return;
       }
 
       const { data: session } = await getSession();
-      const role = session?.user?.role;
+      const accountType = session?.user?.accountType;
 
-      if (role === "recruiter") {
+      if (accountType === "recruiter") {
         router.push("/dashboard/recruiter");
       } else {
         router.push("/dashboard/seeker");
@@ -73,21 +77,25 @@ const SignUpCard = () => {
 
   const signUpWithGoogle = async () => {
     setGoogleLoading(true);
-    sessionStorage.setItem("authIntent", "signup");
+    setTimeout(() => {
+      setGoogleLoading(false);
+    }, 3000);
 
     try {
       await signIn.social({
         provider: "google",
       });
     } catch (err) {
-      sessionStorage.removeItem("authIntent");
       setGoogleLoading(false);
     }
   };
 
+  const inputClass =
+    "rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15 bg-foreground/2 dark:bg-black focus:bg-white dark:focus:bg-black placeholder:opacity-60";
+
   return (
-    <div className="px-4">
-      <div className="mt-24 sm:mt-28 border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-black/20 p-6 pb-5 max-w-sm mx-auto rounded-xl shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+    <div className="px-4 h-screen">
+      <div className="mt-24 sm:mt-28 bg-white dark:bg-foreground/5 p-6 pb-5 max-w-sm mx-auto rounded-xl border">
         <h2 className="text-center text-3xl font-semibold pb-4">
           Create Account
         </h2>
@@ -109,10 +117,7 @@ const SignUpCard = () => {
             }}
           >
             <Label>Name</Label>
-            <Input
-              placeholder="Enter your name"
-              className="rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15"
-            />
+            <Input placeholder="Enter your name" className={inputClass} />
             <FieldError />
           </TextField>
           <TextField
@@ -127,17 +132,13 @@ const SignUpCard = () => {
             }}
           >
             <Label>Email</Label>
-            <Input
-              placeholder="Enter your email"
-              className="rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15"
-            />
+            <Input placeholder="Enter your email" className={inputClass} />
             <FieldError />
           </TextField>
           <TextField
             minLength={8}
             name="password"
             type={show ? "text" : "password"}
-            className="relative"
             onChange={clearMessage}
             validate={(value) => {
               if (value.length < 8) {
@@ -153,21 +154,23 @@ const SignUpCard = () => {
             }}
           >
             <Label>Password</Label>
-            <Input
-              placeholder="Enter your password"
-              className="rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 pr-10 shadow-none border border-foreground/15"
-            />
-            <button
-              type="button"
-              onClick={() => setShow((prev) => !prev)}
-              className="absolute right-3 top-9 sm:top-8 opacity-50 hover:opacity-70 cursor-pointer"
-            >
-              {show ? (
-                <EyeSlash className="w-5 h-5" />
-              ) : (
-                <Eye className="w-5 h-5" />
-              )}
-            </button>
+            <div className="relative">
+              <Input
+                placeholder="Enter your password"
+                className={`${inputClass} w-full`}
+              />
+              <button
+                type="button"
+                onClick={() => setShow((prev) => !prev)}
+                className="absolute right-3 translate-y-1/2 opacity-50 hover:opacity-70 cursor-pointer"
+              >
+                {show ? (
+                  <EyeSlash className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
+              </button>
+            </div>
             <Description>
               At least 8 characters with 1 uppercase and 1 number
             </Description>
@@ -175,37 +178,39 @@ const SignUpCard = () => {
           </TextField>
 
           <RadioGroup
-            name="role"
+            name="accountType"
             orientation="horizontal"
             isRequired
-            className={"flex items-center gap-1 mb-3"}
+            className="flex items-center gap-1 mb-3"
           >
             <Label>Select role:</Label>
 
             <div className="flex items-center gap-5 ml-1">
-              <Radio value="seeker" className={"flex items-center gap-1"}>
-                <Radio.Control
-                  className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600 dark:bg-indigo-500 shadow-none"
-                  style={{ outline: "none", boxShadow: "none" }}
-                >
-                  <Radio.Indicator />
-                </Radio.Control>
-                <Radio.Content>
-                  <Label className="-mb-0.5 font-normal">Job Seeker</Label>
+              <Radio value="seeker">
+                <Radio.Content className="gap-1.5">
+                  <Radio.Control
+                    className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600 dark:bg-indigo-500 shadow-none"
+                    style={{ outline: "none", boxShadow: "none" }}
+                  >
+                    <Radio.Indicator />
+                  </Radio.Control>
+                  Job Seeker
                 </Radio.Content>
               </Radio>
-              <Radio value="recruiter" className={"flex items-center gap-1"}>
-                <Radio.Control
-                  className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600 shadow-none"
-                  style={{ outline: "none", boxShadow: "none" }}
-                >
-                  <Radio.Indicator />
-                </Radio.Control>
-                <Radio.Content>
-                  <Label className="-mb-0.5 font-normal">Recruiter</Label>
+
+              <Radio value="recruiter">
+                <Radio.Content className="gap-1.5">
+                  <Radio.Control
+                    className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600 dark:bg-indigo-500 shadow-none"
+                    style={{ outline: "none", boxShadow: "none" }}
+                  >
+                    <Radio.Indicator />
+                  </Radio.Control>
+                  Recruiter
                 </Radio.Content>
               </Radio>
             </div>
+
             <FieldError>Please select a role</FieldError>
           </RadioGroup>
 
@@ -219,6 +224,7 @@ const SignUpCard = () => {
             <Button
               type="submit"
               className="rounded-md w-full bg-indigo-600 text-base"
+              style={{ outline: "none", boxShadow: "none" }}
               isLoading={isLoading}
               isDisabled={isLoading || googleLoading}
             >
@@ -232,7 +238,7 @@ const SignUpCard = () => {
           </div>
           <div
             onClick={signUpWithGoogle}
-            className="relative select-none bg-white border dark:border-gray-700 dark:bg-gray-800 rounded-md py-2 cursor-pointer"
+            className="relative select-none bg-foreground/3 dark:bg-foreground/10 border rounded-md py-2 cursor-pointer"
           >
             <div className={googleLoading ? "opacity-20" : "opacity-100"}>
               <div className="flex items-center justify-center gap-2">

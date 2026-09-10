@@ -41,6 +41,8 @@ const Profile = () => {
 
   // Format plan name
   const formatPlanName = (plan) => {
+    if (!plan) return "";
+
     return plan
       .split("_")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -49,6 +51,8 @@ const Profile = () => {
 
   // Get plan color
   const getPlanColor = (plan) => {
+    if (!plan) return "bg-foreground/5 text-foreground";
+
     if (plan.includes("seeker")) {
       if (plan.includes("starter")) return "bg-foreground/5 text-foreground";
       if (plan.includes("pro"))
@@ -68,7 +72,7 @@ const Profile = () => {
   const profileCompletion = getProfileCompletion();
 
   return (
-    <div className="bg-white/80 dark:bg-foreground/5 p-5 rounded-lg border-t-2 dark:border-t border-white dark:border-white/10 shadow-[0_1px_2px_rgba(0,0,0,0.06)] flex flex-col justify-between gap-5 w-full md:w-fit lg:max-w-60 xl:max-w-80 flex-1">
+    <div className="bg-white dark:bg-foreground/5 p-5 rounded-lg flex flex-col justify-between gap-5 w-full md:w-fit lg:max-w-60 xl:max-w-80 flex-1 border">
       <div className="flex gap-4">
         <Avatar className="rounded-lg bg-transparent">
           <Avatar.Image
@@ -77,7 +81,7 @@ const Profile = () => {
             className="object-cover h-full w-full"
           />
           <Avatar.Fallback className="rounded-lg">
-            {user?.name.charAt(0).toUpperCase()}
+            {user?.name?.charAt(0).toUpperCase()}
           </Avatar.Fallback>
         </Avatar>
         <div>
@@ -132,8 +136,8 @@ const Profile = () => {
       </div>
 
       <Link
-        href={"/dashboard/seeker/profile/edit"}
-        className="border border-foreground/20 dark:border-white/10 px-5 py-2 rounded-sm cursor-pointer bg-black hover:bg-black/80 dark:bg-white dark:hover:bg-white/80 text-background w-full duration-75 active:scale-95 text-sm font-medium text-center"
+        href="/dashboard/seeker/profile/edit"
+        className="w-full px-5 py-2 rounded-sm bg-foreground text-background duration-75 active:scale-95 text-sm text-center font-medium cursor-pointer"
       >
         Edit Profile
       </Link>

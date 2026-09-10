@@ -9,22 +9,16 @@ import {
   PersonPencil,
   Xmark,
 } from "@gravity-ui/icons";
-import { Chip, EmptyState, Spinner, Table } from "@heroui/react";
-import { useTheme } from "next-themes";
+import { Chip } from "@heroui/react";
 import Link from "next/link";
+import DashboardSpinner from "../DashboardSpinner";
+import { MoveUpRight } from "lucide-react";
 
 const SeekerApplications = ({ applications }) => {
   const { isPending } = useSessionClient();
 
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
-
   if (isPending) {
-    return (
-      <div className="flex justify-center items-center mt-10 md:mt-16">
-        <Spinner color="current" size="xl" />
-      </div>
-    );
+    return <DashboardSpinner />;
   }
 
   const statusMap = {
@@ -62,99 +56,112 @@ const SeekerApplications = ({ applications }) => {
           {applications.length} applications
         </p>
       </div>
-      <Table
-        className="rounded-lg p-0 border-t border-x dark:border-foreground/15  bg-background dark:bg-foreground/5 shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
-        variant={isDark ? "secondary" : "primary"}
-      >
-        <Table.ScrollContainer>
-          <Table.Content aria-label="Job applications">
-            <Table.Header>
-              <Table.Column
-                isRowHeader
-                className={
-                  "py-4 rounded-none bg-white/5 border-b dark:border-0 text-nowrap"
-                }
-              >
+
+      <div className="overflow-x-auto rounded-lg border dark:bg-foreground/3">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="bg-gray-100 dark:bg-foreground/8">
+              <th className="px-4 py-4 text-left font-medium text-xs text-muted">
+                #
+              </th>
+              <th className="px-4 py-4 text-left font-medium text-xs text-muted text-nowrap">
                 Job Title
-              </Table.Column>
-              <Table.Column className={"bg-white/5 border-b dark:border-0"}>
+              </th>
+              <th className="px-4 py-4 text-left font-medium text-xs text-muted">
                 Company
-              </Table.Column>
-              <Table.Column
-                className={"bg-white/5 border-b dark:border-0 text-center"}
-              >
+              </th>
+              <th className="px-4 py-4 text-left font-medium text-xs text-muted">
                 Applied
-              </Table.Column>
-              <Table.Column
-                className={"bg-white/5 border-b dark:border-0 text-center"}
-              >
+              </th>
+              <th className="px-4 py-4 text-left font-medium text-xs text-muted">
                 Status
-              </Table.Column>
-              <Table.Column
-                className={
-                  "rounded-none bg-white/5 border-b dark:border-0 text-center"
-                }
-              >
+              </th>
+              <th className="px-4 py-4 text-left font-medium text-xs text-muted">
                 Actions
-              </Table.Column>
-            </Table.Header>
-            <Table.Body
-              renderEmptyState={() => (
-                <EmptyState className="flex h-full w-full flex-col items-center justify-center gap-3 text-center py-10">
-                  <FileLetterX className="scale-150" />
-                  <span className="text-xl text-muted">No results found</span>
-                  <Link
-                    href={"/jobs"}
-                    className="text-base bg-foreground/90 text-background px-4 py-2 rounded-lg flex items-center gap-2 mt-2 active:scale-95 duration-100 font-semibold"
-                  >
-                    Apply to a Job <ArrowRight />
-                  </Link>
-                </EmptyState>
-              )}
-            >
-              {applications.map((app) => {
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {applications.length === 0 ? (
+              <tr>
+                <td colSpan={6}>
+                  <div className="flex flex-col items-center justify-center text-center py-10 bg-white dark:bg-foreground/3 border-t">
+                    <FileLetterX className="scale-150" />
+
+                    <span className="text-xl text-muted mt-3 mb-1">
+                      No results found
+                    </span>
+
+                    <Link
+                      href="/jobs"
+                      className="text-base bg-foreground/90 text-background px-4 py-2 rounded-lg flex items-center gap-2 mt-2 active:scale-95 duration-100 font-semibold"
+                    >
+                      Apply to a Job <ArrowRight />
+                    </Link>
+                  </div>
+                </td>
+              </tr>
+            ) : (
+              applications.map((app, i) => {
                 const status = statusMap[app.status.toLowerCase()] || {
                   color: "default",
                   icon: null,
                 };
+
                 return (
-                  <Table.Row key={app._id}>
-                    <Table.Cell className={"rounded-none py-"}>
-                      <p className="text-lg">{app.job.title || "Not found"}</p>
-                      <p className="font-light dark:text-foreground/70">
-                        {capitalize(app.job.jobType) || "Not found"} •{" "}
-                        {app.job.isRemote ? "Remote" : "On-site" || "Not found"}
+                  <tr
+                    key={app._id}
+                    className="border-t border-foreground/10 bg-white dark:border-white/10 dark:bg-foreground/3 hover:bg-gray-50 dark:hover:bg-foreground/5 transition-colors text-sm"
+                  >
+                    <td className="px-4 py-3 text-muted">{i + 1}</td>
+
+                    <td className="px-4 py-3 text-nowrap">
+                      <p className="text-base">
+                        {app.job.title || "Not found"}
                       </p>
-                    </Table.Cell>
-                    <Table.Cell>{app.company.name || "Not found"}</Table.Cell>
-                    <Table.Cell className={"text-center"}>
+
+                      <p className="font-light text-xs dark:text-foreground/70">
+                        {capitalize(app.job.jobType) || "Not found"}{" "}
+                        <span className="opacity-60">•</span>{" "}
+                        {app.job.isRemote ? "Remote" : "On-site"}
+                      </p>
+                    </td>
+
+                    <td className="px-4 py-3">
+                      {app.company.name || "Not found"}
+                    </td>
+
+                    <td className="px-4 py-3 text-nowrap">
                       {formatDate(app.createdAt) || "Not found"}
-                    </Table.Cell>
-                    <Table.Cell className={"text-center"}>
+                    </td>
+
+                    <td className="px-4 py-3">
                       <Chip color={status.color}>
                         {status.icon}
+
                         <Chip.Label>
                           {capitalize(app.status) || "Not found"}
                         </Chip.Label>
                       </Chip>
-                    </Table.Cell>
-                    <Table.Cell className={"rounded-none"}>
-                      <div className="flex gap-1 justify-center">
-                        <Link
-                          href={`/dashboard/seeker/applications/${app._id}`}
-                          className="cursor-pointer px-6 py-2 hover:bg-foreground/5 active:bg-foreground/10 rounded-sm duration-75 font-medium text-foreground/85"
-                        >
-                          View Details
-                        </Link>
-                      </div>
-                    </Table.Cell>
-                  </Table.Row>
+                    </td>
+
+                    <td className="px-4 py-3">
+                      <Link
+                        href={`/dashboard/seeker/applications/${app._id}`}
+                        className="font-medium text-foreground/80 active:opacity-50 flex items-center gap-1"
+                      >
+                        <span>Details</span>
+                        <MoveUpRight size={10} />
+                      </Link>
+                    </td>
+                  </tr>
                 );
-              })}
-            </Table.Body>
-          </Table.Content>
-        </Table.ScrollContainer>
-      </Table>
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

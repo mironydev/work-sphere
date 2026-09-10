@@ -42,23 +42,28 @@ export const JobCardMenu = ({ job, savedJobs }) => {
   };
 
   const handleToggleSaveJob = async () => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
     try {
       setIsLoading(true);
 
       if (isSaved) {
-        // Remove saved job
         await removeSavedJob({
           userId: user.id,
           jobId: job._id,
         });
+
         setIsSaved(false);
         toast.success("Job removed from saved");
       } else {
-        // Save job
         await saveJob({
           userId: user.id,
           jobId: job._id,
         });
+
         setIsSaved(true);
         toast.success("Job saved");
       }
@@ -81,16 +86,17 @@ export const JobCardMenu = ({ job, savedJobs }) => {
       }}
     >
       <Dropdown.Trigger style={{ boxShadow: "none", outline: "none" }}>
-        <p className="p-2 hover:bg-foreground/5 rounded-sm cursor-pointer">
+        <p className="p-2 hover:bg-foreground/5 active:bg-foreground/5 rounded-sm cursor-pointer">
           <EllipsisVertical className="w-4 h-4" />
         </p>
       </Dropdown.Trigger>
-      <Dropdown.Popover className={"dark:bg-stone-950"}>
+      <Dropdown.Popover className="dark:bg-[#151515] rounded-xl w-fit min-w-32">
         <Dropdown.Menu onAction={(key) => handleAction(key)}>
           <Dropdown.Item
             id="save"
             textValue="Save"
             isDisabled={isLoading}
+            className="rounded-lg"
             style={{ boxShadow: "none", outline: "none" }}
           >
             {isSaved ? (
@@ -109,6 +115,7 @@ export const JobCardMenu = ({ job, savedJobs }) => {
           <Dropdown.Item
             id="details"
             textValue="View details"
+            className="rounded-lg text-nowrap"
             style={{ boxShadow: "none", outline: "none" }}
           >
             <Eye className="w-4 h-4" />
@@ -118,6 +125,7 @@ export const JobCardMenu = ({ job, savedJobs }) => {
           <Dropdown.Item
             id="share"
             textValue="Share"
+            className="rounded-lg"
             style={{ boxShadow: "none", outline: "none" }}
           >
             <Share2 className="w-4 h-4" />
@@ -128,6 +136,7 @@ export const JobCardMenu = ({ job, savedJobs }) => {
           <Dropdown.Item
             id="hide"
             textValue="Hide"
+            className="rounded-lg"
             style={{ boxShadow: "none", outline: "none" }}
           >
             <EyeOff className="w-4 h-4" />
@@ -137,6 +146,7 @@ export const JobCardMenu = ({ job, savedJobs }) => {
             id="report"
             variant="danger"
             textValue="Report"
+            className="rounded-lg"
             style={{ boxShadow: "none", outline: "none" }}
           >
             <AlertCircle className="w-4 h-4" />

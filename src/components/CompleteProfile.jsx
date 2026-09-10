@@ -25,23 +25,23 @@ const CompleteProfile = () => {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
 
-    const role = data.role;
+    const accountType = data.role;
 
     const { error } = await updateUser({
-      role,
-      plan: role === "seeker" ? "seeker_starter" : "recruiter_starter",
+      accountType,
+      plan: accountType === "seeker" ? "seeker_starter" : "recruiter_starter",
     });
 
     setIsLoading(false);
 
     if (!error) {
-      window.location.href = "/";
+      router.push(`/dashboard/${accountType}`);
     }
   };
 
   return (
     <div className="px-4">
-      <div className="mt-36 max-w-sm mx-auto p-6 bg-background rounded-xl">
+      <div className="mt-36 max-w-sm mx-auto p-6 rounded-md bg-white dark:bg-black/30 dark:border border-foreground/15 shadow">
         <h2 className="text-2xl font-semibold text-center">
           Complete Your Profile
         </h2>
@@ -52,35 +52,42 @@ const CompleteProfile = () => {
             name="role"
             isRequired
             orientation="horizontal"
-            className={"flex flex-col mt-1 mb-6 gap-0"}
+            className="flex flex-col mt-1 mb-6"
           >
             <div className="flex items-center gap-5 mt-2">
               <Radio value="seeker">
-                <Radio.Control className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600 dark:bg-indigo-500">
-                  <Radio.Indicator />
-                </Radio.Control>
-                <Radio.Content>
+                <Radio.Content className="gap-2">
+                  <Radio.Control
+                    className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600 dark:bg-indigo-500 shadow-none"
+                    style={{ outline: "none", boxShadow: "none" }}
+                  >
+                    <Radio.Indicator />
+                  </Radio.Control>
                   <Label>Job Seeker</Label>
                 </Radio.Content>
               </Radio>
 
               <Radio value="recruiter">
-                <Radio.Control className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600 dark:bg-indigo-500">
-                  <Radio.Indicator />
-                </Radio.Control>
-                <Radio.Content>
+                <Radio.Content className="gap-2">
+                  <Radio.Control
+                    className="border-2 border-gray-300 dark:border-gray-700 bg-indigo-600 dark:bg-indigo-500 shadow-none"
+                    style={{ outline: "none", boxShadow: "none" }}
+                  >
+                    <Radio.Indicator />
+                  </Radio.Control>
                   <Label>Recruiter</Label>
                 </Radio.Content>
               </Radio>
             </div>
 
-            <FieldError className={"mt-2"}>Please select a role</FieldError>
+            <FieldError className="mt-2">Please select a role</FieldError>
           </RadioGroup>
 
           <Button
             type="submit"
             isLoading={isLoading}
-            className={"w-full rounded-xl bg-indigo-600"}
+            className={"w-full rounded-sm bg-indigo-600"}
+            style={{ outline: "none", boxShadow: "none" }}
           >
             Save
           </Button>

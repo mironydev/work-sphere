@@ -1,5 +1,5 @@
 import SeekerApplications from "@/components/dashboard/seeker/SeekerApplications";
-import { getApplications } from "@/lib/fetch/fetchJobs";
+import { getApplications } from "@/lib/fetch/fetchApplications";
 import React from "react";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";

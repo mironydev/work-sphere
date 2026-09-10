@@ -8,28 +8,38 @@ export async function POST(req) {
     const headersList = await headers();
     const origin = headersList.get("origin");
 
-    const formData = await req.formData();
-    const planName = formData.get("planName");
-    const priceId = PRICE_ID[planName];
-
     const userSession = await auth.api.getSession({
-      headers: await headers(),
+      headers: headersList,
     });
 
-    const userMail = userSession?.user?.email;
+    if (!userSession?.user) {
+      return NextResponse.json(
+        { error: "You must be logged in to subscribe." },
+        { status: 401 },
+      );
+    }
 
-    // Create Checkout Sessions from body params.
+    const formData = await req.formData();
+    const planName = formData.get("planName");
+    const billingCycle = formData.get("billingCycle");
+    const priceId = PRICE_ID[`${planName}_${billingCycle}`];
+    const accountType = userSession.user.accountType;
+    const userId = userSession.user.id;
+
+    if (!priceId) {
+      return NextResponse.json({ error: "Invalid plan." }, { status: 400 });
+    }
+
     const session = await stripe.checkout.sessions.create({
-      customer_email: userMail,
+      customer_email: userSession.user.email,
       line_items: [
         {
-          // Provide the exact Price ID (for example, price_1234) of the product you want to sell
           price: priceId,
           quantity: 1,
         },
       ],
       mode: "subscription",
-      metadata: { planName },
+      metadata: { planName, billingCycle, accountType, userId },
       success_url: `${origin}/pricing/success?session_id={CHECKOUT_SESSION_ID}`,
     });
     return NextResponse.redirect(session.url, 303);

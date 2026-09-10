@@ -1,6 +1,6 @@
 import RecruiterPostJob from "@/components/dashboard/recruiter/RecruiterPostJob";
 import { auth } from "@/lib/auth";
-import { getCompanies } from "@/lib/fetch/fetchCompanies";
+import { getMyCompanies } from "@/lib/fetch/fetchCompanies";
 import { headers } from "next/headers";
 
 export default async function AddJobPage() {
@@ -8,8 +8,7 @@ export default async function AddJobPage() {
     headers: await headers(),
   });
   const userId = session?.user?.id;
-
-  const companies = await getCompanies(userId);
+  const companies = await getMyCompanies(userId);
 
   return <RecruiterPostJob companies={companies} userId={userId} />;
 }

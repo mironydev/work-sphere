@@ -3,11 +3,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import React from "react";
 import Apply from "./Apply";
-import {
-  getApplications,
-  getJobDetails,
-  getPlans,
-} from "@/lib/fetch/fetchJobs";
+import { getJobDetails, getPlans } from "@/lib/fetch/fetchJobs";
+import { getApplications } from "@/lib/fetch/fetchApplications";
 
 const ApplyPage = async ({ params }) => {
   const { id } = await params;
@@ -25,7 +22,7 @@ const ApplyPage = async ({ params }) => {
     redirect(`/login?redirect=jobs/${id}/apply`);
   }
 
-  if (user.role !== "seeker") {
+  if (user.accountType !== "seeker") {
     return (
       <div className="mt-36 px-4 flex justify-center">
         <div className="max-w-md w-full rounded-xl border border-white dark:border-foreground/15 bg-white/70 dark:bg-foreground/5 p-8 text-center shadow-xs">

@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,13 +6,8 @@ import Providers from "./providers";
 import { Toaster } from "sonner";
 import DashboardDrawer from "@/components/dashboard/DashboardDrawer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const nunito = Nunito({
+  variable: "--font-nunito",
   subsets: ["latin"],
 });
 
@@ -26,7 +21,7 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased bg-[#f1f1f1] dark:bg-[#111111]`}
+      className={`${nunito.variable} h-full antialiased bg-[#f9f9f9] dark:bg-black scrollbar-gutter-stable`}
     >
       <body>
         <Providers>

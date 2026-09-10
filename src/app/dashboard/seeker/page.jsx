@@ -1,6 +1,7 @@
 import SeekerHomepage from "@/components/dashboard/seeker/seekerHomepage/SeekerHomepage";
 import { auth } from "@/lib/auth";
-import { getApplications, getSavedJobs } from "@/lib/fetch/fetchJobs";
+import { getApplications } from "@/lib/fetch/fetchApplications";
+import { getSavedJobs } from "@/lib/fetch/fetchJobs";
 import { headers } from "next/headers";
 
 const SeekerPage = async () => {
@@ -9,14 +10,11 @@ const SeekerPage = async () => {
   });
 
   const applications = await getApplications(session?.user?.id);
-  const savedJobs = await getSavedJobs(session?.user?.id);
-  const savedJobsCount = savedJobs.total;
+  const { total } = await getSavedJobs(session?.user?.id);
+
   return (
     <div>
-      <SeekerHomepage
-        applications={applications}
-        savedJobsCount={savedJobsCount}
-      />
+      <SeekerHomepage applications={applications} savedJobsCount={total} />
     </div>
   );
 };

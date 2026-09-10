@@ -1,16 +1,12 @@
 "use client";
 
-import {
-  FileText,
-  LogoLinkedin,
-  MapPin,
-  PencilToSquare,
-} from "@gravity-ui/icons";
+import { FileText, MapPin, PencilToSquare } from "@gravity-ui/icons";
 import { useSessionClient } from "@/lib/helpers";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Mail, Phone } from "lucide-react";
+import DashboardSpinner from "../../DashboardSpinner";
 
 const Empty = ({ children = "Not added" }) => (
   <span className="italic text-sm text-muted">{children}</span>
@@ -20,11 +16,7 @@ const SeekerProfileView = () => {
   const { user, isPending } = useSessionClient();
 
   if (isPending) {
-    return (
-      <div className="flex justify-center items-center py-24">
-        <div className="w-10 h-10 rounded-full border-4 border-foreground/20 border-t-foreground animate-spin" />
-      </div>
-    );
+    return <DashboardSpinner />;
   }
 
   const skills =
@@ -36,11 +28,11 @@ const SeekerProfileView = () => {
   return (
     <div className="space-y-6">
       {/* Hero */}
-      <div className="relative overflow-hidden rounded-xl dark:border border-foreground/10 bg-white/80 dark:bg-foreground/5 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+      <div className="relative overflow-hidden rounded-xl bg-white dark:bg-foreground/5 border">
         <div className="h-32 bg-linear-to-t sm:bg-linear-to-r from-[#161616] via-[#b0b0b0] sm:via-[#e1e1e1] to-white dark:from-[#858585] dark:via-[#262626] dark:to-black" />
         <div className="px-8 pb-6">
           <div className="-mt-16 flex flex-col items-center sm:items-start sm:flex-row sm:gap-4 md:gap-6">
-            <div className="w-32 h-32 rounded-full border-3 dark:border-2 border-[#FCFCFC] dark:border-[#1D1D1D] overflow-hidden bg-gray-200 dark:bg-gray-500 flex items-center justify-center shrink-0">
+            <div className="w-32 h-32 rounded-full border-3 dark:border-2 border-[#FCFCFC] dark:border-[#1D1D1D] overflow-hidden bg-gray-200 dark:bg-gray-500 flex items-center justify-center shrink-0 select-none">
               {user?.image ? (
                 <Image
                   src={user.image}
@@ -57,10 +49,10 @@ const SeekerProfileView = () => {
             </div>
 
             <div className="flex-1 sm:pt-5 text-center sm:text-left">
-              <h1 className="text-3xl font-bold text-center sm:text-white sm:text-left sm:text-shadow-lg">
+              <h1 className="text-3xl pt-3 sm:pt-0 font-bold text-center sm:text-white sm:text-left sm:text-shadow-lg">
                 {user?.name || <Empty>No name</Empty>}
               </h1>
-              <p className="mt-3 text-base text-muted text-center sm:text-left">
+              <p className="mt-3 text-center sm:text-left">
                 {user?.headline || <Empty>Add professional headline</Empty>}
               </p>
 
@@ -136,7 +128,7 @@ const SeekerProfileView = () => {
         </div>
         <Link
           href={"/dashboard/seeker/profile/edit"}
-          className="absolute top-3 right-3 flex items-center gap-2 bg-foreground/90 sm:bg-foreground/1 text-background sm:text-foreground font-medium rounded-lg p-3 sm:px-4 sm:py-2"
+          className="absolute top-3 right-3 flex items-center gap-2 bg-foreground/90 sm:bg-transparent text-background sm:text-foreground font-medium rounded-lg p-3 sm:px-4 sm:py-2 select-none"
         >
           <span className="hidden sm:block">Edit Profile</span>
           <PencilToSquare className="scale-110 sm:scale-100" />
@@ -145,7 +137,7 @@ const SeekerProfileView = () => {
 
       {/* About + Resume */}
       <div className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 rounded-xl border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-foreground/5 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+        <div className="lg:col-span-2 rounded-xl bg-white dark:bg-foreground/5 p-6 border">
           <h2 className="text-xl font-semibold mb-4">About</h2>
 
           <p className="leading-7 text-muted">
@@ -153,7 +145,7 @@ const SeekerProfileView = () => {
           </p>
         </div>
 
-        <div className="rounded-xl border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-foreground/5 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+        <div className="rounded-xl bg-white dark:bg-foreground/5 p-6 border">
           <h2 className="text-xl font-semibold mb-4">Resume</h2>
 
           {user?.resumeLink ? (
@@ -185,7 +177,7 @@ const SeekerProfileView = () => {
       </div>
 
       {/* Skills */}
-      <div className="rounded-xl border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-foreground/5 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+      <div className="rounded-xl bg-white dark:bg-foreground/5 p-6 border">
         <h2 className="text-xl font-semibold mb-4">Skills</h2>
 
         {skills.length ? (
@@ -193,24 +185,24 @@ const SeekerProfileView = () => {
             {skills.map((skill) => (
               <span
                 key={skill}
-                className="px-3 py-1 rounded-full bg-foreground/5 text-sm"
+                className="px-3 py-1 rounded-md bg-foreground/10 text-sm"
               >
                 {skill}
               </span>
             ))}
           </div>
         ) : (
-          <Empty>No skills added.</Empty>
+          <Empty>No skills added</Empty>
         )}
       </div>
 
       {/* Professional */}
-      <div className="rounded-xl border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-foreground/5 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+      <div className="rounded-xl bg-white dark:bg-foreground/5 p-6 border">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold">Professional Information</h2>
           <Link
             href={"/dashboard/seeker/profile/edit"}
-            className="flex items-center gap-2 bg-foreground/5 dark:bg-foreground/10 text-foreground font-medium rounded-lg p-3 sm:px-4 sm:py-2"
+            className="flex items-center gap-2 bg-foreground/5 dark:bg-foreground/10 text-foreground font-medium rounded-lg p-3 sm:px-4 sm:py-2 select-none"
           >
             <span className="hidden sm:block">Edit</span>
             <PencilToSquare className="scale-110 sm:scale-100" />

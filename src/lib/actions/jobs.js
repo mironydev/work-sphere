@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { authHeader } from "../authHeader";
 
 const url = process.env.SERVER_URL;
 
@@ -42,7 +43,7 @@ export async function saveJob(data) {
     },
     body: JSON.stringify(data),
   });
-  revalidatePath("http://localhost:3000/jobs");
+  revalidatePath("/jobs");
   return res.json();
 }
 
@@ -54,6 +55,19 @@ export async function removeSavedJob(data) {
     },
     body: JSON.stringify(data),
   });
-  revalidatePath("http://localhost:3000/jobs");
+  revalidatePath("/jobs");
+  return res.json();
+}
+
+export async function toggleJobActive(jobId, isActive) {
+  const res = await fetch(`${url}/jobs/${jobId}/active`, {
+    method: "PATCH",
+    headers: {
+      "content-type": "application/json",
+      ...(await authHeader()),
+    },
+    body: JSON.stringify({ isActive }),
+  });
+  revalidatePath("/dashboard/recruiter/jobs");
   return res.json();
 }

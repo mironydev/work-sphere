@@ -20,14 +20,16 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSessionClient } from "@/lib/helpers";
+import DashboardSpinner from "../DashboardSpinner";
 
 const RecruiterEditJob = ({ job }) => {
+  const { isPending } = useSessionClient();
   const router = useRouter();
   const [jobType, setJobType] = useState(job.jobType || "");
 
   const {
     _id,
-    companyName,
     jobTitle,
     jobCategory,
     currency,
@@ -35,14 +37,30 @@ const RecruiterEditJob = ({ job }) => {
     salaryMax,
     city,
     country,
-    deadline,
     responsibilities,
     requirements,
     benefits,
   } = job;
 
   const inputClassName =
-    "rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 bg-white dark:bg-black/40";
+    "rounded-md border border-foreground/15 focus:border-transparent focus:ring-1 focus:ring-foreground/50 aria-invalid:focus:ring-red-500 bg-foreground/2 focus:bg-white dark:focus:bg-black dark:bg-black placeholder:text-foreground/40 mt-1";
+
+  const industries = [
+    { id: "technology", label: "Technology" },
+    { id: "design", label: "Design" },
+    { id: "marketing", label: "Marketing" },
+    { id: "sales", label: "Sales" },
+    { id: "customer-support", label: "Customer Support" },
+    { id: "human-resources", label: "Human Resources" },
+    { id: "finance", label: "Finance" },
+    { id: "engineering", label: "Engineering" },
+    { id: "data-analytics", label: "Data & Analytics" },
+    { id: "product-management", label: "Product Management" },
+    { id: "operations", label: "Operations" },
+    { id: "healthcare", label: "Healthcare" },
+    { id: "education", label: "Education" },
+    { id: "other", label: "Other" },
+  ];
 
   const handleForm = async (e) => {
     e.preventDefault();
@@ -66,11 +84,15 @@ const RecruiterEditJob = ({ job }) => {
     }
   };
 
+  if (isPending) {
+    return <DashboardSpinner />;
+  }
+
   return (
     <div>
       <div>
         <h1 className="text-3xl font-bold">Edit Job Posting</h1>
-        <p className="mt-2 opacity-70">
+        <p className="mt-1 opacity-70">
           Update the details below to modify your job listing.
         </p>
       </div>
@@ -78,37 +100,11 @@ const RecruiterEditJob = ({ job }) => {
       <div className="flex items-center justify-center mt-6">
         <Form
           onSubmit={handleForm}
-          className="relative p-6 w-full sm:w-lg lg:w-3xl rounded-lg bg-background dark:bg-foreground/5"
+          className="relative p-6 w-full sm:w-xl lg:w-2xl rounded-lg bg-white dark:bg-foreground/5 border shadow-xs"
         >
-          <Fieldset className="w-full mb-8 sm:border-l-3 border-indigo-500 sm:pl-6">
+          <Fieldset className="w-full mb-8">
             <Fieldset.Legend>Job Information</Fieldset.Legend>
             <Description>Edit the basic job details.</Description>
-            <Select
-              isDisabled
-              placeholder="Select one"
-              defaultValue={companyName}
-              className="sm:absolute top-6 right-7"
-            >
-              <Label>Company</Label>
-              <Select.Trigger
-                className={"rounded-md bg-white dark:bg-black/40 shadow-none"}
-              >
-                <Select.Value />
-                <Select.Indicator />
-              </Select.Trigger>
-              <Select.Popover className={"rounded-lg"}>
-                <ListBox>
-                  <ListBox.Item
-                    id={companyName}
-                    textValue={companyName}
-                    className="rounded-lg focus:ring-indigo-500"
-                  >
-                    {companyName}
-                    <ListBox.ItemIndicator />
-                  </ListBox.Item>
-                </ListBox>
-              </Select.Popover>
-            </Select>
 
             <Fieldset.Group>
               <div className="flex flex-col sm:flex-row gap-4">
@@ -147,118 +143,18 @@ const RecruiterEditJob = ({ job }) => {
                   </Select.Trigger>
                   <Select.Popover className="rounded-lg">
                     <ListBox>
-                      <ListBox.Item
-                        id="technology"
-                        textValue="Technology"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Technology
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="design"
-                        textValue="Design"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Design
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="marketing"
-                        textValue="Marketing"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Marketing
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="sales"
-                        textValue="Sales"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Sales
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="customer-support"
-                        textValue="Customer Support"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Customer Support
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="human-resources"
-                        textValue="Human Resources"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Human Resources
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="finance"
-                        textValue="Finance"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Finance
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="engineering"
-                        textValue="Engineering"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Engineering
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="data-analytics"
-                        textValue="Data & Analytics"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Data & Analytics
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="product-management"
-                        textValue="Product Management"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Product Management
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="operations"
-                        textValue="Operations"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Operations
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="healthcare"
-                        textValue="Healthcare"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Healthcare
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="education"
-                        textValue="Education"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Education
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
-                      <ListBox.Item
-                        id="other"
-                        textValue="Other"
-                        className="rounded-lg focus:ring-indigo-500"
-                      >
-                        Other
-                        <ListBox.ItemIndicator />
-                      </ListBox.Item>
+                      {industries.map((industry) => (
+                        <ListBox.Item
+                          key={industry.id}
+                          id={industry.id}
+                          textValue={industry.label}
+                          className="rounded-lg focus:ring-indigo-500"
+                          style={{ outline: "none", boxShadow: "none" }}
+                        >
+                          {industry.label}
+                          <ListBox.ItemIndicator />
+                        </ListBox.Item>
+                      ))}
                     </ListBox>
                   </Select.Popover>
                 </Select>
@@ -281,6 +177,7 @@ const RecruiterEditJob = ({ job }) => {
                   <Select.Popover className={"rounded-lg"}>
                     <ListBox>
                       <ListBox.Item
+                        style={{ outline: "none", boxShadow: "none" }}
                         id="full-time"
                         textValue="Full-time"
                         className="rounded-lg focus:ring-indigo-500"
@@ -289,6 +186,7 @@ const RecruiterEditJob = ({ job }) => {
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
                       <ListBox.Item
+                        style={{ outline: "none", boxShadow: "none" }}
                         id="part-time"
                         textValue="Part-time"
                         className="rounded-lg focus:ring-indigo-500"
@@ -297,6 +195,7 @@ const RecruiterEditJob = ({ job }) => {
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
                       <ListBox.Item
+                        style={{ outline: "none", boxShadow: "none" }}
                         id="remote"
                         textValue="Remote"
                         className="rounded-lg focus:ring-indigo-500"
@@ -305,6 +204,7 @@ const RecruiterEditJob = ({ job }) => {
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
                       <ListBox.Item
+                        style={{ outline: "none", boxShadow: "none" }}
                         id="contract"
                         textValue="Contract"
                         className="rounded-lg focus:ring-indigo-500"
@@ -313,6 +213,7 @@ const RecruiterEditJob = ({ job }) => {
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
                       <ListBox.Item
+                        style={{ outline: "none", boxShadow: "none" }}
                         id="internship"
                         textValue="Internship"
                         className="rounded-lg focus:ring-indigo-500"
@@ -338,6 +239,7 @@ const RecruiterEditJob = ({ job }) => {
                   <Select.Popover className={"rounded-lg"}>
                     <ListBox>
                       <ListBox.Item
+                        style={{ outline: "none", boxShadow: "none" }}
                         id="usd"
                         textValue="USD"
                         className="rounded-lg focus:ring-indigo-500"
@@ -346,6 +248,7 @@ const RecruiterEditJob = ({ job }) => {
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
                       <ListBox.Item
+                        style={{ outline: "none", boxShadow: "none" }}
                         id="eur"
                         textValue="EUR"
                         className="rounded-lg focus:ring-indigo-500"
@@ -354,6 +257,7 @@ const RecruiterEditJob = ({ job }) => {
                         <ListBox.ItemIndicator />
                       </ListBox.Item>
                       <ListBox.Item
+                        style={{ outline: "none", boxShadow: "none" }}
                         id="gbp"
                         textValue="GBP"
                         className="rounded-lg focus:ring-indigo-500"
@@ -513,6 +417,7 @@ const RecruiterEditJob = ({ job }) => {
               <DateField
                 isRequired
                 name="deadline"
+                className="sm:w-1/2 sm:pr-2"
                 validate={(value) => {
                   if (!value) {
                     return "Deadline is required";
@@ -528,7 +433,9 @@ const RecruiterEditJob = ({ job }) => {
                 }}
               >
                 <Label>Deadline</Label>
-                <DateField.Group className={`${inputClassName} shadow-none`}>
+                <DateField.Group
+                  className={`${inputClassName} shadow-none focus-within:ring-1 focus-within:ring-foreground/50 focus-within:border-transparent`}
+                >
                   <DateField.Input>
                     {(segment) => <DateField.Segment segment={segment} />}
                   </DateField.Input>
@@ -538,7 +445,7 @@ const RecruiterEditJob = ({ job }) => {
             </Fieldset.Group>
           </Fieldset>
 
-          <Fieldset className="w-full sm:border-l-3 border-green-700 sm:pl-6">
+          <Fieldset className="w-full">
             <Fieldset.Legend>Job Description</Fieldset.Legend>
             <Description>
               Update detailed information about the role.
@@ -562,7 +469,6 @@ const RecruiterEditJob = ({ job }) => {
                   className={inputClassName}
                   rows={4}
                 />
-                <Description>What will the candidate be doing?</Description>
                 <FieldError />
               </TextField>
 
@@ -584,9 +490,7 @@ const RecruiterEditJob = ({ job }) => {
                   className={inputClassName}
                   rows={5}
                 />
-                <Description>
-                  Skills, experience, and qualifications needed
-                </Description>
+
                 <FieldError />
               </TextField>
 
@@ -598,33 +502,19 @@ const RecruiterEditJob = ({ job }) => {
                   className={inputClassName}
                   rows={3}
                 />
-                <Description>
-                  What benefits does this position offer?
-                </Description>
+
                 <FieldError />
               </TextField>
             </Fieldset.Group>
 
-            <Fieldset.Actions>
+            <Fieldset.Actions className="justify-center">
               <Button
                 type="submit"
-                className="rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600"
+                className="w-full sm:w-1/2 py-5 rounded-md bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 pr-6 text-base"
               >
                 <Check />
                 Update Job
               </Button>
-              <Link href={"/dashboard/recruiter/jobs"}>
-                <Button
-                  variant="tertiary"
-                  className="rounded-lg bg-foreground/10"
-                  style={{
-                    boxShadow: "none",
-                    outline: "none",
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Link>
             </Fieldset.Actions>
           </Fieldset>
         </Form>

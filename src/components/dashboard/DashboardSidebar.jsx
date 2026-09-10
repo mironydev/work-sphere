@@ -9,18 +9,18 @@ import {
   Circles4Square,
   Persons,
   CircleDollar,
+  CirclePlusFill,
+  ClockArrowRotateLeft,
 } from "@gravity-ui/icons";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { signOut } from "@/lib/auth-client";
-import { toast } from "sonner";
+import { usePathname } from "next/navigation";
 import { useDashboardMenu } from "@/app/providers";
+import { Skeleton } from "@heroui/react";
 
 export default function DashboardSidebar() {
   const { user, isPending } = useSessionClient();
   const { setIsDashboardMenuOpen } = useDashboardMenu();
   const pathname = usePathname();
-  const router = useRouter();
   const isDashboardRoute = pathname.startsWith("/dashboard");
 
   const recruiterNavItems = [
@@ -41,11 +41,17 @@ export default function DashboardSidebar() {
       href: "/dashboard/recruiter/applications",
     },
     { icon: Gear, label: "Settings", href: "/dashboard/recruiter/settings" },
+    {
+      icon: CirclePlusFill,
+      iconColor: "text-indigo-500",
+      label: "Add a Job",
+      href: "/dashboard/recruiter/new",
+    },
   ];
 
   const seekerNavItems = [
     { icon: Circles4Square, label: "Dashboard", href: "/dashboard/seeker" },
-    { icon: Briefcase, label: "Browse Jobs", href: "/jobs?page=1" },
+    { icon: Briefcase, label: "Find Jobs", href: "/jobs?page=1" },
     {
       icon: FileText,
       label: "Applications",
@@ -57,8 +63,13 @@ export default function DashboardSidebar() {
       href: "/dashboard/seeker/saved-jobs",
     },
     {
+      icon: ClockArrowRotateLeft,
+      label: "History",
+      href: "/dashboard/seeker/history",
+    },
+    {
       icon: Gear,
-      label: "Profile Settings",
+      label: "Profile",
       href: "/dashboard/seeker/profile",
     },
   ];
@@ -76,33 +87,41 @@ export default function DashboardSidebar() {
     { icon: Gear, label: "Settings", href: "/dashboard/admin/settings" },
   ];
 
-  const handleSignout = async () => {
-    const res = await signOut();
-
-    if (!res.error) {
-      toast.success("Logout successful");
-      setIsDashboardMenuOpen(false);
-      router.refresh();
-    } else {
-      toast.error("Couldn't log out, something went wrong.");
-    }
-  };
-
   if (isPending) {
-    return "";
+    return (
+      <aside className="hidden md:block border-r border-foreground/15 h-full">
+        <nav className="flex flex-col">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-3 rounded-md pl-3 pr-7.75 py-2.5 border border-transparent"
+            >
+              <Skeleton className="size-5 rounded-md" />
+              <Skeleton className="h-4 w-21.5 rounded-md" />
+            </div>
+          ))}
+        </nav>
+      </aside>
+    );
   }
 
   const navItems =
-    user?.role === "recruiter"
+    user?.accountType === "recruiter"
       ? recruiterNavItems
       : user?.role === "admin"
         ? adminNavItems
         : seekerNavItems;
 
   const renderSidebar = (variant) => (
-    <nav className="flex flex-col gap-1">
+    <nav className="flex flex-col">
       {navItems.map((item) => {
-        const isActive = pathname === item.href;
+        const isActive =
+          pathname === item.href ||
+          (item.href !== "/dashboard/seeker" &&
+            item.href !== "/dashboard/recruiter" &&
+            item.href !== "/dashboard/admin" &&
+            pathname.startsWith(`${item.href}/`)) ||
+          (item.href.startsWith("/jobs") && pathname === "/jobs");
 
         return (
           <Link
@@ -113,19 +132,19 @@ export default function DashboardSidebar() {
                 ? () => setIsDashboardMenuOpen(false)
                 : undefined
             }
-            className={`flex items-center gap-3 rounded-md px-3 text-sm text-foreground transition-colors ${
+            className={`border border-r-0 font-semibold text-nowrap flex items-center gap-3 rounded-l-md pl-3 pr-6 text-sm text-foreground transition-colors ${
               variant === "drawer" ? "py-3" : "py-2.5"
             } ${
               isActive
                 ? variant === "drawer"
                   ? "bg-foreground/8 dark:bg-default"
-                  : "hover:bg-none bg-white/90 shadow-[0_1px_2px_rgba(0,0,0,0.04)] dark:bg-default"
+                  : "bg-white dark:bg-default dark:border-foreground/10"
                 : variant === "drawer"
                   ? "hover:bg-foreground/5"
-                  : "hover:bg-white/60 dark:hover:bg-default/60"
+                  : "hover:bg-white dark:hover:bg-default/60 border-transparent"
             }`}
           >
-            <item.icon className="size-5 text-muted" />
+            <item.icon className={`size-5 ${item.iconColor || "text-muted"}`} />
             {item.label}
           </Link>
         );
@@ -136,7 +155,13 @@ export default function DashboardSidebar() {
   return (
     <div>
       {isDashboardRoute && (
-        <aside className="hidden md:block border-r border-foreground/15 h-full px-3">
+        <aside
+          className={`hidden md:block border-r border-foreground/15 h-full ${
+            user?.role === "admin" || user?.accountType === "seeker"
+              ? "w-[163.5px]"
+              : "w-auto"
+          }`}
+        >
           <div>{renderSidebar("aside")}</div>
         </aside>
       )}

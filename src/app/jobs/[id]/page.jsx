@@ -1,6 +1,7 @@
 import JobDetails from "@/components/jobs/JobDetails";
 import { auth } from "@/lib/auth";
-import { getApplications, getJobDetails } from "@/lib/fetch/fetchJobs";
+import { getJobDetails } from "@/lib/fetch/fetchJobs";
+import { getApplications } from "@/lib/fetch/fetchApplications";
 import { headers } from "next/headers";
 import React from "react";
 
@@ -22,7 +23,6 @@ const JobsDetailsPage = async ({ params }) => {
         job={job}
         hasApplied={hasApplied}
         applicationId={applicationId}
-        user={user}
       />
     </div>
   );

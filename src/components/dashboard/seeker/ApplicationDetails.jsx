@@ -7,11 +7,22 @@ import {
   PersonPencil,
   Xmark,
 } from "@gravity-ui/icons";
-import { FileText, Globe } from "lucide-react";
-import { formatDate } from "@/lib/helpers";
-import { Chip, Link } from "@heroui/react";
+import { ArrowUpRight, FileText, Globe } from "lucide-react";
+import { capitalize, formatDate, useSessionClient } from "@/lib/helpers";
+import { Chip, ListBox, Select } from "@heroui/react";
+import { updateApplicationStatus } from "@/lib/actions/application";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import DashboardSpinner from "../DashboardSpinner";
+import Link from "next/link";
 
 const ApplicationDetails = ({ application }) => {
+  const [updatingId, setUpdatingId] = useState(null);
+  const router = useRouter();
+
+  const { user, isPending } = useSessionClient();
+
   const statusMap = {
     applied: {
       color: "default",
@@ -39,38 +50,114 @@ const ApplicationDetails = ({ application }) => {
     },
   };
 
+  const statusOptions = [
+    "applied",
+    "reviewing",
+    "shortlisted",
+    "interviewing",
+    "offered",
+    "rejected",
+  ];
+
+  const handleStatusChange = async (appId, newStatus) => {
+    setUpdatingId(appId);
+    try {
+      const res = await updateApplicationStatus(appId, newStatus);
+      if (res.modifiedCount) {
+        toast.success(`Status updated to ${capitalize(newStatus)}`);
+        router.refresh();
+      } else {
+        toast.error("Failed to update status");
+      }
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  if (isPending) {
+    return <DashboardSpinner />;
+  }
+
   return (
     <div>
       {/* Header */}
       <div className="mb-4">
-        <div className="flex items-start justify-between gap-4">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-1">
+          {application.job.title}
+        </h1>
+        <div className="flex items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-bold mb-2">
-              {application.job.title}
-            </h1>
             <p className="text- text-muted">
               {application.company.name || (
                 <span className="italic opacity-60">Not available</span>
               )}
             </p>
+            <p className="flex items-center gap-1 text-sm text-muted">
+              Applied {formatDate(application.createdAt)}
+            </p>
           </div>
-          <Chip
-            className="pl-4 pr-5 text-sm pb-2 pt-1.75 rounded-md select-none"
-            color={
-              statusMap[application.status?.toLowerCase()]?.color || "default"
-            }
-          >
-            {statusMap[application.status?.toLowerCase()]?.icon && (
-              <span className="mr-1">
-                {statusMap[application.status?.toLowerCase()].icon}
-              </span>
+          <div>
+            {user?.accountType === "recruiter" ? (
+              <Select
+                className="w-33 mx-auto"
+                variant="secondary"
+                value={application.status}
+                isDisabled={updatingId === application._id}
+                onChange={(value) => handleStatusChange(application._id, value)}
+                aria-label="Application status"
+              >
+                <Select.Trigger
+                  style={{
+                    outline: "none",
+                    boxShadow: "none",
+                    borderRadius: "none",
+                  }}
+                  className="rounded-md bg-white/80 dark:bg-foreground/8 border border-foreground/10"
+                >
+                  <Select.Value className="text-sm" />
+                  <Select.Indicator />
+                </Select.Trigger>
+
+                <Select.Popover className="rounded-md dark:bg-[#171717]">
+                  <ListBox>
+                    {statusOptions.map((option) => (
+                      <ListBox.Item
+                        style={{
+                          outline: "none",
+                          boxShadow: "none",
+                        }}
+                        className="rounded-sm"
+                        key={option}
+                        id={option}
+                        textValue={capitalize(option)}
+                      >
+                        {capitalize(option)}
+                        <ListBox.ItemIndicator />
+                      </ListBox.Item>
+                    ))}
+                  </ListBox>
+                </Select.Popover>
+              </Select>
+            ) : (
+              <Chip
+                className="pl-4 pr-5 text-sm pb-2 pt-1.75 rounded-md bg-white dark:bg-foreground/10 border"
+                color={
+                  statusMap[application.status?.toLowerCase()]?.color ||
+                  "default"
+                }
+              >
+                {statusMap[application.status?.toLowerCase()]?.icon && (
+                  <span className="mr-1">
+                    {statusMap[application.status?.toLowerCase()].icon}
+                  </span>
+                )}
+                {application.status?.charAt(0).toUpperCase() +
+                  application.status?.slice(1)}
+              </Chip>
             )}
-            {application.status?.charAt(0).toUpperCase() +
-              application.status?.slice(1)}
-          </Chip>
-        </div>
-        <div className="flex items-center gap-1 text-sm text-muted">
-          Applied {formatDate(application.createdAt)}
+          </div>
         </div>
       </div>
 
@@ -79,10 +166,8 @@ const ApplicationDetails = ({ application }) => {
         {/* Left: Application Info */}
         <div className="col-span-2 space-y-6">
           {/* Applicant Info */}
-          <div className="rounded-lg border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-foreground/5 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
-            <h2 className="text-lg font-semibold mb-4">
-              Applicant Information
-            </h2>
+          <div className="rounded-lg bg-white dark:bg-foreground/5 p-6 border">
+            <h2 className="text-lg font-bold mb-4">Applicant Information</h2>
             <div className="space-y-4">
               <div>
                 <p className="text-sm text-muted mb-1">Name</p>
@@ -115,16 +200,16 @@ const ApplicationDetails = ({ application }) => {
           </div>
 
           {/* Cover Letter */}
-          <div className="rounded-lg border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-foreground/5 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
-            <h2 className="text-lg font-semibold mb-4">Cover Letter</h2>
+          <div className="rounded-lg bg-white dark:bg-foreground/5 p-6 border">
+            <h2 className="text-lg font-bold mb-4">Cover Letter</h2>
             <p className="text-sm leading-relaxed whitespace-pre-wrap">
               {application.coverLetter || "No cover letter provided"}
             </p>
           </div>
 
           {/* Additional Message */}
-          <div className="rounded-lg border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-foreground/5 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)] mb-6">
-            <h2 className="text-lg font-semibold mb-4">Additional Message</h2>
+          <div className="rounded-lg bg-white dark:bg-foreground/5 p-6 mb-6 border">
+            <h2 className="text-lg font-bold mb-4">Additional Message</h2>
             <p className="text-sm leading-relaxed whitespace-pre-wrap">
               {application.additionalMessage || (
                 <span className="text-sm text-muted">Not provided</span>
@@ -136,8 +221,8 @@ const ApplicationDetails = ({ application }) => {
         {/* Right: Links & Documents */}
         <div className="space-y-6">
           {/* Resume */}
-          <div className="rounded-lg border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-foreground/5 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)] shrink-0 min-w-44">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
+          <div className="rounded-lg bg-white dark:bg-foreground/5 p-6 shrink-0 min-w-44 border">
+            <h3 className="font-bold mb-4 flex items-center gap-2">
               <FileText className="w-4 h-4" />
               Resume
             </h3>
@@ -157,8 +242,8 @@ const ApplicationDetails = ({ application }) => {
           </div>
 
           {/* LinkedIn */}
-          <div className="rounded-lg border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-foreground/5 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
+          <div className="rounded-lg bg-white dark:bg-foreground/5 p-6 border">
+            <h3 className="font-bold mb-4 flex items-center gap-2">
               <LogoLinkedin className="w-4 h-4" />
               LinkedIn
             </h3>
@@ -179,8 +264,8 @@ const ApplicationDetails = ({ application }) => {
           </div>
 
           {/* Portfolio */}
-          <div className="rounded-lg border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-foreground/5 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
-            <h3 className="font-semibold mb-4 flex items-center gap-2">
+          <div className="rounded-lg bg-white dark:bg-foreground/5 p-6 border">
+            <h3 className="font-bold mb-4 flex items-center gap-2">
               <Globe className="w-4 h-4" />
               Portfolio
             </h3>
@@ -201,23 +286,23 @@ const ApplicationDetails = ({ application }) => {
           </div>
 
           {/* Application Meta */}
-          <div className="rounded-lg border-t-2 border-white dark:border dark:border-foreground/15 bg-white/80 dark:bg-foreground/5 p-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
-            <h3 className="font-semibold mb-4">Details</h3>
+          <div className="rounded-lg bg-white dark:bg-foreground/5 p-6 border">
+            <h3 className="font-bold mb-4">Details</h3>
             <div className="space-y-3 text-sm">
-              <Link
-                href={`/jobs/${application.job.id}`}
-                className="w-fit gap-0.5 font-normal"
-              >
-                View Job <Link.Icon />
-              </Link>
               <div>
                 <p className="text-muted">Status</p>
                 <p className="font-medium capitalize">{application.status}</p>
               </div>
               <div>
                 <p className="text-muted">Application ID</p>
-                <p className="font-mono text-xs break-all">{application._id}</p>
+                <p className="text-xs break-all">{application._id}</p>
               </div>
+              <Link
+                href={`/jobs/${application.job.id}`}
+                className="w-fit flex items-center gap-0.5 font-bold hover:underline active:underline select-none"
+              >
+                View Job <ArrowUpRight size={16} />
+              </Link>
             </div>
           </div>
         </div>

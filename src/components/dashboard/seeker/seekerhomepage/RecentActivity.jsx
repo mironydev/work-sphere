@@ -1,7 +1,7 @@
 import React from "react";
 import { CheckCircle, XCircle, Bell, MessageSquare, Star } from "lucide-react";
 import { formatDate } from "@/lib/helpers";
-import { Link } from "@heroui/react";
+import Link from "next/link";
 
 const RecentActivity = () => {
   const activities = [
@@ -62,28 +62,26 @@ const RecentActivity = () => {
   };
 
   return (
-    <div className="rounded-lg border-t-2 dark:border-t border-white dark:border-foreground/15 overflow-hidden mt-6 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+    <div className="rounded-lg overflow-hidden mt-6 border">
       {/* Header */}
-      <div className="bg-white/80 dark:bg-foreground/2 p-6 border-b border-foreground/10 flex justify-between items-center">
-        <h3 className="text-lg font-semibold">
-          Recent Activity{" "}
+      <div className="bg-white/80 dark:bg-foreground/5 p-6 border-b border-foreground/10 flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-2">
+          <h3 className="text-lg font-semibold">Recent Activity</h3>
           <span className="text-xs text-muted font-normal text-nowrap">
             [dummy data]
           </span>
-        </h3>
+        </div>
         <Link
-          href="#"
-          className="text-sm hover:underline cursor-pointer text-nowrap gap-0.5"
-          style={{ outline: "none", boxShadow: "none" }}
+          href="/dashboard/seeker/history"
+          className="text-sm hover:underline text-nowrap active:text-foreground/50"
         >
           View all activity
-          <Link.Icon />
         </Link>
       </div>
 
       {/* Activities */}
       {activities.length > 0 ? (
-        <div className="bg-white/50 dark:bg-black/30 divide-y divide-foreground/10">
+        <div className="bg-white dark:bg-black/30 divide-y divide-foreground/10">
           {activities.map((activity) => {
             const IconComponent = activity.icon;
             const timeAgo = getTimeAgo(activity.timestamp);

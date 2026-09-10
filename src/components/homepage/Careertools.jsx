@@ -11,7 +11,7 @@ import {
 
 const Careertools = () => {
   return (
-    <div className="mt-28 sm:mt-36 bg-white/80 dark:bg-black/50 sm:dark:bg-black/30 py-14 sm:py-20 rounded-lg mx-4 px-4 border-t-2 dark:border border-white dark:border-foreground/10 shadow-[0_1px_2px_rgba(0,0,0,0.06)] outline-2 outline-offset-2 outline-gray-100 dark:outline-black">
+    <div className="mt-28 sm:mt-36 bg-white dark:bg-white/5 rounded-lg mx-4 px-4 pt-8 pb-4 sm:px-8 sm:py-14 border">
       <div className="text-center space-y-2">
         <div className="flex justify-center items-center gap-3">
           <span className="bg-black dark:bg-cyan-500 h-2 w-2 rounded-xs"></span>
@@ -20,14 +20,14 @@ const Careertools = () => {
           </p>
           <span className="bg-black dark:bg-cyan-500 h-2 w-2 rounded-xs"></span>
         </div>
-        <h2 className="text-4xl font-semibold max-w-xl mx-auto">
-          Everything You Need for Your Job Search
+        <h2 className="text-4xl font-semibold max-w-2xl mx-auto">
+          Tools to Help You Find the Right Job
         </h2>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-14 mb-8 sm:px-10 pl-2">
-        <div className="flex items-center gap-7">
-          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md scale-150 dark:text-cyan-400">
-            <Magnifier />
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 mt-14">
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md dark:text-cyan-400">
+            <Magnifier className="size-8" />
           </div>
           <div>
             <p className="font-medium">Smart Search</p>
@@ -36,9 +36,9 @@ const Careertools = () => {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-7">
-          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md scale-150 dark:text-cyan-400">
-            <SquareChartColumn />
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md dark:text-cyan-400">
+            <SquareChartColumn className="size-8" />
           </div>
           <div>
             <p className="font-medium">Salary Insights</p>
@@ -47,9 +47,9 @@ const Careertools = () => {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-7">
-          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md scale-150 dark:text-cyan-400">
-            <Factory />
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md dark:text-cyan-400">
+            <Factory className="size-8" />
           </div>
           <div>
             <p className="font-medium">Top Companies</p>
@@ -58,9 +58,9 @@ const Careertools = () => {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-7">
-          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md scale-150 dark:text-cyan-400">
-            <Bookmark />
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md dark:text-cyan-400">
+            <Bookmark className="size-8" />
           </div>
           <div>
             <p className="font-medium">Saved Jobs</p>
@@ -69,9 +69,9 @@ const Careertools = () => {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-7">
-          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md scale-150 dark:text-cyan-400">
-            <LayoutHeaderCursor />
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md dark:text-cyan-400">
+            <LayoutHeaderCursor className="size-8" />
           </div>
           <div>
             <p className="font-medium">One-Click Apply</p>
@@ -80,9 +80,9 @@ const Careertools = () => {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-7">
-          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md scale-150 dark:text-cyan-400">
-            <FileText />
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md dark:text-cyan-400">
+            <FileText className="size-8" />
           </div>
           <div>
             <p className="font-medium">Resume Builder</p>
@@ -91,9 +91,9 @@ const Careertools = () => {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-7">
-          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md scale-150 dark:text-cyan-400">
-            <PersonMagnifier />
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md dark:text-cyan-400">
+            <PersonMagnifier className="size-8" />
           </div>
           <div>
             <p className="font-medium">Skill-Based Matching</p>
@@ -102,9 +102,9 @@ const Careertools = () => {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-7">
-          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md scale-150 dark:text-cyan-400">
-            <ChartLineArrowUp />
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-linear-to-b bg-black/80 text-white dark:from-black dark:to-stone-900 border rounded-md dark:text-cyan-400">
+            <ChartLineArrowUp className="size-8" />
           </div>
           <div>
             <p className="font-medium">Career Growth Resources</p>

@@ -10,17 +10,9 @@ import {
   TextArea,
   TextField,
 } from "@heroui/react";
-import {
-  Check,
-  FileArrowDown,
-  File,
-  BriefcaseFill,
-  Handset,
-  LogoLinkedin,
-  Globe,
-} from "@gravity-ui/icons";
+import { Check } from "@gravity-ui/icons";
 import { toast } from "sonner";
-import { submitApplication } from "@/lib/actions/submitapplication";
+import { submitApplication } from "@/lib/actions/application";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -51,7 +43,6 @@ const Apply = ({ job, user, totalApplications, plan }) => {
     };
 
     applicationData.status = "applied";
-
     const res = await submitApplication(applicationData);
     if (res.insertedId) {
       toast.success("Application submitted!");
@@ -62,26 +53,22 @@ const Apply = ({ job, user, totalApplications, plan }) => {
   };
 
   const inputClassName =
-    "rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500 bg-white dark:bg-black/40";
+    "rounded-md border border-foreground/15 focus:border-transparent focus:ring-1 focus:ring-foreground/50 aria-invalid:focus:ring-red-500 bg-foreground/2 focus:bg-white dark:focus:bg-black dark:bg-black placeholder:text-foreground/40";
 
   if (totalApplications >= plan.maxApplicationsPerMonth) {
     return (
       <div className="flex items-center justify-center pt-12">
         <div className="max-w-2xl w-full text-center">
           <div className="mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold mb-2">
               Quota Reached
             </h1>
-            <p className="text-lg text-muted mb-2">
+            <p className="text-lg text-muted">
               You&apos;ve applied to the maximum number of jobs.
-            </p>
-            <p className="text-sm text-muted mb-8">
-              You have 5 active applications. Check back later to apply to more
-              positions.
             </p>
           </div>
 
-          <div className="mb-10 p-8 rounded-xl bg-linear-to-r from-red-600/10 via-red-500/5 to-red-400/5 border border-red-200/30 dark:border-red-400/20">
+          <div className="mb-10 p-8 rounded-xl bg-white dark:bg-foreground/5 border">
             <p className="text-sm text-muted mb-2">Your Applications</p>
             <p className="text-5xl font-bold text-red-500">5 / 5</p>
           </div>
@@ -95,297 +82,269 @@ const Apply = ({ job, user, totalApplications, plan }) => {
             </Link>
             <Link
               href="/dashboard/seeker/applications"
-              className="bg-foreground/10 hover:bg-foreground/20 text-foreground font-semibold px-8 py-3 rounded-lg active:scale-95 duration-100"
+              className="bg-white dark:bg-foreground/5 hover:bg-blue-50 dark:hover:bg-black border text-foreground font-semibold px-8 py-3 rounded-lg active:scale-95 duration-100"
             >
               View My Applications
             </Link>
           </div>
 
           {/* Info Box */}
-          <div className="p-4 rounded-lg bg-foreground/5 shadow-sm dark:border border-foreground/10">
-            <p className="text-sm text-muted">
-              Upgrade your plan to apply to more jobs and unlock premium
-              features.
-            </p>
-          </div>
+          <p className="text-sm text-muted">
+            Upgrade your plan to apply to more jobs and unlock premium features.
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="">
-      <div className="max-w-3xl mx-auto">
-        <div className="mb-4 flex justify-between items-end">
-          <div>
-            <h1 className="text-4xl font-bold mb-2">Apply Now</h1>
-            <p className="text-muted text-lg">
-              Join our team and make an impact
+    <div className="max-w-2xl mx-auto sm:pt-4">
+      <div className="mb-4">
+        <h1 className="text-3xl font-bold">Apply for {jobTitle}</h1>
+        <p className="text-muted mt-1">{job.company.companyName}</p>
+      </div>
+
+      <div className="rounded-xl bg-white dark:bg-foreground/5 border">
+        <div className="p-6 sm:p-8">
+          <div className="mb-8">
+            <div className="flex justify-between">
+              <h2 className="text-xl font-semibold">Application</h2>
+              {plan.name === "seeker_starter" && (
+                <p className="text-xs text-muted whitespace-nowrap h-fit bg-foreground/3 px-2 py-0.5 rounded-full">
+                  Applications left:{" "}
+                  <span className="font-semibold">
+                    {plan.maxApplicationsPerMonth - totalApplications} /{" "}
+                    {plan.maxApplicationsPerMonth}
+                  </span>
+                </p>
+              )}
+            </div>
+
+            <p className="text-sm text-muted mt-1">
+              Submit your application for this position.
             </p>
           </div>
-          <div className={plan.name === "seeker_starter" ? "" : "hidden"}>
-            Applications left:{" "}
-            <span className="font-semibold text-red-500">
-              {5 - totalApplications} / 5
-            </span>
-          </div>
-        </div>
 
-        <div className="mb-10 p-8 rounded-xl bg-linear-to-r from-indigo-600/10 via-indigo-500/5 to-indigo-400/5 border border-indigo-200/30 dark:border-indigo-400/20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            <div>
-              <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mb-2 uppercase tracking-wide">
-                Position
-              </p>
-              <p className="text-2xl font-bold">{jobTitle}</p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mb-2 uppercase tracking-wide">
-                Company
-              </p>
-              <p className="text-2xl font-bold">{job.company.companyName}</p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-muted mb-2 uppercase tracking-wide">
-                Your Name
-              </p>
-              <p className="text-lg">{name}</p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-muted mb-2 uppercase tracking-wide">
-                Your Email
-              </p>
-              <p className="text-lg">{email}</p>
-            </div>
-          </div>
-        </div>
-        <Form
-          onSubmit={handleSubmit}
-          className="space-y-8 p-5 sm:p-8 rounded-xl bg-white/50 dark:bg-black/20 backdrop-blur-sm border border-foreground/10"
-        >
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-1 h-6 bg-indigo-600 rounded-full"></div>
-              <h2 className="text-xl font-bold">Essential Information</h2>
-            </div>
-
-            <div className="space-y-5">
-              <div className="p-5 rounded-lg bg-foreground/3 border border-foreground/10 hover:border-indigo-300/50 transition-colors">
-                <div className="flex items-start gap-3">
-                  <FileArrowDown className="hidden sm:block w-5 h-5 text-indigo-600 mt-1 shrink-0" />
-                  <TextField
-                    isRequired
-                    name="resumeLink"
-                    className="w-full"
-                    validate={(value) => {
-                      if (!value) return "Resume link is required";
-                      if (!value.startsWith("http")) {
-                        return "Please provide a valid URL";
-                      }
-                      return null;
-                    }}
-                  >
-                    <Label className="font-semibold">Resume / CV Link</Label>
-                    <Input
-                      placeholder="https://drive.google.com/... or your CV link"
-                      variant="secondary"
-                      className={inputClassName}
-                    />
-                    <FieldError />
-                  </TextField>
-                </div>
+          <div className="mb-8 p-4 bg-foreground/1 dark:bg-foreground/3 rounded-lg border">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs font-medium text-muted uppercase tracking-wide">
+                  Your Name
+                </p>
+                <p className="mt-1">{name}</p>
               </div>
 
-              <div className="p-5 rounded-lg bg-foreground/3 border border-foreground/10 hover:border-indigo-300/50 transition-colors">
-                <div className="flex items-start gap-3">
-                  <File className="hidden sm:block w-5 h-5 text-indigo-600 mt-1 shrink-0" />
-                  <TextField
-                    isRequired
-                    name="coverLetter"
-                    className="w-full"
-                    validate={(value) => {
-                      if (value.length < 50) {
-                        return "Please write at least 50 characters";
-                      }
-                      return null;
-                    }}
-                  >
-                    <Label className="font-semibold">Cover Letter</Label>
-                    <TextArea
-                      placeholder="Tell us why you're excited about this opportunity and what makes you a great fit..."
-                      variant="secondary"
-                      className={inputClassName}
-                      rows={5}
-                    />
-                    <FieldError />
-                  </TextField>
-                </div>
+              <div>
+                <p className="text-xs font-medium text-muted uppercase tracking-wide">
+                  Your Email
+                </p>
+                <p className="mt-1">{email}</p>
               </div>
+            </div>
+          </div>
 
-              <div className="p-5 rounded-lg bg-foreground/3 border border-foreground/10 hover:border-indigo-300/50 transition-colors">
-                <div className="flex items-start gap-3">
-                  <BriefcaseFill className="hidden sm:block w-5 h-5 text-indigo-600 mt-1 shrink-0" />
-                  <TextField
-                    isRequired
-                    name="yearsOfExperience"
+          <Form onSubmit={handleSubmit} className="space-y-8">
+            <section>
+              <h3 className="text-sm font-semibold mb-5">
+                Essential Information
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <TextField
+                  isRequired
+                  name="resumeLink"
+                  validate={(value) => {
+                    if (!value) return "Resume link is required";
+
+                    if (!value.startsWith("http")) {
+                      return "Please provide a valid URL";
+                    }
+
+                    return null;
+                  }}
+                >
+                  <Label>Resume / CV Link</Label>
+
+                  <Input
+                    placeholder="https://drive.google.com/..."
+                    variant="secondary"
+                    className={inputClassName}
+                  />
+
+                  <FieldError />
+                </TextField>
+
+                <TextField
+                  isRequired
+                  name="yearsOfExperience"
+                  validate={(value) => {
+                    if (value === "" || value === null) {
+                      return "Years of experience is required";
+                    }
+
+                    if (Number(value) < 0) {
+                      return "Must be 0 or greater";
+                    }
+
+                    return null;
+                  }}
+                >
+                  <Label>Years of Experience</Label>
+
+                  <Input
+                    placeholder="e.g. 5"
+                    variant="secondary"
+                    className={inputClassName}
                     type="number"
-                    className="w-full"
-                    validate={(value) => {
-                      if (value === "" || value === null)
-                        return "Years of experience is required";
-                      if (Number(value) < 0) return "Must be 0 or greater";
-                      return null;
-                    }}
-                  >
-                    <Label className="font-semibold">Years of Experience</Label>
-                    <Input
-                      placeholder="e.g., 5"
-                      variant="secondary"
-                      className={inputClassName}
-                      type="number"
-                    />
-                    <FieldError />
-                  </TextField>
-                </div>
+                  />
+
+                  <FieldError />
+                </TextField>
+
+                <TextField
+                  isRequired
+                  name="coverLetter"
+                  validate={(value) => {
+                    if (value.length < 50) {
+                      return "Please write at least 50 characters";
+                    }
+
+                    return null;
+                  }}
+                  className="sm:col-span-2"
+                >
+                  <Label>Cover Letter</Label>
+
+                  <TextArea
+                    placeholder="Tell us why you're excited about this opportunity and what makes you a great fit..."
+                    variant="secondary"
+                    className={inputClassName}
+                    rows={6}
+                  />
+
+                  <FieldError />
+                </TextField>
               </div>
-            </div>
-          </div>
+            </section>
 
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-1 h-6 bg-indigo-600 rounded-full"></div>
-              <h2 className="text-xl font-bold">Contact Information</h2>
-            </div>
+            <div className="border-t border-foreground/10" />
 
-            <div className="space-y-5">
-              <div className="p-5 rounded-lg bg-foreground/3 border border-foreground/10 hover:border-indigo-300/50 transition-colors">
-                <div className="flex items-start gap-3">
-                  <Handset className=" hidden sm:block w-5 h-5 text-indigo-600 mt-1 shrink-0" />
-                  <TextField
-                    name="phoneNumber"
-                    className="w-full"
-                    validate={(value) => {
-                      if (value && value.length < 10) {
-                        return "Please provide a valid phone number";
-                      }
-                      return null;
-                    }}
-                  >
-                    <Label className="font-semibold">
-                      Phone Number{" "}
-                      <span className="text-muted">(Optional)</span>
-                    </Label>
-                    <Input
-                      placeholder="+1 (555) 123-4567"
-                      variant="secondary"
-                      className={inputClassName}
-                      type="tel"
-                    />
-                    <FieldError />
-                  </TextField>
-                </div>
+            <section>
+              <h3 className="text-sm font-semibold mb-5">
+                Contact Information
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <TextField
+                  name="phoneNumber"
+                  validate={(value) => {
+                    if (value && value.length < 10) {
+                      return "Please provide a valid phone number";
+                    }
+
+                    return null;
+                  }}
+                >
+                  <Label>
+                    Phone Number <span className="text-muted">(Optional)</span>
+                  </Label>
+
+                  <Input
+                    placeholder="+1 (555) 123-4567"
+                    variant="secondary"
+                    className={inputClassName}
+                    type="tel"
+                  />
+
+                  <FieldError />
+                </TextField>
+
+                <TextField
+                  name="linkedinProfile"
+                  validate={(value) => {
+                    if (value && !value.startsWith("http")) {
+                      return "Please provide a valid LinkedIn URL";
+                    }
+
+                    return null;
+                  }}
+                >
+                  <Label>
+                    LinkedIn Profile{" "}
+                    <span className="text-muted">(Optional)</span>
+                  </Label>
+
+                  <Input
+                    placeholder="https://linkedin.com/in/yourprofile"
+                    variant="secondary"
+                    className={inputClassName}
+                  />
+
+                  <FieldError />
+                </TextField>
+
+                <TextField
+                  name="portfolio"
+                  validate={(value) => {
+                    if (value && !value.startsWith("http")) {
+                      return "Please provide a valid portfolio URL";
+                    }
+
+                    return null;
+                  }}
+                  className="sm:col-span-2"
+                >
+                  <Label>
+                    Portfolio / Website{" "}
+                    <span className="text-muted">(Optional)</span>
+                  </Label>
+
+                  <Input
+                    placeholder="https://yourportfolio.com"
+                    variant="secondary"
+                    className={inputClassName}
+                  />
+
+                  <FieldError />
+                </TextField>
               </div>
+            </section>
 
-              <div className="p-5 rounded-lg bg-foreground/3 border border-foreground/10 hover:border-indigo-300/50 transition-colors">
-                <div className="flex items-start gap-3">
-                  <LogoLinkedin className="hidden sm:block w-5 h-5 text-indigo-600 mt-1 shrink-0" />
-                  <TextField
-                    name="linkedinProfile"
-                    className="w-full"
-                    validate={(value) => {
-                      if (value && !value.startsWith("http")) {
-                        return "Please provide a valid LinkedIn URL";
-                      }
-                      return null;
-                    }}
-                  >
-                    <Label className="font-semibold">
-                      LinkedIn Profile{" "}
-                      <span className="text-muted">(Optional)</span>
-                    </Label>
-                    <Input
-                      placeholder="https://linkedin.com/in/yourprofile"
-                      variant="secondary"
-                      className={inputClassName}
-                    />
-                    <FieldError />
-                  </TextField>
-                </div>
-              </div>
+            <div className="border-t border-foreground/10" />
 
-              <div className="p-5 rounded-lg bg-foreground/3 border border-foreground/10 hover:border-indigo-300/50 transition-colors">
-                <div className="flex items-start gap-3">
-                  <Globe className="hidden sm:block w-5 h-5 text-indigo-600 mt-1 shrink-0" />
-                  <TextField
-                    name="portfolio"
-                    className="w-full"
-                    validate={(value) => {
-                      if (value && !value.startsWith("http")) {
-                        return "Please provide a valid portfolio URL";
-                      }
-                      return null;
-                    }}
-                  >
-                    <Label className="font-semibold">
-                      Portfolio / Website{" "}
-                      <span className="text-muted">(Optional)</span>
-                    </Label>
-                    <Input
-                      placeholder="https://yourportfolio.com"
-                      variant="secondary"
-                      className={inputClassName}
-                    />
-                    <FieldError />
-                  </TextField>
-                </div>
-              </div>
-            </div>
-          </div>
+            <section>
+              <h3 className="text-sm font-semibold mb-5">
+                Additional Information
+              </h3>
 
-          <div>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-1 h-6 bg-indigo-600 rounded-full"></div>
-              <h2 className="text-xl font-bold">Final Thoughts</h2>
-            </div>
-
-            <div className="p-5 rounded-lg bg-foreground/3 border border-foreground/10">
               <TextField name="additionalMessage" className="w-full">
-                <Label className="font-semibold">
+                <Label>
                   Additional Message{" "}
                   <span className="text-muted">(Optional)</span>
                 </Label>
+
                 <TextArea
-                  placeholder="Share anything else you'd like us to know about you..."
+                  placeholder="Anything else you'd like the recruiter to know?"
                   variant="secondary"
                   className={inputClassName}
                   rows={4}
                 />
+
                 <FieldError />
               </TextField>
-            </div>
-          </div>
+            </section>
 
-          <div className="flex gap-3 pt-6 border-t border-foreground/10">
-            <Button
-              type="submit"
-              className="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 rounded-lg flex-1"
-            >
-              <Check />
-              Submit Application
-            </Button>
-            <Button
-              type="reset"
-              variant="tertiary"
-              className="rounded-lg bg-foreground/10 hover:bg-foreground/20"
-              style={{
-                boxShadow: "none",
-                outline: "none",
-              }}
-            >
-              Reset
-            </Button>
-          </div>
-        </Form>
+            <div className="flex justify-end gap-3 pt-6 border-t border-foreground/10">
+              <Button
+                type="submit"
+                className="w-full sm:w-fit bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 rounded-lg py-5 pr-6 text-base"
+              >
+                <Check />
+                Submit Application
+              </Button>
+            </div>
+          </Form>
+        </div>
       </div>
     </div>
   );

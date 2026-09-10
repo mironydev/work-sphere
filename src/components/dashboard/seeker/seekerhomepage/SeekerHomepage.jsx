@@ -1,22 +1,18 @@
 "use client";
 
 import { useSessionClient } from "@/lib/helpers";
-import { Spinner } from "@heroui/react";
 import Stats from "./Stats";
 import Profile from "./Profile";
 import ApplicationStatus from "./ApplicationStatus";
 import RecentApplications from "./RecentApplications";
 import RecentActivity from "./RecentActivity";
+import DashboardSpinner from "../../DashboardSpinner";
 
 const SeekerHomepage = ({ applications, savedJobsCount }) => {
   const { user, isPending } = useSessionClient();
 
   if (isPending) {
-    return (
-      <div className="flex justify-center items-center mt-10 md:mt-16">
-        <Spinner color="current" size="xl" />
-      </div>
-    );
+    return <DashboardSpinner />;
   }
 
   return (

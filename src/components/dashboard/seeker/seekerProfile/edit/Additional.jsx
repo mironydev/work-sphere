@@ -2,6 +2,8 @@
 
 import { updateUser } from "@/lib/auth-client";
 import {
+  Chip,
+  CloseButton,
   Description,
   FieldError,
   Form,
@@ -11,13 +13,24 @@ import {
   TextField,
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 
 const SeekerAdditional = ({ user }) => {
+  const [skills, setSkills] = useState(
+    user?.skills
+      ? user.skills
+          .split(",")
+          .map((skill) => skill.trim())
+          .filter(Boolean)
+      : [],
+  );
+
+  const [skillInput, setSkillInput] = useState("");
   const router = useRouter();
+
   const inputClassName =
-    "border border-foreground/10 rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 bg-white dark:bg-black/40";
+    "rounded-md border border-foreground/15 focus-within:border-transparent focus-within:ring-1 focus-within:ring-foreground/50 aria-invalid:focus-within:ring-red-500 bg-foreground/2 focus-within:bg-white dark:focus-within:bg-black dark:bg-black placeholder:text-foreground/40";
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -58,7 +71,7 @@ const SeekerAdditional = ({ user }) => {
   };
 
   return (
-    <div className="rounded-lg border-t-2 dark:border border-white dark:border-foreground/10 bg-white/80 dark:bg-foreground/5 shadow-[0_1px_2px_rgba(0,0,0,0.06)]">
+    <div className="rounded-lg bg-white dark:bg-foreground/5 border">
       <div className="p-6 pb-0">
         <h2 className="text-xl font-semibold">Professional Details</h2>
       </div>
@@ -168,19 +181,18 @@ const SeekerAdditional = ({ user }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <TextField
             name="skills"
-            defaultValue={user?.skills || ""}
-            validate={(value) => {
-              const skills = value.trim();
+            validate={() => {
+              const skillsValue = skills.join(", ");
 
-              if (!skills) {
+              if (!skillsValue) {
                 return null;
               }
 
-              if (skills.length < 2) {
+              if (skillsValue.length < 2) {
                 return "Add at least one skill";
               }
 
-              if (skills.length > 300) {
+              if (skillsValue.length > 300) {
                 return "Skills must be less than 300 characters";
               }
 
@@ -188,14 +200,90 @@ const SeekerAdditional = ({ user }) => {
             }}
           >
             <Label>Skills</Label>
-            <Input
-              placeholder="React, Next.js, TypeScript"
-              variant="secondary"
-              className={inputClassName}
-            />
+
+            <div
+              className={`${inputClassName} flex flex-wrap gap-2 items-center py-2 px-3 transition-all duration-150`}
+            >
+              {skills.map((skill) => (
+                <Chip key={skill} size="sm" className="rounded-sm">
+                  <Chip.Label>{skill}</Chip.Label>
+
+                  <CloseButton
+                    aria-label={`Remove ${skill}`}
+                    onPress={() =>
+                      setSkills((current) =>
+                        current.filter((item) => item !== skill),
+                      )
+                    }
+                  />
+                </Chip>
+              ))}
+
+              <input
+                value={skillInput}
+                onChange={(e) => {
+                  const value = e.target.value;
+
+                  if (value.includes(",")) {
+                    const parts = value.split(",");
+                    const newSkills = parts
+                      .slice(0, -1)
+                      .map((skill) => skill.trim())
+                      .filter(Boolean);
+
+                    setSkills((current) => [
+                      ...current,
+                      ...newSkills.filter(
+                        (skill) =>
+                          !current.some(
+                            (existing) =>
+                              existing.toLowerCase() === skill.toLowerCase(),
+                          ),
+                      ),
+                    ]);
+
+                    setSkillInput(parts.at(-1) || "");
+                  } else {
+                    setSkillInput(value);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && skillInput.trim()) {
+                    e.preventDefault();
+
+                    const skill = skillInput.trim();
+
+                    setSkills((current) => {
+                      if (
+                        current.some(
+                          (existing) =>
+                            existing.toLowerCase() === skill.toLowerCase(),
+                        )
+                      ) {
+                        return current;
+                      }
+
+                      return [...current, skill];
+                    });
+
+                    setSkillInput("");
+                  }
+
+                  if (e.key === "Backspace" && !skillInput && skills.length) {
+                    setSkills((current) => current.slice(0, -1));
+                  }
+                }}
+                placeholder={skills.length ? "" : "React, Next.js, TypeScript"}
+                className="flex-1 min-w-24 outline-none bg-transparent text-sm placeholder:opacity-70"
+              />
+            </div>
+
+            <input type="hidden" name="skills" value={skills.join(", ")} />
+
             <Description id="skills-description">
-              Enter each skill separated by a comma
+              Separate skills with commas
             </Description>
+
             <FieldError />
           </TextField>
 

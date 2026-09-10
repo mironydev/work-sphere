@@ -18,33 +18,30 @@ const JobsPagination = ({ page, setPage, total }) => {
         <Pagination.Content className="flex-wrap">
           <Pagination.Item>
             <Pagination.Previous
+              style={{ outline: "none", boxShadow: "none" }}
               isDisabled={page === 1}
-              onPress={() => setPage((p) => p - 1)}
+              onPress={() => setPage(Math.max(1, page - 1))}
             >
               <Pagination.PreviousIcon />
               <span className="hidden sm:block">Previous</span>
             </Pagination.Previous>
           </Pagination.Item>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p, i) =>
-            p === "ellipsis" ? (
-              <Pagination.Item key={`ellipsis-${i}`}>
-                <Pagination.Ellipsis />
-              </Pagination.Item>
-            ) : (
-              <Pagination.Item key={p}>
-                <Pagination.Link
-                  isActive={p === page}
-                  onPress={() => setPage(p)}
-                >
-                  {p}
-                </Pagination.Link>
-              </Pagination.Item>
-            ),
-          )}
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+            <Pagination.Item key={p}>
+              <Pagination.Link
+                isActive={p === page}
+                onPress={() => setPage(p)}
+                style={{ outline: "none", boxShadow: "none" }}
+              >
+                {p}
+              </Pagination.Link>
+            </Pagination.Item>
+          ))}
           <Pagination.Item>
             <Pagination.Next
+              style={{ outline: "none", boxShadow: "none" }}
               isDisabled={page === totalPages}
-              onPress={() => setPage((p) => p + 1)}
+              onPress={() => setPage(Math.min(totalPages, page + 1))}
             >
               <span className="hidden sm:block">Next</span>
               <Pagination.NextIcon />

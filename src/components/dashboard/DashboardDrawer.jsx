@@ -1,6 +1,17 @@
 "use client";
 
-import { ArrowRightFromSquare, Xmark } from "@gravity-ui/icons";
+import {
+  ArrowRightFromSquare,
+  Xmark,
+  Gear,
+  Briefcase,
+  Factory,
+  FileText,
+  Circles4Square,
+  Persons,
+  CircleDollar,
+  CirclePlusFill,
+} from "@gravity-ui/icons";
 import { Avatar, Drawer } from "@heroui/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -18,28 +29,62 @@ export default function DashboardDrawer() {
   const { resolvedTheme, setTheme } = useTheme();
 
   const recruiterNavItems = [
-    { label: "Dashboard", href: "/dashboard/recruiter" },
-    { label: "My Companies", href: "/dashboard/recruiter/company" },
-    { label: "Manage Jobs", href: "/dashboard/recruiter/jobs" },
-    { label: "Applications", href: "/dashboard/recruiter/applications" },
-    { label: "Settings", href: "/dashboard/recruiter/settings" },
+    { icon: Circles4Square, label: "Dashboard", href: "/dashboard/recruiter" },
+    {
+      icon: Factory,
+      label: "My Companies",
+      href: "/dashboard/recruiter/company",
+    },
+    {
+      icon: Briefcase,
+      label: "Manage Jobs",
+      href: "/dashboard/recruiter/jobs",
+    },
+    {
+      icon: FileText,
+      label: "Applications",
+      href: "/dashboard/recruiter/applications",
+    },
+    { icon: Gear, label: "Settings", href: "/dashboard/recruiter/settings" },
+    {
+      icon: CirclePlusFill,
+      iconColor: "text-indigo-500",
+      label: "Add a Job",
+      href: "/dashboard/recruiter/new",
+    },
   ];
 
   const seekerNavItems = [
-    { label: "Dashboard", href: "/dashboard/seeker" },
-    { label: "Browse Jobs", href: "/jobs?page=1" },
-    { label: "Applications", href: "/dashboard/seeker/applications" },
-    { label: "Saved Jobs", href: "/dashboard/seeker/saved-jobs" },
-    { label: "Profile Settings", href: "/dashboard/seeker/profile" },
+    { icon: Circles4Square, label: "Dashboard", href: "/dashboard/seeker" },
+    { icon: Briefcase, label: "Find Jobs", href: "/jobs?page=1" },
+    {
+      icon: FileText,
+      label: "Applications",
+      href: "/dashboard/seeker/applications",
+    },
+    {
+      icon: Persons,
+      label: "Saved Jobs",
+      href: "/dashboard/seeker/saved-jobs",
+    },
+    {
+      icon: Gear,
+      label: "Profile",
+      href: "/dashboard/seeker/profile",
+    },
   ];
 
   const adminNavItems = [
-    { label: "Dashboard", href: "/dashboard/admin" },
-    { label: "Users", href: "/dashboard/admin/users" },
-    { label: "Companies", href: "/dashboard/admin/companies" },
-    { label: "Jobs", href: "/dashboard/admin/jobs" },
-    { label: "Payments", href: "/dashboard/admin/payments" },
-    { label: "Settings", href: "/dashboard/admin/settings" },
+    { icon: Circles4Square, label: "Dashboard", href: "/dashboard/admin" },
+    { icon: Persons, label: "Users", href: "/dashboard/admin/users" },
+    { icon: Factory, label: "Companies", href: "/dashboard/admin/companies" },
+    { icon: Briefcase, label: "Jobs", href: "/dashboard/admin/jobs" },
+    {
+      icon: CircleDollar,
+      label: "Payments",
+      href: "/dashboard/admin/payments",
+    },
+    { icon: Gear, label: "Settings", href: "/dashboard/admin/settings" },
   ];
 
   if (isPending) {
@@ -47,7 +92,7 @@ export default function DashboardDrawer() {
   }
 
   const navItems =
-    user?.role === "recruiter"
+    user?.accountType === "recruiter"
       ? recruiterNavItems
       : user?.role === "admin"
         ? adminNavItems
@@ -80,26 +125,34 @@ export default function DashboardDrawer() {
             <div className="flex-1 overflow-y-auto px-3 py-4">
               <nav className="flex flex-col gap-1">
                 {navItems.map((item) => {
-                  const isActive = pathname === item.href;
-
+                  const isActive =
+                    pathname === item.href ||
+                    (item.href !== "/dashboard/seeker" &&
+                      item.href !== "/dashboard/recruiter" &&
+                      item.href !== "/dashboard/admin" &&
+                      pathname.startsWith(`${item.href}/`)) ||
+                    (item.href.startsWith("/jobs") && pathname === "/jobs");
                   return (
                     <Link
                       key={item.label}
                       href={item.href}
                       onClick={() => setIsDashboardMenuOpen(false)}
-                      className={`flex items-center gap-3 rounded-md px-3 py-3 text-sm text-foreground transition-colors ${
+                      className={`font-semibold flex items-center gap-3 rounded-md px-3 py-3 text-sm text-foreground transition-colors ${
                         isActive
                           ? "bg-foreground/8 dark:bg-default"
                           : "hover:bg-foreground/5 active:bg-foreground/5"
                       }`}
                     >
+                      <item.icon
+                        className={`size-5 ${item.iconColor || "text-muted"}`}
+                      />
                       {item.label}
                     </Link>
                   );
                 })}
               </nav>
             </div>
-            <div className="flex sm:hidden p-3 items-center justify-between">
+            <div className="flex p-3 items-center justify-between">
               <p className="text-xs select-none">
                 Theme: {capitalize(resolvedTheme)}
               </p>
@@ -111,6 +164,7 @@ export default function DashboardDrawer() {
                 className="cursor-pointer text-sm active:opacity-70"
                 onClick={() => {
                   setTheme(resolvedTheme === "dark" ? "light" : "dark");
+                  setIsDashboardMenuOpen(false);
                 }}
               >
                 <path
@@ -124,7 +178,21 @@ export default function DashboardDrawer() {
             </div>
             {user && (
               <div className="border-t border-foreground/10 p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3 min-w-0">
+                <div
+                  className="flex items-center gap-3 min-w-0 cursor-pointer"
+                  onClick={() => {
+                    router.push(
+                      user?.accountType === "seeker"
+                        ? "/dashboard/seeker/profile"
+                        : user?.accountType === "recruiter"
+                          ? "/dashboard/recruiter/settings"
+                          : user?.role === "admin"
+                            ? "/dashboard/admin/settings"
+                            : null,
+                    );
+                    setIsDashboardMenuOpen(false);
+                  }}
+                >
                   <Avatar className="size-9 shrink-0 select-none">
                     <Avatar.Image alt="profile" src={user.image} />
                     <Avatar.Fallback className="bg-foreground/5 text-sm">
@@ -142,7 +210,7 @@ export default function DashboardDrawer() {
                 <button
                   onClick={handleSignout}
                   aria-label="Sign out"
-                  className="p-2 rounded-md hover:bg-red-600/10 text-red-500 shrink-0"
+                  className="p-2 rounded-md active:bg-red-600/10 text-red-500 shrink-0"
                 >
                   <ArrowRightFromSquare className="size-5" />
                 </button>

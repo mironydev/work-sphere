@@ -38,14 +38,14 @@ const Stats = ({ savedJobsCount, applications }) => {
         return (
           <div
             key={i}
-            className="bg-white/80 dark:bg-foreground/5 p-5 rounded-lg flex-1 flex flex-col justify-between gap-2 border-t-2 dark:border-t border-white dark:border-white/10 shadow-[0_1px_2px_rgba(0,0,0,0.06)]"
+            className="bg-white dark:bg-foreground/5 p-5 rounded-lg flex-1 flex flex-col justify-between gap-2 border"
           >
             <div className="flex justify-between gap-2">
               <p className="dark:text-stone-200 text-sm">{card.title}</p>
               <IconComponent
                 strokeWidth={1.5}
                 opacity={0.8}
-                className="shrink-0"
+                className="shrink-0 hidden sm:block"
               />
             </div>
             <p className="text-2xl font-medium">{card.number}</p>

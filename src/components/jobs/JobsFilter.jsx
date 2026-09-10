@@ -31,10 +31,10 @@ const JobsFilter = ({ searchQuery, page, setPage }) => {
     if (isRemote) searchParam.set("isRemote", isRemote);
     if (page) searchParam.set("page", page);
 
-    router.push(`?${searchParam}`);
+    router.push(`?${searchParam}`, { scroll: false });
   }, [search, jobType, category, isRemote, page, router]);
 
-  const selectStyle = "ring-0  rounded-sm ring-offset-0";
+  const selectStyle = "ring-0 rounded-sm ring-offset-0";
 
   return (
     <div className="my-5">
@@ -49,11 +49,14 @@ const JobsFilter = ({ searchQuery, page, setPage }) => {
         >
           <SearchField.Group
             className={
-              "shadow-none ring-0 rounded-sm py-5 sm:py-0 dark:bg-foreground/5"
+              "shadow-none ring-0 rounded-sm py-5 sm:py-0 dark:bg-foreground/10 sm:dark:bg-foreground/7"
             }
           >
             <SearchField.SearchIcon />
-            <SearchField.Input placeholder="Search by company or job title..." />
+            <SearchField.Input
+              placeholder="Search by company or job title..."
+              className="placeholder:text-foreground/40"
+            />
             <SearchField.ClearButton />
           </SearchField.Group>
         </SearchField>
@@ -63,12 +66,12 @@ const JobsFilter = ({ searchQuery, page, setPage }) => {
             <Select
               aria-label="Job type"
               placeholder="Select job type"
-              className="flex-1 rounded-md border bg-white dark:bg-foreground/5 text-nowrap"
+              className="flex-1 rounded-md border bg-white dark:bg-foreground/10 sm:dark:bg-foreground/7 text-nowrap placeholder:text-red-600"
               onChange={(value) => setJobType(value)}
               variant="secondary"
               value={jobType}
             >
-              <Select.Trigger className={`${selectStyle} bg-transparent `}>
+              <Select.Trigger className={`${selectStyle} bg-transparent`}>
                 <Select.Value />
                 <Select.Indicator />
               </Select.Trigger>
@@ -122,7 +125,7 @@ const JobsFilter = ({ searchQuery, page, setPage }) => {
             <Select
               aria-label="Job category"
               placeholder="Select category"
-              className="flex-1 rounded-md border bg-white dark:bg-foreground/5 text-nowrap"
+              className="flex-1 rounded-md border bg-white dark:bg-foreground/10 sm:dark:bg-foreground/7 text-nowrap"
               onChange={(value) => setCategory(value)}
               variant="secondary"
               value={category}
@@ -196,9 +199,9 @@ const JobsFilter = ({ searchQuery, page, setPage }) => {
 
           <div className="w-fit">
             <Checkbox isSelected={isRemote} onChange={setIsRemote}>
-              <Checkbox.Content className="flex flex-row items-center gap-2 ">
+              <Checkbox.Content className="flex flex-row items-center gap-1">
                 <Checkbox.Control
-                  className="dark:bg-foreground/15 shadow-none ring-0"
+                  className="bg-white dark:bg-foreground/10 border border-foreground/20 dark:border-foreground/10 ring-0 rounded-xl"
                   style={{
                     boxShadow: "none",
                     outline: "none",

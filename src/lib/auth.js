@@ -7,14 +7,15 @@ import { getUserForMail } from "./sendEmail";
 const client = new MongoClient(process.env.MONGO_DB_URI);
 const db = client.db(process.env.DB_NAME);
 
-const ALLOWED_ROLES = ["seeker", "recruiter"];
+const ALLOWED_ACCOUNT_TYPES = ["seeker", "recruiter"];
 const ALLOWED_PLANS = ["seeker_starter", "recruiter_starter"];
-
 export const auth = betterAuth({
-  trustedOrigins: [process.env.BASE_URL, process.env.ALT_URL],
+  trustedOrigins: process.env.TRUSTED_ORIGINS.split(","),
+
   emailAndPassword: {
     enabled: true,
   },
+
   socialProviders: {
     google: {
       prompt: "select_account",
@@ -22,20 +23,27 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     },
   },
+
   database: mongodbAdapter(db, {
     client,
+    transaction: false,
   }),
+
   user: {
     additionalFields: {
-      // NOT "role" — that name is reserved/protected by the admin plugin
-      requestedRole: {
+      accountType: {
         type: "string",
         input: true,
       },
 
       plan: {
         type: "string",
-        default: "seeker_starter",
+        input: true,
+      },
+      billingCycle: {
+        type: "string",
+        input: true,
+        required: false,
       },
 
       phone: {
@@ -99,27 +107,24 @@ export const auth = betterAuth({
       },
     },
   },
+
   databaseHooks: {
     user: {
       create: {
         before: async (user, ctx) => {
-          const requestedRole = ctx?.body?.requestedRole;
-          const requestedPlan = ctx?.body?.plan;
+          const accountType = ctx?.body?.accountType;
+          const plan = ctx?.body?.plan;
 
-          const role = ALLOWED_ROLES.includes(requestedRole)
-            ? requestedRole
-            : "seeker";
+          const validAccountType = ALLOWED_ACCOUNT_TYPES.includes(accountType)
+            ? accountType
+            : undefined;
 
-          const plan = ALLOWED_PLANS.includes(requestedPlan)
-            ? requestedPlan
-            : "seeker_starter";
-
+          const validPlan = ALLOWED_PLANS.includes(plan) ? plan : undefined;
           return {
             data: {
               ...user,
-              role,
-              plan,
-              requestedRole: undefined, // don't persist the scratch field
+              ...(validAccountType && { accountType: validAccountType }),
+              ...(validPlan && { plan: validPlan }),
             },
           };
         },
@@ -130,5 +135,6 @@ export const auth = betterAuth({
       },
     },
   },
+
   plugins: [admin()],
 });

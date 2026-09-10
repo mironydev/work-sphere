@@ -1,23 +1,19 @@
 import RecruiterHomepage from "@/components/dashboard/recruiter/RecruiterHomepage";
-import { auth } from "@/lib/auth";
-import { getMyCompanies } from "@/lib/fetch/fetchCompanies";
-import { getRecruiterJobs } from "@/lib/fetch/fetchJobs";
-import { headers } from "next/headers";
-import React from "react";
+import { getRecruiterStats } from "@/lib/fetch/fetchRecruiterStats";
 
 const RecruiterPage = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  const userid = session?.user?.id;
-
-  const totalJobs = await getRecruiterJobs();
-  const companies = await getMyCompanies();
-  const topCompanies = companies.slice(0, 3);
+  const stats = await getRecruiterStats();
 
   return (
     <div>
-      <RecruiterHomepage totalJobs={totalJobs} topCompanies={topCompanies} />
+      <RecruiterHomepage
+        totalApplications={stats.totalApplications}
+        totalJobs={stats.totalJobs}
+        recentApplications={stats.recentApplications}
+        topCompanies={stats.topCompanies}
+        pendingReview={stats.pendingApplications}
+        activeJobs={stats.activeJobs}
+      />
     </div>
   );
 };

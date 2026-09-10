@@ -9,9 +9,7 @@ import { uploadToImgBB } from "@/lib/uploadImage";
 export default function ImageUpload({
   onImageUpload,
   uploadText = "Click to upload",
-  previewSize = "w-9 h-9",
-  mainTextSize = "text-xs",
-  subTextSize = "text-[10px]",
+  previewSize = "w-10 h-10",
 }) {
   const [preview, setPreview] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -94,10 +92,8 @@ export default function ImageUpload({
             />
           </label>
           <div>
-            <p className={`${mainTextSize} font-medium text-foreground/70`}>
-              {uploadText}
-            </p>
-            <p className={`${subTextSize} pt-0.5 text-muted`}>Max 5 MB</p>
+            <p className="font-medium text-foreground/70">{uploadText}</p>
+            <p className={`text-xs pt-0.5 text-muted`}>Max 5 MB</p>
           </div>
         </div>
       )}

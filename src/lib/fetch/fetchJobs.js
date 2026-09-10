@@ -11,8 +11,8 @@ export const getAllJobs = async (query) => {
   return res.json();
 };
 
-export const getRecruiterJobs = async () => {
-  const res = await fetch(`${url}/recruiter/jobs`, {
+export const getRecruiterJobs = async (page) => {
+  const res = await fetch(`${url}/recruiter/jobs?page=${page}&limit=10`, {
     headers: await authHeader(),
   });
   return res.json();
@@ -23,13 +23,14 @@ export const getJobDetails = async (jobId) => {
   return res.json();
 };
 
-export const getApplications = async (userId) => {
-  const res = await fetch(`${url}/applications?userId=${userId}`);
+export const getSavedJobs = async (userId) => {
+  const res = await fetch(`${url}/savedjobs?userId=${userId}`);
   return res.json();
 };
 
 export const getPlans = async (planName) => {
-  const res = await fetch(`${url}/plans?planName=${planName}`);
+  const query = planName ? `?planName=${encodeURIComponent(planName)}` : "";
+  const res = await fetch(`${url}/plans${query}`);
   return res.json();
 };
 
@@ -42,9 +43,4 @@ export const listAllUsers = async () => {
     headers: await headers(),
   });
   return users;
-};
-
-export const getSavedJobs = async (userId) => {
-  const res = await fetch(`${url}/savedjobs?userId=${userId}`);
-  return res.json();
 };

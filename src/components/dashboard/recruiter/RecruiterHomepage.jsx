@@ -4,174 +4,250 @@ import React from "react";
 import {
   Persons,
   Thunderbolt,
-  SquareXmark,
   File,
-  Plus,
+  FileLetterX,
+  PersonPencil,
+  CircleCheckFill,
+  Xmark,
+  Clock,
+  Eye,
 } from "@gravity-ui/icons";
-import { Avatar, Chip, Spinner, Table } from "@heroui/react";
+import { Avatar, Chip, Table, EmptyState } from "@heroui/react";
 import Link from "next/link";
 import RecruiterAddCompanyModal from "./RecruiterAddCompanyModal";
-import { capitalize, useSessionClient } from "@/lib/helpers";
-import IfNotRecruiter from "./IfNotRecruiter";
+import { capitalize, formatDate, useSessionClient } from "@/lib/helpers";
+import DashboardSpinner from "../DashboardSpinner";
 
-const RecruiterHomepage = ({ totalJobs, topCompanies }) => {
-  const getJobCount = (companyId) => {
-    return totalJobs.filter(
-      (job) => String(job.companyId) === String(companyId),
-    ).length;
+const RecruiterHomepage = ({
+  totalApplications,
+  totalJobs,
+  recentApplications,
+  topCompanies,
+  pendingReview,
+  activeJobs,
+}) => {
+  const { isPending } = useSessionClient();
+
+  const statusMap = {
+    applied: {
+      color: "default",
+      icon: null,
+    },
+    reviewing: {
+      color: "warning",
+      icon: <Clock width={12} />,
+    },
+    shortlisted: {
+      color: "default",
+      icon: <CircleCheckFill width={12} />,
+    },
+    interviewing: {
+      color: "accent",
+      icon: <PersonPencil width={12} />,
+    },
+    offered: {
+      color: "success",
+      icon: <CircleCheckFill width={12} />,
+    },
+    rejected: {
+      color: "danger",
+      icon: <Xmark width={12} />,
+    },
   };
 
-  const { user, isPending } = useSessionClient();
+  const stats = [
+    { icon: Thunderbolt, label: "Active Jobs", value: activeJobs },
+    { icon: Persons, label: "Total Applications", value: totalApplications },
+    { icon: Clock, label: "Pending Review", value: pendingReview },
+    { icon: File, label: "Total Jobs Posted", value: totalJobs },
+  ];
 
   if (isPending) {
-    return (
-      <div className="flex justify-center items-center mt-10 md:mt-16">
-        <Spinner color="current" size="xl" />
-      </div>
-    );
-  }
-
-  if (user?.role !== "recruiter") {
-    return <IfNotRecruiter />;
+    return <DashboardSpinner />;
   }
 
   return (
     <div>
       <div>
-        <p className="text-2xl font-semibold">Dashboard</p>
+        <h1 className="text-3xl font-semibold">Dashboard</h1>
+        <p className="mt-1 text-muted">
+          Track jobs, applications, and hiring activity in one place.
+        </p>
+
+        {/*Stats*/}
         <div className="grid grid-cols-2 lg:grid-cols-4 mt-5 gap-4">
-          <div className="bg-white/80 dark:bg-foreground/5 border-t-2 dark:border border-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:border-foreground/15 rounded-lg p-4">
-            <div className="flex items-center justify-between">
+          {stats.map(({ icon: Icon, label, value }) => (
+            <div
+              key={label}
+              className="bg-white dark:bg-foreground/5 rounded-lg p-4 border"
+            >
               <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
-                <File />
+                <Icon />
               </div>
-              <Link
-                href={"/dashboard/recruiter/jobs/new"}
-                className="p-1 bg-indigo-500 hover:bg-indigo-500/80 text-white dark:bg-indigo-600/80 dark:hover:bg-indigo-600 duration-75 font-bold w-fit rounded-sm active:scale-95"
-              >
-                <Plus />
-              </Link>
+
+              <p className="text-sm font-medium pt-4 pb-1">{label}</p>
+              <p className="text-2xl font-bold">{value}</p>
             </div>
-            <p className="text-sm font-medium pt-4 pb-1">Total Job Posts</p>
-            <p className="text-2xl font-bold">{totalJobs.length}</p>
-          </div>
-          <div className="bg-white/80 dark:bg-foreground/5 border-t-2 dark:border border-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:border-foreground/15 rounded-lg p-4">
-            <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
-              <Persons />
-            </div>
-            <p className="text-sm font-medium pt-4 pb-1">Total Applicants</p>
-            <p className="text-2xl font-bold">0</p>
-          </div>
-          <div className="bg-white/80 dark:bg-foreground/5 border-t-2 dark:border border-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:border-foreground/15 rounded-lg p-4">
-            <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
-              <Thunderbolt />
-            </div>
-            <p className="text-sm font-medium pt-4 pb-1">Active Jobs</p>
-            <p className="text-2xl font-bold">0</p>
-          </div>
-          <div className="bg-white/80 dark:bg-foreground/5 border-t-2 dark:border border-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:border-foreground/15 rounded-lg p-4">
-            <div className="p-2 bg-foreground/5 dark:bg-foreground/10 w-fit rounded-md">
-              <SquareXmark />
-            </div>
-            <p className="text-sm font-medium pt-4 pb-1">Jobs Closed</p>
-            <p className="text-2xl font-bold">0</p>
-          </div>
+          ))}
         </div>
       </div>
       <div className="flex flex-col lg:flex-row mt-10 gap-10 md:gap-5">
-        <div className="flex-2">
-          <div className="flex justify-between items-center">
+        <div className="flex-1">
+          <div className="flex justify-between items-center mb-3">
             <p className="text-xl font-semibold">Recent Applications</p>
 
             <Link
-              href={"/dashboard/recruiter"}
-              className="rounded-md hover:bg-foreground/5 active:bg-foreground/5 px-4 py-1.5 text-sm duration-100"
+              href={"/dashboard/recruiter/applications"}
+              className="text-sm hover:underline text-nowrap active:text-foreground/50 mr-2"
             >
               View all
             </Link>
           </div>
-          <Table className="rounded-lg p-0 border-t dark:border dark:border-foreground/15 mt-3 shadow-xs">
-            <Table.ScrollContainer>
-              <Table.Content aria-label="Team members">
-                <Table.Header
-                  style={{
-                    border: "1px solid rgb(220, 38, 38)",
-                    padding: "2.5rem",
-                    margin: "2.5rem",
-                  }}
-                >
-                  <Table.Column isRowHeader className="py-4 text-nowrap">
-                    Candidate Name
-                  </Table.Column>
-                  <Table.Column>Role</Table.Column>
-                  <Table.Column className="text-nowrap">
-                    Date Applied
-                  </Table.Column>
-                  <Table.Column>Experience</Table.Column>
-                  <Table.Column>Status</Table.Column>
-                </Table.Header>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell
-                      className={"rounded-none py-5 font-bold text-nowrap"}
-                    >
-                      Kate Moore
-                    </Table.Cell>
-                    <Table.Cell>SWE</Table.Cell>
-                    <Table.Cell className="text-nowrap">
-                      Jan 01, 2026
-                    </Table.Cell>
-                    <Table.Cell>5 years</Table.Cell>
-                    <Table.Cell className={"rounded-none"}>
-                      <Chip color="warning">Reviewing</Chip>
-                    </Table.Cell>
-                  </Table.Row>
-                </Table.Body>
-              </Table.Content>
-            </Table.ScrollContainer>
-          </Table>
+
+          {/*Recent Applications*/}
+          <div className="overflow-x-auto rounded-lg dark:bg-foreground/3 border">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100 dark:bg-foreground/8">
+                  <th className="px-4 py-4 text-left font-medium text-xs text-muted">
+                    #
+                  </th>
+
+                  <th className="px-4 py-4 text-left font-medium text-xs text-muted">
+                    Applicant
+                  </th>
+
+                  <th className="px-4 py-4 text-left font-medium text-xs text-muted text-nowrap">
+                    Job Title
+                  </th>
+
+                  <th className="px-4 py-4 text-left font-medium text-xs text-muted">
+                    Applied
+                  </th>
+
+                  <th className="px-4 py-4 text-left font-medium text-xs text-muted">
+                    Status
+                  </th>
+
+                  <th className="px-4 py-4 text-left font-medium text-xs text-muted">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {recentApplications.length === 0 ? (
+                  <tr>
+                    <td colSpan={6}>
+                      <div className="flex flex-col items-center justify-center text-center py-10 bg-white dark:bg-transparent border-t border-foreground/10">
+                        <FileLetterX className="scale-150" />
+
+                        <span className="text-xl text-muted mt-3 mb-1">
+                          No applications yet
+                        </span>
+
+                        <p className="text-sm text-muted">
+                          Applications for your jobs will show up here.
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  recentApplications.map((app, i) => {
+                    const status = statusMap[app.status.toLowerCase()] || {
+                      color: "default",
+                      icon: null,
+                    };
+
+                    return (
+                      <tr
+                        key={app._id}
+                        className="border-t border-foreground/10 bg-white dark:border-white/10 dark:bg-foreground/3 hover:bg-gray-50 dark:hover:bg-foreground/5 transition-colors text-sm"
+                      >
+                        <td className="px-4 py-3 text-muted">{i + 1}</td>
+
+                        <td className="px-4 py-3 text-nowrap">
+                          <p className="font-medium">
+                            {app.user.name || "Not found"}
+                          </p>
+                        </td>
+
+                        <td className="px-4 py-3 text-nowrap">
+                          {app.job.title || "Not found"}
+                        </td>
+
+                        <td className="px-4 py-3 text-nowrap">
+                          {formatDate(app.createdAt) || "Not found"}
+                        </td>
+
+                        <td className="px-4 py-3">
+                          <Chip color={status.color}>
+                            {status.icon}
+
+                            <Chip.Label>
+                              {capitalize(app.status) || "Not found"}
+                            </Chip.Label>
+                          </Chip>
+                        </td>
+
+                        <td className="px-4 py-3">
+                          <Link
+                            href={`/dashboard/recruiter/applications/${app._id}`}
+                            title="View"
+                            className="inline-flex active:opacity-70 p-1.25 hover:bg-foreground/5 rounded-sm"
+                          >
+                            <Eye />
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div className="flex-1">
+        <div className="lg:max-w-80">
           <div className="flex justify-between items-center">
             <p className="text-xl font-semibold">My Top Companies</p>
             <Link
               href={"/dashboard/recruiter/company"}
-              className="rounded-md hover:bg-foreground/5 active:bg-foreground/5 px-4 py-1.5 text-sm duration-100"
+              className="text-sm hover:underline text-nowrap active:text-foreground/50 mr-2"
             >
               View all
             </Link>
           </div>
+
+          {/*My Top Companies*/}
           {topCompanies.length > 0 ? (
             topCompanies.map((comp, i) => (
               <div
                 key={i}
-                className="rounded-lg mt-3 p-4 bg-white/80 dark:bg-foreground/5 border-t-2 dark:border border-white shadow-[0_1px_2px_rgba(0,0,0,0.06)] dark:border-foreground/15"
+                className="rounded-lg mt-3 p-4 sm:flex-1 bg-white dark:bg-foreground/5 border"
               >
                 <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
                     <Avatar className="rounded-lg bg-transparent">
                       <Avatar.Image alt={comp.companyName} src={comp.logo} />
                       <Avatar.Fallback className="rounded-lg">
                         {comp.companyName.charAt(0).toUpperCase()}
                       </Avatar.Fallback>
                     </Avatar>
-                    <div>
-                      <p className="font-semibold">{comp.companyName}</p>
-                      <p className="text-xs opacity-60">
-                        {capitalize(comp.industry)} <br /> {comp.location}
+                    <div className="min-w-0">
+                      <p className="font-semibold overflow-hidden">
+                        {comp.companyName}
+                      </p>
+                      <p className="text-xs opacity-60 overflow-hidden mt-0.5">
+                        {comp.location}
                       </p>
                     </div>
-                  </div>
-                  <div className="flex flex-col items-end">
-                    <p className="font-semibold">{getJobCount(comp._id)}</p>
-                    <p className="text-xs opacity-80 text-right">ACTIVE JOBS</p>
                   </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="flex flex-col items-center gap-3 rounded-lg mt-3 p-6 bg-white/80 dark:bg-foreground/5 border border-b-0 dark:border-0 shadow-xs">
-              <p className="text-lg text-foreground/50">
+            <div className="flex flex-col items-center gap-3 rounded-lg mt-3 p-10 lg:min-w-80 bg-white dark:bg-foreground/5 border">
+              <p className="text-foreground/50 text-center mb-1">
                 You don&apos;t have any company
               </p>
               <RecruiterAddCompanyModal />

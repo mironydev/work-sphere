@@ -4,95 +4,7 @@ import ThemeToggle from "./ThemeToggle";
 
 const Footer = () => {
   return (
-    <footer className="mt-16 sm:mt-24 px-4 relative overflow-hidden lg:overflow-visible">
-      {/* Decorative background */}
-      <div
-        className="absolute inset-0 max-w-7xl mx-auto -z-10 pointer-events-none"
-        style={{
-          maskImage:
-            "radial-gradient(ellipse 60% 70% at 50% 50%, black 20%, transparent 90%), linear-gradient(to bottom, black 0%, black 75%, transparent 100%)",
-          maskComposite: "intersect",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 60% 70% at 50% 50%, black 20%, transparent 90%), linear-gradient(to bottom, black 0%, black 75%, transparent 100%)",
-          WebkitMaskComposite: "source-in",
-        }}
-      >
-        <div className="absolute inset-0 bg-linear-to-br from-white via-white to-white dark:from-indigo-950/30 dark:via-black/30 dark:to-violet-950/20" />
-
-        <svg
-          className="absolute inset-0 w-full h-full opacity-[0.3] dark:opacity-[0.2]"
-          preserveAspectRatio="none"
-        >
-          <defs>
-            <pattern
-              id="nodes"
-              width="120"
-              height="120"
-              patternUnits="userSpaceOnUse"
-            >
-              {/* Light mode: gray
-                  Dark mode: indigo */}
-              <circle
-                cx="10"
-                cy="10"
-                r="2"
-                className="fill-gray-400 dark:fill-indigo-500"
-              />
-
-              <circle
-                cx="80"
-                cy="40"
-                r="2"
-                className="fill-gray-400 dark:fill-indigo-500"
-              />
-
-              <circle
-                cx="40"
-                cy="90"
-                r="2"
-                className="fill-gray-400 dark:fill-indigo-500"
-              />
-
-              <line
-                x1="10"
-                y1="10"
-                x2="80"
-                y2="40"
-                stroke="currentColor"
-                className="text-gray-400 dark:text-indigo-500"
-                strokeWidth="0.5"
-              />
-
-              <line
-                x1="80"
-                y1="40"
-                x2="40"
-                y2="90"
-                stroke="currentColor"
-                className="text-gray-400 dark:text-indigo-500"
-                strokeWidth="0.5"
-              />
-            </pattern>
-          </defs>
-
-          <rect width="100%" height="100%" fill="url(#nodes)" />
-        </svg>
-
-        {/* Top-right glow */}
-        <div className="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-gray-300/20 dark:bg-indigo-500/20 blur-3xl" />
-
-        {/* Bottom-left glow */}
-        <div className="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-gray-300/20 dark:bg-violet-500/20 blur-3xl" />
-
-        {/* Center glow */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-96 h-64 rounded-full bg-gray-200/10 dark:bg-transparent blur-3xl" />
-      </div>
-
-      <p className="hidden lg:block pointer-events-none select-none absolute -z-10 -bottom-6 left-1/2 -translate-x-1/2 text-[18vw] sm:text-[10rem] font-bold leading-none text-foreground/2 whitespace-nowrap">
-        WorkSphere
-      </p>
-
-      {/* Content */}
+    <footer className="mt-16 sm:mt-24 bg-indigo-50 dark:bg-indigo-600/5">
       <div className="max-w-7xl mx-auto pt-10 pb-6 px-4 md:px-6 lg:px-10 text-center lg:text-left">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-2">
@@ -150,8 +62,15 @@ const Footer = () => {
 
           <div>
             <h3 className="font-semibold text-foreground mb-4">Navigation</h3>
-
             <ul className="space-y-3 text-gray-600 dark:text-gray-400">
+              <li>
+                <Link
+                  href="/"
+                  className="hover:text-foreground active:opacity-70 transition-colors"
+                >
+                  Home
+                </Link>
+              </li>
               <li>
                 <Link
                   href="/"

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Plus } from "@gravity-ui/icons";
 import {
   Button,
   Input,
@@ -19,6 +18,7 @@ import { createCompany } from "@/lib/actions/company";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
 import ImageUpload from "./ImageUpload";
+import { Plus } from "lucide-react";
 
 const RecruiterAddCompanyModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +36,7 @@ const RecruiterAddCompanyModal = () => {
     if (logoUrl) {
       newData.logo = logoUrl;
     }
-    newData.status = "pending";
+    newData.status = "approved";
 
     const res = await createCompany(newData);
     if (res.insertedId) {
@@ -49,22 +49,19 @@ const RecruiterAddCompanyModal = () => {
   };
 
   const inputClassName =
-    "rounded-md focus:ring-indigo-500 aria-invalid:focus:ring-red-500";
+    "rounded-md border border-foreground/15 focus:border-transparent focus:ring-1 focus:ring-foreground/50 aria-invalid:focus:ring-red-500 bg-white dark:focus:bg-black dark:bg-black placeholder:text-foreground/40 mt-1";
 
   return (
     <div>
       <Modal isOpen={isOpen} onOpenChange={setIsOpen}>
-        <Button
-          className={"bg-foreground text-background ring-foreground"}
-          variant="tertiary"
-        >
+        <Button className="bg-foreground rounded-md text-background ring-foreground text-base pl-3">
           <Plus /> Register a company
         </Button>
         <Modal.Backdrop>
           <Modal.Container placement="auto">
             <Modal.Dialog className="p-0 rounded-lg border max-h-[80vh] w-full sm:max-w-xl">
               <Form
-                className="flex flex-col  overflow-hidden"
+                className="flex flex-col overflow-hidden"
                 onSubmit={handleForm}
               >
                 <Modal.CloseTrigger />
@@ -76,10 +73,10 @@ const RecruiterAddCompanyModal = () => {
                     Enter your business details to start hiring on WorkSphere.
                   </p>
                 </Modal.Header>
-                <Modal.Body className="overflow-y-auto flex-1">
+                <Modal.Body className="overflow-y-auto flex-1 ">
                   <Surface
                     variant="default"
-                    className="bg-background/30 p-6 border-y flex flex-col gap-4"
+                    className="bg-foreground/3 dark:bg-black/50 p-6 border-y flex flex-col gap-4"
                   >
                     <div className="flex flex-col sm:flex-row gap-5">
                       <TextField
@@ -103,21 +100,21 @@ const RecruiterAddCompanyModal = () => {
                         <FieldError />
                       </TextField>
                       <Select
+                        variant="secondary"
                         isRequired
                         name="industry"
                         placeholder="Select one"
-                        className="flex-1"
+                        className="flex-1 [&_[data-slot=select-value][data-placeholder=true]]:opacity-60"
                       >
                         <Label>Industry / Category</Label>
-                        <Select.Trigger
-                          className={`${inputClassName} bg-[#EBEBEC] hover:bg-[#E1E1E2] dark:bg-[#27272A] dark:hover:bg-[#2E2E31] shadow-none`}
-                        >
+                        <Select.Trigger className={inputClassName}>
                           <Select.Value />
                           <Select.Indicator />
                         </Select.Trigger>
                         <Select.Popover className={"rounded-lg"}>
                           <ListBox>
                             <ListBox.Item
+                              style={{ outline: "none", boxShadow: "none" }}
                               id="technology"
                               textValue="Technology"
                               className="rounded-lg focus:ring-indigo-500"
@@ -126,6 +123,7 @@ const RecruiterAddCompanyModal = () => {
                               <ListBox.ItemIndicator />
                             </ListBox.Item>
                             <ListBox.Item
+                              style={{ outline: "none", boxShadow: "none" }}
                               id="healthcare"
                               textValue="Healthcare"
                               className="rounded-lg focus:ring-indigo-500"
@@ -134,6 +132,7 @@ const RecruiterAddCompanyModal = () => {
                               <ListBox.ItemIndicator />
                             </ListBox.Item>
                             <ListBox.Item
+                              style={{ outline: "none", boxShadow: "none" }}
                               id="finance"
                               textValue="Finance"
                               className="rounded-lg focus:ring-indigo-500"
@@ -142,6 +141,7 @@ const RecruiterAddCompanyModal = () => {
                               <ListBox.ItemIndicator />
                             </ListBox.Item>
                             <ListBox.Item
+                              style={{ outline: "none", boxShadow: "none" }}
                               id="marketing"
                               textValue="Marketing"
                               className="rounded-lg focus:ring-indigo-500"
@@ -150,6 +150,7 @@ const RecruiterAddCompanyModal = () => {
                               <ListBox.ItemIndicator />
                             </ListBox.Item>
                             <ListBox.Item
+                              style={{ outline: "none", boxShadow: "none" }}
                               id="sales"
                               textValue="Sales"
                               className="rounded-lg focus:ring-indigo-500"
@@ -226,10 +227,12 @@ const RecruiterAddCompanyModal = () => {
 
                       <div className="flex-1">
                         <Label>Company Logo</Label>
-                        <ImageUpload
-                          onImageUpload={setLogoUrl}
-                          uploadText="Click to upload logo"
-                        />
+                        <div className="mt-2 select-none">
+                          <ImageUpload
+                            onImageUpload={setLogoUrl}
+                            uploadText="Click to upload logo"
+                          />
+                        </div>
                       </div>
                     </div>
                     <TextField
@@ -259,7 +262,7 @@ const RecruiterAddCompanyModal = () => {
                   <Button
                     slot="close"
                     variant="tertiary"
-                    className="rounded-lg bg-foreground/10"
+                    className="rounded-lg bg-foreground/10 text-base sm:text-sm"
                     style={{
                       boxShadow: "none",
                       outline: "none",
@@ -270,7 +273,7 @@ const RecruiterAddCompanyModal = () => {
 
                   <Button
                     type="submit"
-                    className="rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600"
+                    className="rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 text-base sm:text-sm"
                   >
                     Register Company
                   </Button>
