@@ -4,7 +4,7 @@ import ThemeToggle from "./ThemeToggle";
 
 const Footer = () => {
   return (
-    <footer className="mt-16 sm:mt-24 bg-indigo-50 dark:bg-indigo-600/5">
+    <footer className="mt-16 sm:mt-24 bg-white dark:bg-foreground/7">
       <div className="max-w-7xl mx-auto pt-10 pb-6 px-4 md:px-6 lg:px-10 text-center lg:text-left">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-6">
           <div className="lg:col-span-2">

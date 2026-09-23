@@ -8,6 +8,7 @@ import {
   Dropdown,
   Label,
   Pagination,
+  Modal,
 } from "@heroui/react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -122,7 +123,7 @@ const RecruiterAllJobs = ({ jobsData }) => {
           <span>Add a Job</span>
         </Link>
       </div>
-      <div className="mt-6">
+      <div className="mt-4">
         <div className="overflow-x-auto rounded-t-lg dark:bg-foreground/3 border">
           <table className="w-full border-collapse">
             <thead>
@@ -280,7 +281,7 @@ const RecruiterAllJobs = ({ jobsData }) => {
                             outline: "none",
                           }}
                         >
-                          <p className="p-2 hover:bg-foreground/5 rounded-sm cursor-pointer">
+                          <p className="flex items-center justify-center hover:bg-foreground/5 active:bg-foreground/5 p-1.5 rounded-full cursor-pointer">
                             <EllipsisVertical className="w-4 h-4" />
                           </p>
                         </Dropdown.Trigger>
@@ -429,36 +430,45 @@ const RecruiterAllJobs = ({ jobsData }) => {
         )}
       </div>
 
-      {/* Single shared delete confirmation, reused across every row */}
+      {/* delete modal */}
       <AlertDialog
         isOpen={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
       >
         <AlertDialog.Backdrop>
-          <AlertDialog.Container>
-            <AlertDialog.Dialog className="rounded-xl">
-              <AlertDialog.CloseTrigger />
+          <AlertDialog.Container placement="center">
+            <AlertDialog.Dialog className="rounded-xl sm:max-w-96">
               <AlertDialog.Header>
-                <AlertDialog.Icon status="danger" />
-                <AlertDialog.Heading>
+                <AlertDialog.Heading className="text-xl">
                   Delete job permanently?
                 </AlertDialog.Heading>
               </AlertDialog.Header>
+
               <AlertDialog.Body>
-                <p>
+                <p className="text-sm leading-6 text-muted">
                   This will permanently delete the job{" "}
-                  <strong>{jobToDelete?.jobTitle}</strong>. This action cannot
-                  be undone.
+                  <span className="font-medium text-foreground">
+                    {jobToDelete?.jobTitle}
+                  </span>
+                  . This action cannot be undone.
                 </p>
               </AlertDialog.Body>
+
               <AlertDialog.Footer>
-                <Button slot="close" variant="tertiary" className="rounded-lg">
+                <Button
+                  slot="close"
+                  variant="tertiary"
+                  className="w-full rounded-lg"
+                  style={{ outline: "none", boxShadow: "none" }}
+                >
                   Cancel
                 </Button>
+
                 <Button
                   slot={isDeleting ? "" : "close"}
                   variant="danger"
-                  className="rounded-lg"
+                  className="w-full rounded-lg"
+                  style={{ outline: "none", boxShadow: "none" }}
                   onClick={handleConfirmDelete}
                 >
                   {isDeleting ? "Deleting..." : "Delete Job"}
@@ -469,48 +479,57 @@ const RecruiterAllJobs = ({ jobsData }) => {
         </AlertDialog.Backdrop>
       </AlertDialog>
 
-      {/* Single shared pause/resume confirmation, reused across every row */}
-      <AlertDialog
-        isOpen={isPauseDialogOpen}
-        onOpenChange={setIsPauseDialogOpen}
-      >
-        <AlertDialog.Backdrop>
-          <AlertDialog.Container>
-            <AlertDialog.Dialog className="rounded-xl">
-              <AlertDialog.CloseTrigger />
-              <AlertDialog.Header>
-                <AlertDialog.Icon
-                  status={jobToPause?.isActive ? "warning" : "success"}
-                />
-                <AlertDialog.Heading>
+      {/* pause/resume modal */}
+      <Modal isOpen={isPauseDialogOpen} onOpenChange={setIsPauseDialogOpen}>
+        <Modal.Backdrop>
+          <Modal.Container placement="center">
+            <Modal.Dialog className="rounded-xl sm:max-w-96">
+              <Modal.Header>
+                <Modal.Heading className="text-xl">
                   {jobToPause?.isActive
                     ? "Unpublish this job?"
                     : "Republish this job?"}
-                </AlertDialog.Heading>
-              </AlertDialog.Header>
-              <AlertDialog.Body>
-                <p>
+                </Modal.Heading>
+              </Modal.Header>
+
+              <Modal.Body>
+                <p className="text-sm leading-6 text-muted">
                   {jobToPause?.isActive ? (
                     <>
-                      <strong>{jobToPause?.jobTitle}</strong> will be hidden
-                      from job seekers until you resume it. You can reactivate
-                      it anytime.
+                      <span className="font-medium text-foreground">
+                        {jobToPause?.jobTitle}
+                      </span>{" "}
+                      will be hidden from job seekers until you resume it. You
+                      can reactivate it anytime.
                     </>
                   ) : (
                     <>
-                      <strong>{jobToPause?.jobTitle}</strong> will become
-                      visible to job seekers again.
+                      <span className="font-medium text-foreground">
+                        {jobToPause?.jobTitle}
+                      </span>{" "}
+                      will become visible to job seekers again.
                     </>
                   )}
                 </p>
-              </AlertDialog.Body>
-              <AlertDialog.Footer>
-                <Button slot="close" variant="tertiary" className="rounded-lg">
+              </Modal.Body>
+
+              <Modal.Footer>
+                <Button
+                  slot="close"
+                  variant="tertiary"
+                  className="w-full rounded-lg"
+                  style={{ outline: "none", boxShadow: "none" }}
+                >
                   Cancel
                 </Button>
+
                 <Button
                   slot={isPausing ? "" : "close"}
-                  className={`rounded-lg ${jobToPause?.isActive ? "bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-700 dark:bg-yellow-700 hover:dark:bg-yellow-800 active:dark:bg-yellow-800" : "bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-700 dark:bg-emerald-700 hover:dark:bg-emerald-800 active:dark:bg-emerald-800"}`}
+                  className={`w-full rounded-lg ${
+                    jobToPause?.isActive
+                      ? "bg-yellow-600 hover:bg-yellow-700 active:bg-yellow-700 dark:bg-yellow-700 hover:dark:bg-yellow-800 active:dark:bg-yellow-800"
+                      : "bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-700 dark:bg-emerald-700 hover:dark:bg-emerald-800 active:dark:bg-emerald-800"
+                  }`}
                   style={{ outline: "none", boxShadow: "none" }}
                   onClick={handleConfirmPauseToggle}
                 >
@@ -520,11 +539,11 @@ const RecruiterAllJobs = ({ jobsData }) => {
                       ? "Unpublish"
                       : "Republish"}
                 </Button>
-              </AlertDialog.Footer>
-            </AlertDialog.Dialog>
-          </AlertDialog.Container>
-        </AlertDialog.Backdrop>
-      </AlertDialog>
+              </Modal.Footer>
+            </Modal.Dialog>
+          </Modal.Container>
+        </Modal.Backdrop>
+      </Modal>
     </div>
   );
 };

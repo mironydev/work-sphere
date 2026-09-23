@@ -9,8 +9,8 @@ const RecruiterLayoutPage = async ({ children }) => {
   if (session?.user?.accountType !== "recruiter") {
     return (
       <div>
-        <div className="flex justify-center items-center -mt-26 sm:mt-0 h-screen sm:h-[60vh]">
-          <div className="max-w-lg text-center rounded-xl shadow-xs border border-white dark:border-foreground/15 bg-white/70 dark:bg-foreground/5 px-4 py-8 sm:p-8">
+        <div className="flex justify-center items-center -mt-26 h-screen">
+          <div className="max-w-lg text-center rounded-xl shadow-xs border border-foreground/15 bg-white dark:bg-foreground/5 px-4 py-8 sm:p-8">
             <h1 className="text-2xl font-semibold mb-3 text-red-400">
               Recruiter Account Required
             </h1>

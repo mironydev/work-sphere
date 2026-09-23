@@ -1,5 +1,6 @@
 "use client";
 
+import { downgradePlan } from "@/lib/actions/plan";
 import {
   Person,
   ChartLineArrowUp,
@@ -242,10 +243,16 @@ const Pricing = ({ user, showSkeleton }) => {
   ].join(" ");
 
   const handleDowngrade = async () => {
+    const planName =
+      user?.accountType === "recruiter"
+        ? "recruiter_starter"
+        : "seeker_starter";
     try {
-      // We'll add the backend downgrade request here
-      setIsDowngradeModalOpen(false);
-      toast.success("Plan downgraded.");
+      const res = await downgradePlan(planName);
+      if (res.modifiedCount) {
+        toast.success("Plan downgraded.");
+        setIsDowngradeModalOpen(false);
+      }
     } catch (error) {
       toast.error("Something went wrong.");
     }
@@ -635,6 +642,7 @@ const Pricing = ({ user, showSkeleton }) => {
         )}
       </Tabs>
 
+      {/* downgrade modal */}
       <Modal
         isOpen={isDowngradeModalOpen}
         onOpenChange={setIsDowngradeModalOpen}
@@ -689,7 +697,7 @@ const Pricing = ({ user, showSkeleton }) => {
                 <Button
                   className="rounded-lg"
                   style={{ outline: "none", boxShadow: "none" }}
-                  onPress={handleDowngrade}
+                  onPress={() => handleDowngrade()}
                   variant="danger"
                 >
                   Downgrade to Starter

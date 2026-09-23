@@ -7,6 +7,7 @@ const ApplicationStatus = ({ applications }) => {
     acc[app.status] = (acc[app.status] || 0) + 1;
     return acc;
   }, {});
+
   return (
     <div className="bg-white dark:bg-foreground/5 p-6 rounded-lg w-full md:w-fit lg:flex-1 min-w-56 lg:max-w-min xl:max-w-80 border">
       <p className="text-xl font-medium mb-8">Application Status</p>
@@ -30,7 +31,7 @@ const ApplicationStatus = ({ applications }) => {
           formatOptions={""}
           maxValue={applied}
           minValue={0}
-          value={statusCount.applied}
+          value={statusCount.applied || statusCount.reviewing}
           size="lg"
         >
           <p className="text-xs text-muted">Under Review</p> <Meter.Output />

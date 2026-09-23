@@ -212,7 +212,7 @@ export default function Navbar() {
                         src={user.image}
                         className="w-full h-full object-cover"
                       />
-                      <Avatar.Fallback className="bg-foreground/5 dark:bg-background/5">
+                      <Avatar.Fallback>
                         {user.name?.[0]?.toUpperCase() || "U"}
                       </Avatar.Fallback>
                     </Avatar>

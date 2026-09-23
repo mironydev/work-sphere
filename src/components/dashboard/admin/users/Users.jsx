@@ -6,33 +6,66 @@ import {
   ListBox,
   Modal,
   Separator,
-  Table,
   Select,
   Input,
   FieldError,
-  Fieldset,
   TextField,
   FieldGroup,
-  Form,
-  EmptyState,
+  Label,
+  Dropdown,
 } from "@heroui/react";
 import Image from "next/image";
 import { capitalize, formatDate } from "@/lib/helpers";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { TrashBin } from "@gravity-ui/icons";
+import { Check, PersonXmark } from "@gravity-ui/icons";
 import { toast } from "sonner";
 import { updatePlan } from "@/lib/actions/plan";
 import UserStats from "./UserStats";
-import { useState } from "react";
-import { PackageOpen } from "lucide-react";
+import { useEffect, useState } from "react";
+import { EllipsisVertical } from "lucide-react";
+import { updateUserRole } from "@/lib/actions/user";
 
 const Users = ({ allUsers, allPlans }) => {
   const router = useRouter();
 
   const users = allUsers.filter((user) => user.role !== "admin");
-
   const [filteredUsers, setFilteredUsers] = useState(users);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setFilteredUsers(allUsers.filter((user) => user.role !== "admin"));
+  }, [allUsers]);
+
+  const [isUser, setIsUser] = useState(null);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
+  const [isBanDialogOpen, setIsBanDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const handleAction = async (key, user, plan) => {
+    switch (key) {
+      case "ban":
+        setIsUser(user);
+        setIsBanDialogOpen(true);
+        break;
+      case "view":
+        setIsUser(user);
+        setIsViewDialogOpen(true);
+        break;
+      case "delete":
+        setIsUser(user);
+        setIsDeleteDialogOpen(true);
+        break;
+      case "changeRole":
+        setIsUser(user);
+        setIsRoleDialogOpen(true);
+        break;
+      case "changePlan":
+        setIsUser(user);
+        updateUserPlan(user.id, plan.name);
+        break;
+    }
+  };
 
   const formatPlanName = (planName) => {
     return planName
@@ -44,17 +77,14 @@ const Users = ({ allUsers, allPlans }) => {
   const updateUserPlan = async (userId, plan) => {
     const res = await updatePlan(userId, plan);
     if (res.modifiedCount) {
+      router.refresh();
       toast.success(`Plan upgraded to ${formatPlanName(plan)}`);
     }
   };
 
-  const updateUserRole = async (userId, newRole) => {
-    const { error } = await authClient.admin.setRole({
-      userId,
-      role: newRole,
-    });
-
-    if (!error) {
+  const handleUpdateUserRole = async (userId, newRole) => {
+    const res = await updateUserRole(userId, newRole);
+    if (res.modifiedCount) {
       toast.success(`Role updated to ${capitalize(newRole)}`);
       router.refresh();
     } else {
@@ -69,6 +99,7 @@ const Users = ({ allUsers, allPlans }) => {
       banExpiresIn: time,
     });
     if (!error) {
+      router.refresh();
       toast.success(`${data.user.name} has been banned`);
     }
   };
@@ -78,6 +109,7 @@ const Users = ({ allUsers, allPlans }) => {
       userId: userId,
     });
     if (!error) {
+      router.refresh();
       toast.success(`${data.user.name} has been unbanned`);
     }
   };
@@ -92,8 +124,12 @@ const Users = ({ allUsers, allPlans }) => {
 
     if (user.banned) {
       await unbanUser(user.id);
+      setIsBanDialogOpen(false);
+      router.refresh();
     } else {
       await banUser(user.id, reason, time);
+      setIsBanDialogOpen(false);
+      router.refresh();
     }
 
     router.refresh();
@@ -105,6 +141,7 @@ const Users = ({ allUsers, allPlans }) => {
     });
     if (!error) {
       toast.success("User Deleted.");
+      setIsDeleteDialogOpen(false);
       router.refresh();
     }
   };
@@ -116,576 +153,693 @@ const Users = ({ allUsers, allPlans }) => {
         filteredUsers={filteredUsers}
         setFilteredUsers={setFilteredUsers}
       />
-      <Table className="rounded-lg p-0 border border-foreground/15 mt-6 bg-background dark:bg-foreground/3">
-        <Table.ScrollContainer>
-          <Table.Content aria-label="Users">
-            <Table.Header>
-              <Table.Column isRowHeader className="py-4 rounded-none">
-                Name
-              </Table.Column>
-              <Table.Column>Email</Table.Column>
-              <Table.Column>Role</Table.Column>
-              <Table.Column>Joined</Table.Column>
-              <Table.Column>Banned</Table.Column>
-              <Table.Column className="rounded-none">Actions</Table.Column>
-            </Table.Header>
-            <Table.Body
-              renderEmptyState={() => (
-                <EmptyState className="flex h-full w-full flex-col items-center justify-center gap-4 text-center py-16">
-                  <PackageOpen />
-                  <span className="text-sm text-muted">No results found</span>
-                </EmptyState>
-              )}
-            >
-              {filteredUsers.map((user) => {
-                const filteredPlans = allPlans.filter((plan) =>
-                  plan.name.startsWith(user.role),
-                );
-                return (
-                  <Table.Row key={user.id}>
-                    {/* Name */}
-                    <Table.Cell className="rounded-none py-5 font-medium">
-                      <div className="flex items-center gap-3">
-                        {user.image ? (
-                          <Image
-                            src={user.image}
-                            alt={user.name}
-                            width={50}
-                            height={50}
-                            className="w-8 h-8 rounded-full"
-                          />
-                        ) : (
-                          <div className="w-8 h-8 rounded-full bg-foreground/10 flex items-center justify-center text-xs font-semibold">
-                            {user.name?.[0]?.toUpperCase()}
-                          </div>
-                        )}
-                        <p>{user.name}</p>
-                      </div>
-                    </Table.Cell>
+      <div className="mt-6">
+        <div className="overflow-x-auto rounded-lg dark:bg-foreground/3 border">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100 dark:bg-foreground/8">
+                <th className="px-4 py-4 text-left font-medium text-xs text-muted">
+                  #
+                </th>
+                <th className="px-4 py-4 text-left font-medium text-xs text-muted">
+                  Name
+                </th>
+                <th className="px-4 py-4 text-left font-medium text-xs text-muted">
+                  Email
+                </th>
+                <th className="px-4 py-4 text-left font-medium text-xs text-muted pl-7">
+                  Role
+                </th>
+                <th className="px-4 py-4 text-left font-medium text-xs text-muted">
+                  Plan
+                </th>
+                <th className="px-4 py-4 text-left font-medium text-xs text-muted">
+                  Joined
+                </th>
+                <th className="px-4 py-4 text-center font-medium text-xs text-muted">
+                  Banned
+                </th>
+                <th className="px-4 py-4 text-center font-medium text-xs text-muted">
+                  Actions
+                </th>
+              </tr>
+            </thead>
 
-                    {/* Email */}
-                    <Table.Cell>{user.email}</Table.Cell>
+            <tbody>
+              {filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan={7}>
+                    <div className="flex flex-col items-center justify-center text-center py-10 bg-white dark:bg-foreground/5 border-t text-muted">
+                      <PersonXmark className="size-6 mb-2" />
+                      <p className="text-sm text-muted">No user found</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                filteredUsers.map((user, i) => {
+                  const filteredPlans = allPlans.filter((plan) =>
+                    plan.name.startsWith(user.accountType),
+                  );
 
-                    {/* Role */}
-                    <Table.Cell>
-                      <span
-                        className={`capitalize px-3 py-1 rounded-full text-xs font-semibold ${
-                          user.role === "admin"
-                            ? "bg-indigo-600/10 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400"
-                            : user.role === "seeker"
-                              ? "bg-foreground/10 dark:bg-stone-800"
-                              : user.role === "recruiter"
-                                ? "bg-orange-600/10 text-orange-700 dark:text-orange-400"
-                                : ""
-                        }`}
-                      >
-                        {user.role}
-                      </span>
-                    </Table.Cell>
+                  return (
+                    <tr
+                      key={user.id}
+                      className="border-t border-foreground/10 bg-white dark:border-white/10 dark:bg-foreground/3 hover:bg-gray-50 dark:hover:bg-foreground/5 transition-colors text-sm"
+                    >
+                      {/* Number */}
+                      <td className="px-4 py-3 font-medium text-muted">
+                        {i + 1}
+                      </td>
 
-                    {/* Joined */}
-                    <Table.Cell className="text-xs text-muted whitespace-nowrap">
-                      {formatDate(user.createdAt)}
-                    </Table.Cell>
+                      {/* Name */}
+                      <td className="px-4 py-3 font-medium text-nowrap">
+                        {user.name}
+                      </td>
 
-                    {/* Suspended */}
-                    <Table.Cell>{user.banned ? "Yes" : "No"}</Table.Cell>
+                      {/* Email */}
+                      <td className="px-4 py-3">{user.email}</td>
 
-                    {/* Actions */}
-                    <Table.Cell className="rounded-none">
-                      <Modal>
-                        <Button
-                          style={{ boxShadow: "none", outline: "none" }}
-                          className="rounded-sm bg-foreground/95 text-background"
+                      {/* Role */}
+                      <td className="px-4 py-3">
+                        <span
+                          className={`capitalize px-3 py-1 rounded-full text-xs font-semibold ${
+                            user.role === "admin"
+                              ? "bg-indigo-600/10 dark:bg-indigo-600/20 text-indigo-700 dark:text-indigo-400"
+                              : user.accountType === "seeker"
+                                ? "bg-foreground/5"
+                                : user.accountType === "recruiter"
+                                  ? "bg-orange-600/5 text-orange-700 dark:text-orange-300"
+                                  : ""
+                          }`}
                         >
-                          View Details
-                        </Button>
-                        <Modal.Backdrop>
-                          <Modal.Container>
-                            <Modal.Dialog className="sm:max-w-110">
-                              <Modal.CloseTrigger />
-                              <Modal.Header>
-                                <Modal.Heading className="text-center">
-                                  User Details
-                                </Modal.Heading>
-                                <Separator className="my-2" />
-                                {user.image ? (
-                                  <Image
-                                    src={user.image}
-                                    alt={user.name}
-                                    width={100}
-                                    height={100}
-                                    className="w-10 h-10 rounded-full"
-                                  />
-                                ) : (
-                                  <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-semibold">
-                                    {user.name?.[0]?.toUpperCase()}
-                                  </div>
-                                )}
-                              </Modal.Header>
-                              <div className="sm:text-sm font-medium space-y-1 mt-2">
-                                <p>
-                                  Name:{" "}
-                                  <span className="font-normal">
-                                    {user.name}
-                                  </span>
-                                </p>
-                                <p>
-                                  Email:{" "}
-                                  <span className="font-normal flex flex-wrap">
-                                    {user.email}
-                                    <span
-                                      className={`ml-2 px-2 py-0.5 rounded-sm text-[11px] font-semibold ${
-                                        user.emailVerified
-                                          ? "bg-green-600/10 dark:bg-green-600/20 text-green-600 dark:text-green-400"
-                                          : "bg-red-600/10 dark:bg-red-600/20 text-red-600 dark:text-red-400"
-                                      }`}
-                                    >
-                                      {user.emailVerified
-                                        ? "Verified"
-                                        : "Not verified"}
-                                    </span>
-                                  </span>
-                                </p>
-                                <p>
-                                  Role:{" "}
-                                  <span className="font-normal capitalize">
-                                    {user.role}{" "}
-                                  </span>
-                                </p>
-                                <p>
-                                  Plan:{" "}
-                                  <span className="font-normal">
-                                    {formatPlanName(user.plan)}{" "}
-                                  </span>
-                                </p>
-                                <p>
-                                  Created:{" "}
-                                  <span className="font-normal">
-                                    {formatDate(user.createdAt)}
-                                  </span>
-                                </p>
-                                <p>
-                                  Updated:{" "}
-                                  <span className="font-normal">
-                                    {formatDate(user.updatedAt)}
-                                  </span>
-                                </p>
-                                <p>
-                                  Banned:{" "}
-                                  <span className="font-normal">
-                                    {user.banned ? "Yes" : "No"}
-                                  </span>
-                                </p>
-                                <div
-                                  className="space-y-1"
+                          {user.accountType}
+                        </span>
+                      </td>
+
+                      {/* Plan */}
+                      <td className="px-4 py-3 capitalize">
+                        {user.plan.slice(user.accountType.length + 1)}
+                      </td>
+
+                      {/* Joined */}
+                      <td className="px-4 py-3 text-xs text-muted text-nowrap">
+                        {formatDate(user.createdAt)}
+                      </td>
+
+                      {/* Banned */}
+                      <td className="px-4 py-3 text-center">
+                        {user.banned ? "Yes" : "No"}
+                      </td>
+                      <td className="text-center">
+                        <Dropdown>
+                          <Dropdown.Trigger
+                            style={{
+                              boxShadow: "none",
+                              outline: "none",
+                            }}
+                          >
+                            <div className="flex items-center justify-center hover:bg-foreground/5 active:bg-foreground/5 p-1.5 rounded-full cursor-pointer">
+                              <EllipsisVertical className="w-4 h-4" />
+                            </div>
+                          </Dropdown.Trigger>
+
+                          <Dropdown.Popover className="dark:bg-[#151515] rounded-xl w-fit min-w-32">
+                            <Dropdown.Menu
+                              onAction={(key) => {
+                                handleAction(key, user);
+                              }}
+                            >
+                              <Dropdown.Item
+                                id="view"
+                                textValue="View"
+                                className="gap-2 rounded-lg mb-0.5"
+                                style={{
+                                  boxShadow: "none",
+                                  outline: "none",
+                                }}
+                              >
+                                <Label>View</Label>
+                              </Dropdown.Item>
+
+                              <Dropdown.Item
+                                id="changeRole"
+                                textValue="Change Role"
+                                className="gap-2 rounded-lg mb-0.5"
+                                style={{
+                                  boxShadow: "none",
+                                  outline: "none",
+                                }}
+                              >
+                                <Label className="text-nowrap">
+                                  Make{" "}
+                                  {user.accountType === "seeker"
+                                    ? "Recruiter"
+                                    : "Seeker"}
+                                </Label>
+                              </Dropdown.Item>
+
+                              <Dropdown.SubmenuTrigger>
+                                <Dropdown.Item
+                                  id="changePlan"
+                                  textValue="Change Plan"
+                                  className="gap-2 rounded-lg mb-0.5"
                                   style={{
-                                    visibility: user.banned
-                                      ? "visible"
-                                      : "hidden",
+                                    boxShadow: "none",
+                                    outline: "none",
                                   }}
                                 >
-                                  <p>
-                                    Ban reason:{" "}
-                                    <span className="font-normal">
-                                      {user.banned
-                                        ? user.banReason
-                                        : "placeholder"}
-                                    </span>
-                                  </p>
-                                  <p>
-                                    Ban Expires:{" "}
-                                    <span className="font-normal">
-                                      {user.banned
-                                        ? formatDate(user.banExpires)
-                                        : "placeholder"}
-                                    </span>
-                                  </p>
-                                </div>
-                              </div>
-
-                              <Separator className="mt-5 mb-6" />
-
-                              <Modal.Footer>
-                                <div className="w-full flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between sm:items-center">
-                                  <div className="flex flex-row flex-wrap justify-between sm:justify-start gap-3 sm:gap-2">
-                                    <AlertDialog>
-                                      <AlertDialog.Trigger className="flex-1 sm:flex-none">
-                                        <button className="bg-background p-2.5 px-3 rounded-sm cursor-pointer text-sm font-semibold w-full whitespace-nowrap">
-                                          Make{" "}
-                                          {user.role === "seeker"
-                                            ? "Recruiter"
-                                            : "Seeker"}
-                                        </button>
-                                      </AlertDialog.Trigger>
-                                      <AlertDialog.Backdrop>
-                                        <AlertDialog.Container placement="center">
-                                          <AlertDialog.Dialog className="sm:max-w-100">
-                                            <AlertDialog.CloseTrigger />
-                                            <AlertDialog.Header>
-                                              <AlertDialog.Icon status="default" />
-                                              <AlertDialog.Heading>
-                                                Change User Role to{" "}
-                                                {capitalize(
-                                                  user.role === "seeker"
-                                                    ? "recruiter"
-                                                    : "seeker",
-                                                )}
-                                                ?
-                                              </AlertDialog.Heading>
-                                            </AlertDialog.Header>
-                                            <AlertDialog.Body>
-                                              <p>
-                                                This action will change the role
-                                                of{" "}
-                                                <span className="bg-foreground/5 text-foreground font-medium my-1 w-fit px-2 py-0.5 rounded-sm">
-                                                  User: {user.name}
-                                                </span>{" "}
-                                                from x to y
-                                              </p>
-                                            </AlertDialog.Body>
-                                            <AlertDialog.Footer>
-                                              <Button
-                                                slot="close"
-                                                variant="tertiary"
-                                              >
-                                                Cancel
-                                              </Button>
-                                              <Button
-                                                slot="close"
-                                                className="bg-indigo-600"
-                                                onClick={() =>
-                                                  updateUserRole(
-                                                    user.id,
-                                                    user.role === "seeker"
-                                                      ? "recruiter"
-                                                      : "seeker",
-                                                  )
-                                                }
-                                              >
-                                                Make{" "}
-                                                {user.role === "seeker"
-                                                  ? "Recruiter"
-                                                  : "Seeker"}
-                                              </Button>
-                                            </AlertDialog.Footer>
-                                          </AlertDialog.Dialog>
-                                        </AlertDialog.Container>
-                                      </AlertDialog.Backdrop>
-                                    </AlertDialog>
-
-                                    <Select
-                                      className="flex-1 w-full whitespace-nowrap"
-                                      onChange={(value) => {
-                                        updateUserPlan(user.id, value);
-                                      }}
-                                      placeholder="Update Plan"
-                                      aria-label="update plan"
-                                    >
-                                      <Select.Trigger
-                                        className={
-                                          "bg-background rounded-sm py-2.5"
-                                        }
+                                  <Label className="text-nowrap">
+                                    Change Plan
+                                  </Label>
+                                  <Dropdown.SubmenuIndicator />
+                                </Dropdown.Item>
+                                <Dropdown.Popover
+                                  placement="left top"
+                                  className="dark:bg-[#151515] rounded-xl w-fit min-w-32"
+                                >
+                                  <Dropdown.Menu
+                                    onAction={(planId) => {
+                                      const selectedPlan = filteredPlans.find(
+                                        (plan) => plan._id === planId,
+                                      );
+                                      handleAction(
+                                        "changePlan",
+                                        user,
+                                        selectedPlan,
+                                      );
+                                    }}
+                                  >
+                                    {filteredPlans.map((plan) => (
+                                      <Dropdown.Item
+                                        key={plan._id}
+                                        id={plan._id}
+                                        textValue={plan.name}
+                                        isDisabled={user.plan === plan.name}
+                                        className="gap-2 rounded-lg mb-0.5 flex justify-between"
                                         style={{
                                           boxShadow: "none",
                                           outline: "none",
                                         }}
                                       >
-                                        <Select.Value
-                                          className={
-                                            "font-medium text-sm text-center"
-                                          }
-                                        />
-                                        <Select.Indicator />
-                                      </Select.Trigger>
-                                      <Select.Popover
-                                        className={
-                                          "rounded-lg dark:bg-stone-950"
-                                        }
-                                      >
-                                        <ListBox className="rounded-sm">
-                                          {filteredPlans.map((plan) => (
-                                            <ListBox.Item
-                                              key={plan._id}
-                                              isDisabled={
-                                                user.plan === plan.name
-                                              }
-                                              id={plan.name}
-                                              textValue={formatPlanName(
-                                                plan.name,
-                                              )}
-                                              className="rounded-lg ring-black ring-0"
-                                            >
-                                              {formatPlanName(plan.name)}
-                                              {user.plan === plan.name && (
-                                                <span className="text-xs"></span>
-                                              )}
-                                              <ListBox.ItemIndicator />
-                                            </ListBox.Item>
-                                          ))}
-                                        </ListBox>
-                                      </Select.Popover>
-                                    </Select>
-                                  </div>
+                                        <Label>
+                                          {formatPlanName(plan.name)}
+                                        </Label>
+                                        {user.plan === plan.name && (
+                                          <Check className="size-4 text-muted" />
+                                        )}
+                                      </Dropdown.Item>
+                                    ))}
+                                  </Dropdown.Menu>
+                                </Dropdown.Popover>
+                              </Dropdown.SubmenuTrigger>
 
-                                  <div className="flex flex-wrap gap-3 sm:gap-2">
-                                    <AlertDialog>
-                                      <AlertDialog.Trigger className="flex-1 sm:flex-none">
-                                        <button
-                                          className={`p-2.5 px-3 rounded-sm transition-colors cursor-pointer text-sm font-semibold w-full ${
-                                            user.banned
-                                              ? "bg-green-600/10 hover:bg-green-600/20 text-green-600 dark:text-green-400"
-                                              : "bg-yellow-600/10 hover:bg-yellow-600/20 text-yellow-600 dark:text-yellow-400"
-                                          }`}
-                                        >
-                                          <span>
-                                            {user.banned ? "Unban" : "Ban"}
-                                          </span>
-                                        </button>
-                                      </AlertDialog.Trigger>
-                                      <AlertDialog.Backdrop>
-                                        <AlertDialog.Container placement="center">
-                                          <AlertDialog.Dialog className="sm:max-w-100">
-                                            <AlertDialog.CloseTrigger />
-                                            <AlertDialog.Header>
-                                              <AlertDialog.Icon
-                                                status={
-                                                  user.banned
-                                                    ? "default"
-                                                    : "warning"
-                                                }
-                                              />
-                                            </AlertDialog.Header>
-                                            <AlertDialog.Body>
-                                              <Form
-                                                className="w-full max-w-96"
-                                                onSubmit={(e) => {
-                                                  onSubmit(e, user);
-                                                }}
-                                              >
-                                                <Fieldset>
-                                                  <Fieldset.Legend>
-                                                    {user.banned
-                                                      ? "Unban User?"
-                                                      : `Ban ${user.name}?`}
-                                                  </Fieldset.Legend>
-                                                  <p>
-                                                    {user.banned
-                                                      ? `Do you want to unban ${user.name}?`
-                                                      : "State the reason for the ban and its duration."}
-                                                  </p>
-                                                  {user.banned ? (
-                                                    ""
-                                                  ) : (
-                                                    <FieldGroup>
-                                                      <TextField
-                                                        aria-label="Ban Reason"
-                                                        isRequired
-                                                        name="banReason"
-                                                        validate={(value) => {
-                                                          if (!value) {
-                                                            return "State the reason for the ban";
-                                                          }
-                                                          if (
-                                                            value.length < 3
-                                                          ) {
-                                                            return "At least 3 characters";
-                                                          }
-                                                          return null;
-                                                        }}
-                                                      >
-                                                        <Input
-                                                          placeholder="Ban Reason"
-                                                          className="rounded-md focus:ring-0 aria-invalid:focus:ring-red-500 aria-invalid:focus:border-transparent shadow-none bg-stone-100 dark:bg-black/80 border border-transparent focus:border-foreground/50 hover:bg-stone-200"
-                                                        />
-                                                        <FieldError />
-                                                      </TextField>
+                              <Separator />
 
-                                                      <Select
-                                                        isRequired
-                                                        variant="primary"
-                                                        placeholder="Ban Period"
-                                                        aria-label="Ban Period"
-                                                        name="banPeriod"
-                                                        validate={(value) => {
-                                                          if (!value) {
-                                                            return "State the ban period";
-                                                          }
-                                                          return null;
-                                                        }}
-                                                      >
-                                                        <Select.Trigger
-                                                          className="bg-background rounded-md py-2.5 hover:bg-stone-200 dark:hover:bg-black border border-transparent aria-invalid:border-red-500 aria-invalid:ring-1 aria-invalid:ring-red-500"
-                                                          style={{
-                                                            boxShadow: "none",
-                                                            outline: "none",
-                                                          }}
-                                                        >
-                                                          <Select.Value
-                                                            className={
-                                                              "text-sm"
-                                                            }
-                                                          />
-                                                          <Select.Indicator />
-                                                        </Select.Trigger>
-                                                        <Select.Popover
-                                                          className={
-                                                            "rounded-lg"
-                                                          }
-                                                        >
-                                                          <ListBox className="rounded-sm">
-                                                            <ListBox.Item
-                                                              style={{
-                                                                boxShadow:
-                                                                  "none",
-                                                                outline: "none",
-                                                              }}
-                                                              id="86400"
-                                                              textValue="24h"
-                                                              className="rounded-lg"
-                                                            >
-                                                              24h
-                                                              <ListBox.ItemIndicator />
-                                                            </ListBox.Item>
-                                                            <ListBox.Item
-                                                              style={{
-                                                                boxShadow:
-                                                                  "none",
-                                                                outline: "none",
-                                                              }}
-                                                              id="259200"
-                                                              textValue="3 Days"
-                                                              className="rounded-lg"
-                                                            >
-                                                              3 Days
-                                                              <ListBox.ItemIndicator />
-                                                            </ListBox.Item>
-                                                            <ListBox.Item
-                                                              style={{
-                                                                boxShadow:
-                                                                  "none",
-                                                                outline: "none",
-                                                              }}
-                                                              id="604800"
-                                                              textValue="7 Days"
-                                                              className="rounded-lg"
-                                                            >
-                                                              7 Days
-                                                              <ListBox.ItemIndicator />
-                                                            </ListBox.Item>
-                                                            <ListBox.Item
-                                                              style={{
-                                                                boxShadow:
-                                                                  "none",
-                                                                outline: "none",
-                                                              }}
-                                                              id="2592000"
-                                                              textValue="permanent"
-                                                              className="rounded-lg"
-                                                            >
-                                                              Permanent
-                                                              <ListBox.ItemIndicator />
-                                                            </ListBox.Item>
-                                                          </ListBox>
-                                                        </Select.Popover>
-                                                        <FieldError />
-                                                      </Select>
-                                                    </FieldGroup>
-                                                  )}
-                                                  <Fieldset.Actions className="flex justify-end">
-                                                    <Button
-                                                      variant="tertiary"
-                                                      slot="close"
-                                                      style={{
-                                                        boxShadow: "none",
-                                                        outline: "none",
-                                                      }}
-                                                    >
-                                                      Cancel
-                                                    </Button>
-                                                    <Button
-                                                      style={{
-                                                        boxShadow: "none",
-                                                        outline: "none",
-                                                      }}
-                                                      className={`${!user.banned ? "bg-yellow-500 dark:bg-yellow-600" : "bg-emerald-600 dark:bg-emerald-700"} `}
-                                                      type="submit"
-                                                    >
-                                                      {user.banned
-                                                        ? "Unban"
-                                                        : "Ban User"}
-                                                    </Button>
-                                                  </Fieldset.Actions>
-                                                </Fieldset>
-                                              </Form>
-                                            </AlertDialog.Body>
-                                            <AlertDialog.Footer></AlertDialog.Footer>
-                                          </AlertDialog.Dialog>
-                                        </AlertDialog.Container>
-                                      </AlertDialog.Backdrop>
-                                    </AlertDialog>
+                              <Dropdown.Item
+                                id="ban"
+                                textValue="Ban"
+                                className="gap-2 rounded-lg mt-0.5"
+                                style={{
+                                  boxShadow: "none",
+                                  outline: "none",
+                                }}
+                              >
+                                <Label>{user.banned ? "Unban" : "Ban"}</Label>
+                              </Dropdown.Item>
 
-                                    <AlertDialog>
-                                      <AlertDialog.Trigger className="flex-1">
-                                        <button className="bg-red-600/10 hover:bg-red-600/20 text-red-600 dark:text-red-400 rounded-sm p-3 cursor-pointer w-full flex justify-center">
-                                          <TrashBin />
-                                        </button>
-                                      </AlertDialog.Trigger>
-                                      <AlertDialog.Backdrop>
-                                        <AlertDialog.Container placement="center">
-                                          <AlertDialog.Dialog className="sm:max-w-100">
-                                            <AlertDialog.CloseTrigger />
-                                            <AlertDialog.Header>
-                                              <AlertDialog.Icon status="danger" />
-                                              <AlertDialog.Heading>
-                                                Delete User Permanently?
-                                              </AlertDialog.Heading>
-                                            </AlertDialog.Header>
-                                            <AlertDialog.Body>
-                                              <p>
-                                                This will permanently delete{" "}
-                                                <span className="bg-foreground/5 text-foreground font-medium my-1 w-fit px-2 py-0.5 rounded-sm">
-                                                  User: {user.name}
-                                                </span>{" "}
-                                                and all of their data. This
-                                                action cannot be undone.
-                                              </p>
-                                            </AlertDialog.Body>
-                                            <AlertDialog.Footer>
-                                              <Button
-                                                slot="close"
-                                                variant="tertiary"
-                                              >
-                                                Cancel
-                                              </Button>
-                                              <Button
-                                                variant="danger"
-                                                onClick={() =>
-                                                  handleDelete(user.id)
-                                                }
-                                              >
-                                                Delete User
-                                              </Button>
-                                            </AlertDialog.Footer>
-                                          </AlertDialog.Dialog>
-                                        </AlertDialog.Container>
-                                      </AlertDialog.Backdrop>
-                                    </AlertDialog>
-                                  </div>
-                                </div>
-                              </Modal.Footer>
-                            </Modal.Dialog>
-                          </Modal.Container>
-                        </Modal.Backdrop>
-                      </Modal>
-                    </Table.Cell>
-                  </Table.Row>
-                );
-              })}
-            </Table.Body>
-          </Table.Content>
-        </Table.ScrollContainer>
-      </Table>
+                              <Dropdown.Item
+                                id="delete"
+                                textValue="Delete"
+                                className="rounded-lg mt-0.5"
+                                style={{
+                                  boxShadow: "none",
+                                  outline: "none",
+                                }}
+                              >
+                                <Label className="text-rose-500 dark:font-bold">
+                                  Delete
+                                </Label>
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown.Popover>
+                        </Dropdown>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* View User Modal */}
+      {isUser && (
+        <Modal isOpen={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+          <Modal.Backdrop>
+            <Modal.Container placement="center">
+              <Modal.Dialog className="rounded-xl pt-4 max-w-sm">
+                <div className="flex items-center gap-3">
+                  {isUser.image ? (
+                    <Image
+                      src={isUser.image}
+                      alt={isUser.name || "User"}
+                      width={100}
+                      height={100}
+                      className="h-11 w-11 rounded-full select-none object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-11 w-11 shrink-0 select-none items-center justify-center rounded-full bg-foreground/10 font-semibold">
+                      {isUser.name?.[0]?.toUpperCase() || "?"}
+                    </div>
+                  )}
+
+                  <div className="min-w-0">
+                    <Modal.Heading className="text-lg">
+                      {isUser.name || "User Details"}
+                    </Modal.Heading>
+
+                    {isUser.email && (
+                      <div className="mt-0.5 break-all text-sm text-muted">
+                        {isUser.email}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <Separator className="mt-4" />
+                <div className="max-h-[60vh] space-y-5 overflow-y-auto px-1 pt-3 pb-4 text-sm">
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                    <div>
+                      <div className="text-muted">Role</div>
+                      <div className="mt-1 font-medium text-foreground capitalize">
+                        {isUser.accountType || "Not available"}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-muted">Plan</div>
+                      <div className="mt-1 font-medium text-foreground">
+                        {isUser.plan
+                          ? formatPlanName(isUser.plan)
+                          : "Not available"}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-muted">Email Status</div>
+                      <div
+                        className={`mt-1 font-medium ${
+                          isUser.emailVerified
+                            ? "text-green-600 dark:text-green-500"
+                            : "text-red-500 dark:text-red-400"
+                        }`}
+                      >
+                        {isUser.emailVerified ? "Verified" : "Not verified"}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-muted">Account Status</div>
+                      <div
+                        className={`mt-1 font-medium ${
+                          isUser.banned
+                            ? "text-red-500 dark:text-red-400"
+                            : "text-green-600 dark:text-green-500"
+                        }`}
+                      >
+                        {isUser.banned ? "Banned" : "Active"}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-muted">Created</div>
+                      <div className="mt-1 font-medium text-foreground">
+                        {isUser.createdAt
+                          ? formatDate(isUser.createdAt)
+                          : "Not available"}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-muted">Updated</div>
+                      <div className="mt-1 font-medium text-foreground">
+                        {isUser.updatedAt
+                          ? formatDate(isUser.updatedAt)
+                          : "Not available"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {isUser.banned && (
+                    <>
+                      <Separator />
+
+                      <div>
+                        <div className="font-medium text-foreground">
+                          Ban Information
+                        </div>
+
+                        <div className="mt-3 space-y-3">
+                          {isUser.banReason && (
+                            <div>
+                              <div className="text-muted">Reason</div>
+                              <div className="mt-1 font-medium text-foreground">
+                                {isUser.banReason}
+                              </div>
+                            </div>
+                          )}
+
+                          {isUser.banExpires && (
+                            <div>
+                              <div className="text-muted">Expires</div>
+                              <div className="mt-1 font-medium text-foreground">
+                                {formatDate(isUser.banExpires)}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <Modal.Footer>
+                  <Button
+                    variant="tertiary"
+                    className="w-full rounded-lg"
+                    style={{ outline: "none", boxShadow: "none" }}
+                    slot="close"
+                  >
+                    Close
+                  </Button>
+                </Modal.Footer>
+              </Modal.Dialog>
+            </Modal.Container>
+          </Modal.Backdrop>
+        </Modal>
+      )}
+
+      {/* Change Role Modal */}
+      {isUser && (
+        <Modal isOpen={isRoleDialogOpen} onOpenChange={setIsRoleDialogOpen}>
+          <Modal.Backdrop>
+            <Modal.Container placement="center">
+              <Modal.Dialog className="rounded-xl pt-4 max-w-sm">
+                <Modal.Heading className="text-lg">
+                  Change user role
+                </Modal.Heading>
+                <Separator className="mt-4" />
+
+                <Modal.Body className="pt-3">
+                  <p className="text-sm leading-6 text-muted">
+                    You are about to change{" "}
+                    <span className="font-medium text-foreground">
+                      {isUser.name}
+                    </span>
+                    &apos;s role from{" "}
+                    <span className="font-medium text-foreground">
+                      {capitalize(isUser.accountType)}
+                    </span>{" "}
+                    to{" "}
+                    <span className="font-medium text-foreground">
+                      {capitalize(
+                        isUser.accountType === "seeker"
+                          ? "recruiter"
+                          : "seeker",
+                      )}
+                    </span>
+                    .
+                  </p>
+
+                  <div className="mt-4 rounded-lg bg-foreground/5 px-3 py-2.5 text-sm">
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-muted">Current role</span>
+                      <span className="font-medium text-foreground capitalize">
+                        {isUser.accountType}
+                      </span>
+                    </div>
+
+                    <div className="mt-2 flex items-center justify-between gap-4">
+                      <span className="text-muted">New role</span>
+                      <span className="font-medium text-foreground capitalize">
+                        {isUser.accountType === "seeker"
+                          ? "Recruiter"
+                          : "Seeker"}
+                      </span>
+                    </div>
+                  </div>
+                </Modal.Body>
+
+                <Modal.Footer className="gap-2">
+                  <Button
+                    slot="close"
+                    variant="tertiary"
+                    className="w-full rounded-lg"
+                    style={{ boxShadow: "none", outline: "none" }}
+                  >
+                    Cancel
+                  </Button>
+
+                  <Button
+                    slot="close"
+                    className="w-full rounded-lg bg-indigo-600"
+                    style={{ boxShadow: "none", outline: "none" }}
+                    onClick={() =>
+                      handleUpdateUserRole(
+                        isUser.id,
+                        isUser.accountType === "seeker"
+                          ? "recruiter"
+                          : "seeker",
+                      )
+                    }
+                  >
+                    Make{" "}
+                    {isUser.accountType === "seeker" ? "Recruiter" : "Seeker"}
+                  </Button>
+                </Modal.Footer>
+              </Modal.Dialog>
+            </Modal.Container>
+          </Modal.Backdrop>
+        </Modal>
+      )}
+
+      {/* Ban User Modal */}
+      {isUser && (
+        <Modal isOpen={isBanDialogOpen} onOpenChange={setIsBanDialogOpen}>
+          <Modal.Backdrop>
+            <Modal.Container placement="center">
+              <Modal.Dialog className="rounded-xl pt-4 max-w-sm">
+                <form
+                  className="w-full"
+                  onSubmit={(e) => {
+                    onSubmit(e, isUser);
+                  }}
+                >
+                  <div className="flex items-center gap-3">
+                    {isUser.image ? (
+                      <Image
+                        src={isUser.image}
+                        alt={isUser.name || "User"}
+                        width={100}
+                        height={100}
+                        className="h-10 w-10 rounded-full object-cover select-none"
+                      />
+                    ) : (
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-foreground/10 font-semibold select-none">
+                        {isUser.name?.[0]?.toUpperCase() || "?"}
+                      </div>
+                    )}
+
+                    <div className="min-w-0">
+                      <Modal.Heading className="text-lg">
+                        {isUser.banned ? "Unban user" : "Ban user"}
+                      </Modal.Heading>
+
+                      <div className="truncate text-sm text-muted">
+                        {isUser.name}
+                      </div>
+                    </div>
+                  </div>
+
+                  <Separator className="mt-4" />
+
+                  <Modal.Body className="pt-3">
+                    {isUser.banned ? (
+                      <p className="text-sm leading-6 text-muted">
+                        This will restore{" "}
+                        <span className="font-medium text-foreground">
+                          {isUser.name}
+                        </span>
+                        &apos;s access to the platform.
+                      </p>
+                    ) : (
+                      <FieldGroup className="space-y-2">
+                        <TextField
+                          aria-label="Ban Reason"
+                          isRequired
+                          variant="secondary"
+                          name="banReason"
+                          validate={(value) => {
+                            if (!value) {
+                              return "State the reason for the ban";
+                            }
+
+                            if (value.length < 3) {
+                              return "At least 3 characters";
+                            }
+
+                            return null;
+                          }}
+                        >
+                          <Input
+                            placeholder="Ban Reason"
+                            className="rounded-md border border-foreground/15 bg-white dark:border-white/15 dark:bg-black/70 focus-within:border-foreground/40 dark:focus-within:border-white/25"
+                            style={{ boxShadow: "none" }}
+                          />
+                          <FieldError />
+                        </TextField>
+
+                        <Select
+                          isRequired
+                          variant="secondary"
+                          placeholder="Ban Period"
+                          aria-label="Ban Period"
+                          name="banPeriod"
+                        >
+                          <Select.Trigger
+                            style={{ boxShadow: "none" }}
+                            className="rounded-md border border-foreground/15 bg-white dark:border-white/15 dark:bg-black/70 focus-within:border-foreground/40 dark:focus-within:border-white/25"
+                          >
+                            <Select.Value className="text-sm" />
+                            <Select.Indicator />
+                          </Select.Trigger>
+
+                          <Select.Popover className="rounded-md">
+                            <ListBox>
+                              <ListBox.Item
+                                id="86400"
+                                textValue="24h"
+                                className="rounded-md"
+                                style={{ boxShadow: "none", outline: "none" }}
+                              >
+                                24h
+                                <ListBox.ItemIndicator />
+                              </ListBox.Item>
+
+                              <ListBox.Item
+                                id="259200"
+                                textValue="3 Days"
+                                className="rounded-md"
+                                style={{ boxShadow: "none", outline: "none" }}
+                              >
+                                3 Days
+                                <ListBox.ItemIndicator />
+                              </ListBox.Item>
+
+                              <ListBox.Item
+                                id="604800"
+                                textValue="7 Days"
+                                className="rounded-md"
+                                style={{ boxShadow: "none", outline: "none" }}
+                              >
+                                7 Days
+                                <ListBox.ItemIndicator />
+                              </ListBox.Item>
+
+                              <ListBox.Item
+                                id="2592000"
+                                textValue="Permanent"
+                                className="rounded-md"
+                                style={{ boxShadow: "none", outline: "none" }}
+                              >
+                                Permanent
+                                <ListBox.ItemIndicator />
+                              </ListBox.Item>
+                            </ListBox>
+                          </Select.Popover>
+
+                          <FieldError>Select ban duration</FieldError>
+                        </Select>
+                      </FieldGroup>
+                    )}
+                  </Modal.Body>
+
+                  <Modal.Footer className="gap-2">
+                    <Button
+                      variant="tertiary"
+                      slot="close"
+                      className="w-full rounded-lg"
+                      style={{ boxShadow: "none", outline: "none" }}
+                    >
+                      Cancel
+                    </Button>
+
+                    <Button
+                      type="submit"
+                      className={`w-full rounded-lg text-white ${
+                        isUser.banned
+                          ? "bg-emerald-600 dark:bg-emerald-700"
+                          : "bg-warning dark:bg-yellow-700"
+                      }`}
+                      style={{ boxShadow: "none", outline: "none" }}
+                    >
+                      {isUser.banned ? "Unban User" : "Ban User"}
+                    </Button>
+                  </Modal.Footer>
+                </form>
+              </Modal.Dialog>
+            </Modal.Container>
+          </Modal.Backdrop>
+        </Modal>
+      )}
+
+      {/* Delete User Modal */}
+      {isUser && (
+        <AlertDialog
+          isOpen={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+        >
+          <AlertDialog.Backdrop>
+            <AlertDialog.Container placement="center">
+              <AlertDialog.Dialog className="rounded-xl sm:max-w-100">
+                <AlertDialog.Header>
+                  <AlertDialog.Heading className="text-xl">
+                    Delete User Permanently?
+                  </AlertDialog.Heading>
+                </AlertDialog.Header>
+                <AlertDialog.Body>
+                  <p>
+                    This will permanently delete{" "}
+                    <span className="text-foreground font-medium">
+                      {isUser.name}
+                    </span>{" "}
+                    and all of their data. This action cannot be undone.
+                  </p>
+                </AlertDialog.Body>
+                <AlertDialog.Footer className="justify-between">
+                  <Button
+                    slot="close"
+                    variant="tertiary"
+                    className="rounded-lg w-full"
+                    style={{ outline: "none", boxShadow: "none" }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="danger"
+                    className="rounded-lg w-full"
+                    style={{ outline: "none", boxShadow: "none" }}
+                    onClick={() => handleDelete(isUser.id)}
+                  >
+                    Delete User
+                  </Button>
+                </AlertDialog.Footer>
+              </AlertDialog.Dialog>
+            </AlertDialog.Container>
+          </AlertDialog.Backdrop>
+        </AlertDialog>
+      )}
     </div>
   );
 };

@@ -17,3 +17,16 @@ export async function updatePlan(userId, plan) {
   revalidatePath("/dashboard/admin/users");
   return res.json();
 }
+
+export async function downgradePlan(planName) {
+  const res = await fetch(`${url}/downgrade`, {
+    method: "PATCH",
+    headers: {
+      "content-type": "application/json",
+      ...(await authHeader()),
+    },
+    body: JSON.stringify({ planName }),
+  });
+  revalidatePath("/pricing");
+  return res.json();
+}

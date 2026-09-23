@@ -10,7 +10,7 @@ const AdminLayoutPage = async ({ children }) => {
 
   if (session?.user?.role !== "admin") {
     return (
-      <div className="flex items-center justify-center -mt-26 sm:mt-0 h-screen sm:h-[60vh]">
+      <div className="flex items-center justify-center -mt-26 h-screen">
         <div className="max-w-2xl w-full text-center">
           {/* Message */}
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-red-400">
@@ -27,14 +27,14 @@ const AdminLayoutPage = async ({ children }) => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
               href="/"
-              className="flex items-center justify-center gap-2 w-fit bg-foreground/10 hover:bg-foreground/20  font-semibold px-8 py-3 rounded-lg transition-colors"
+              className="flex items-center justify-center gap-2 w-fit bg-white dark:bg-foreground/10 active:bg-foreground/5 border  font-semibold px-8 py-3 rounded-lg transition-colors"
             >
               <House className="w-5 h-5" />
               Go Home
             </Link>
             <a
               href="mailto:support@worksphere.com"
-              className="flex items-center justify-center gap-2 w-fit bg-foreground/10 hover:bg-foreground/20  font-semibold px-8 py-3 rounded-lg transition-colors"
+              className="flex items-center justify-center gap-2 w-fit bg-white dark:bg-foreground/10 active:bg-foreground/5 border  font-semibold px-8 py-3 rounded-lg transition-colors"
             >
               <Envelope className="w-5 h-5" />
               Contact support
@@ -45,7 +45,7 @@ const AdminLayoutPage = async ({ children }) => {
     );
   }
 
-  return <div className="md:pl-4">{children}</div>;
+  return <div>{children}</div>;
 };
 
 export default AdminLayoutPage;

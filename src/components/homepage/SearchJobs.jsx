@@ -1,8 +1,21 @@
-import { Button, Input } from "@heroui/react";
+"use client";
+
+import { Input } from "@heroui/react";
 import React from "react";
 import { Magnifier, Briefcase } from "@gravity-ui/icons";
+import { useRouter } from "next/navigation";
 
 const SearchJobs = () => {
+  const router = useRouter();
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    const value = formData.get("search");
+    if (value) {
+      router.push(`/jobs?search=${value}&page=1`);
+    }
+  };
   return (
     <div className="text-center px-4 space-y-5 mt-12 sm:mt-20 2xl:mt-28">
       <div className="bg-linear-to-b from-white via-white to-stone-100 dark:from-stone-900 dark:via-stone-950 dark:to-stone-950 rounded-full px-5 py-2 w-fit mx-auto border-b-2 dark:border-b-0 dark:border-t dark:border-foreground/25 text-xs select-none">
@@ -22,18 +35,28 @@ const SearchJobs = () => {
         WorkSphere helps you find and apply to jobs from top companies. Explore
         thousands of opportunities and move faster in your career.
       </p>
-      <div className="mt-8 w-full sm:w-96 relative mx-auto">
-        <Magnifier className="absolute left-4 top-1/2 -translate-y-1/2" />
-        <Input
-          aria-label="Name"
-          className="w-full dark:bg-foreground/5 border border-black/20 dark:border-white/20 rounded-xl py-4 pr-15 pl-11 focus:ring-1 ring-indigo-500 shadow-none placeholder:text-foreground/40"
-          placeholder="Enter job title, skill or company"
-        />
+      <form
+        onSubmit={(e) => {
+          handleSearch(e);
+        }}
+      >
+        <div className="mt-8 w-full sm:w-96 relative mx-auto">
+          <Magnifier className="absolute left-4 top-1/2 -translate-y-1/2" />
+          <Input
+            name="search"
+            aria-label="Name"
+            className="w-full dark:bg-foreground/5 border border-black/20 dark:border-white/20 rounded-xl py-4 pr-15 pl-11 focus:ring-1 ring-indigo-500 shadow-none placeholder:text-foreground/40"
+            placeholder="Enter job title or company name"
+          />
 
-        <button className="px-3 py-2.5 rounded-lg absolute right-2.5 top-1/2 -translate-y-1/2 bg-indigo-600 active:bg-indigo-700 text-white cursor-pointer duration-75">
-          <Magnifier />
-        </button>
-      </div>
+          <button
+            type="submit"
+            className="px-3 py-2.5 rounded-lg absolute right-2.5 top-1/2 -translate-y-1/2 bg-indigo-600 active:bg-indigo-700 text-white cursor-pointer duration-75"
+          >
+            <Magnifier />
+          </button>
+        </div>
+      </form>
       <div className="flex flex-col sm:flex-row justify-center items-center gap-3">
         <p className="opacity-60">Trending Position</p>
         <div className="space-y-2 sm:space-y-0 sm:flex flex-row items-center justify-center gap-1">

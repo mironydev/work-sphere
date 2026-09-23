@@ -62,7 +62,7 @@ export default async function Success({ searchParams }) {
           </p>
 
           {/* Plan Info */}
-          <div className="mb-7 p-6 rounded-lg bg-white dark:bg-foreground/5 border border-transparent dark:border-foreground/10">
+          <div className="mb-7 p-6 rounded-lg bg-white dark:bg-foreground/5 border ">
             <p className="text-sm text-muted">Plan</p>
             <p className="text-2xl font-semibold mt-1">{displayPlanName}</p>
             <span className="text-sm text-muted">({billingInterval})</span>

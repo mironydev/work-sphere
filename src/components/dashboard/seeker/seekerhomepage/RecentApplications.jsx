@@ -8,14 +8,14 @@ import {
   PersonPencil,
   Xmark,
 } from "@gravity-ui/icons";
-import { Tooltip, Chip } from "@heroui/react";
+import { Chip } from "@heroui/react";
 import { capitalize, formatDate } from "@/lib/helpers";
 import Link from "next/link";
 
 const RecentApplications = ({ applications }) => {
   const app = applications
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .slice(0, 3);
+    .slice(0, 4);
 
   const statusMap = {
     applied: {
@@ -68,14 +68,15 @@ const RecentApplications = ({ applications }) => {
             return (
               <Link
                 href={`/dashboard/seeker/applications/${app._id}`}
+                style={{ outline: "none" }}
                 key={app._id}
-                className="block p-4  hover:bg-foreground/2 transition-colors"
+                className="block p-4 hover:bg-foreground/3 active:bg-foreground/5 transition-colors"
               >
                 <div className="flex items-center justify-between gap-3">
                   {/* Left: Job Info */}
                   <div>
                     <p className="font-semibold text-sm">{app.job.title}</p>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mt-0.5">
                       <p className="text-xs text-muted">{app.company.name}</p>
                       <span className="text-muted text-xs">•</span>
                       <p className="text-xs text-muted text-nowrap">

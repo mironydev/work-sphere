@@ -6,7 +6,7 @@ const UserStats = ({ users, filteredUsers, setFilteredUsers }) => {
   const activeUsers = filteredUsers.filter((user) => !user.banned);
   const bannedUsers = filteredUsers.filter((user) => user.banned);
   const totalRecruiters = activeUsers.filter(
-    (recruiter) => recruiter.role === "recruiter",
+    (recruiter) => recruiter.accountType === "recruiter",
   );
   const newSignups = filteredUsers.filter((user) => {
     const dayAgo = new Date(new Date() - 24 * 60 * 60 * 1000);
@@ -35,7 +35,7 @@ const UserStats = ({ users, filteredUsers, setFilteredUsers }) => {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-between gap-3">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-3">
         <div>
           <h2 className="text-3xl font-medium whitespace-nowrap">
             User Management
@@ -44,34 +44,16 @@ const UserStats = ({ users, filteredUsers, setFilteredUsers }) => {
             Review, filter, and manage platform access for all users.
           </p>
         </div>
-        <div className="flex items-end gap-2">
-          <UserFilter users={users} setFilteredUsers={setFilteredUsers} />
-
-          <Tooltip delay={0} closeDelay={0}>
-            <Tooltip.Trigger aria-label="Export button">
-              <button className="px-4 py-2 rounded-sm bg-foreground text-background text-sm font-medium whitespace-nowrap cursor-not-allowed select-none">
-                Export List
-              </button>
-            </Tooltip.Trigger>
-            <Tooltip.Content
-              showArrow
-              className="flex items-center gap-1.5 cursor-not-allowed select-none rounded-md"
-            >
-              <Tooltip.Arrow />
-              <Wrench className="opacity-60" />
-              <p className="opacity-60">This feature is under construction</p>
-            </Tooltip.Content>
-          </Tooltip>
-        </div>
+        <UserFilter users={users} setFilteredUsers={setFilteredUsers} />
       </div>
-      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="p-5 rounded-md border dark:border-white/15 bg-white dark:bg-foreground/5">
+      <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="p-5 rounded-lg border border-foreground/15 bg-white dark:bg-foreground/5">
           <p className="text-xs opacity-70">Total Active Users</p>
           <p className="font-medium text-3xl mt-1 mb-2">{activeUsers.length}</p>
           <p
             className={`text-xs ${
               percentageChange > 0
-                ? "text-green-500"
+                ? "text-emerald-500"
                 : percentageChange < 0
                   ? "text-red-500"
                   : ""
@@ -92,9 +74,7 @@ const UserStats = ({ users, filteredUsers, setFilteredUsers }) => {
           <p className="font-medium text-3xl mt-1 mb-2">
             {totalRecruiters.length}
           </p>
-          <p className="text-xs text-green-500 dark:text-green-400">
-            High demand
-          </p>
+          <p className="text-xs text-emerald-500">High demand</p>
         </div>
         <div className="p-5 rounded-md border dark:border-white/15 bg-white dark:bg-foreground/5">
           <p className="text-xs opacity-70">Suspended Accounts</p>

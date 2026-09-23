@@ -12,8 +12,8 @@ const nunito = Nunito({
 });
 
 export const metadata = {
-  title: "Home | WorkSphere",
-  description: "hompage of the website",
+  title: "WorkSphere",
+  description: "",
 };
 
 export default function RootLayout({ children }) {

@@ -85,12 +85,9 @@ const LoginCard = () => {
 
   return (
     <div className="px-4 h-screen">
-      <div className="mt-24 sm:mt-28 bg-white dark:bg-foreground/5 p-6 max-w-sm mx-auto rounded-xl border">
+      <div className="mt-24 sm:mt-28 bg-white dark:bg-black p-6 max-w-sm mx-auto rounded-xl border shadow-xs">
         <h2 className="text-center text-3xl font-semibold">Log In</h2>
-        <p className="text-sm text-center opacity-60 pt-1.5 pb-5">
-          Welcome back, continue your journey.
-        </p>
-        <Separator className="mb-5 dark:bg-foreground/15" />
+        <Separator className="my-5 dark:bg-foreground/15" />
         <Form className="flex mx-auto flex-col gap-4" onSubmit={onSubmit}>
           <TextField
             name="email"
@@ -106,7 +103,7 @@ const LoginCard = () => {
             <Label>Email</Label>
             <Input
               placeholder="Enter your email"
-              className="rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15 bg-foreground/2 dark:bg-black focus:bg-white dark:focus:bg-black placeholder:opacity-60"
+              className="rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15 bg-foreground/3 dark:bg-foreground/10 focus:bg-white dark:focus:bg-foreground/10 placeholder:opacity-60"
             />
             <FieldError />
           </TextField>
@@ -126,7 +123,7 @@ const LoginCard = () => {
             <div className="relative">
               <Input
                 placeholder="Enter your password"
-                className="w-full rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15 bg-foreground/2 dark:bg-black focus:bg-white dark:focus:bg-black placeholder:opacity-60"
+                className="w-full rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15 bg-foreground/3 dark:bg-foreground/10 focus:bg-white dark:focus:bg-foreground/10 placeholder:opacity-60"
               />
               <button
                 type="button"

@@ -49,7 +49,7 @@ const SeekerApplications = ({ applications }) => {
   };
 
   return (
-    <div>
+    <div className="min-h-[50vh]">
       <div>
         <h1 className="text-3xl font-semibold">My Applications</h1>
         <p className="text-muted mt-1 mb-4">
@@ -149,7 +149,7 @@ const SeekerApplications = ({ applications }) => {
                     <td className="px-4 py-3">
                       <Link
                         href={`/dashboard/seeker/applications/${app._id}`}
-                        className="font-medium text-foreground/80 active:opacity-50 flex items-center gap-1"
+                        className="font-medium hover:underline active:underline flex items-center gap-1"
                       >
                         <span>Details</span>
                         <MoveUpRight size={10} />

@@ -49,7 +49,7 @@ const RecruiterAddCompanyModal = () => {
   };
 
   const inputClassName =
-    "rounded-md border border-foreground/15 focus:border-transparent focus:ring-1 focus:ring-foreground/50 aria-invalid:focus:ring-red-500 bg-white dark:focus:bg-black dark:bg-black placeholder:text-foreground/40 mt-1";
+    "rounded-md border border-foreground/15 focus:border-transparent focus:ring-1 focus:ring-foreground/50 aria-invalid:focus:ring-red-500 bg-white dark:bg-foreground/7 placeholder:text-foreground/40 mt-1";
 
   return (
     <div>
@@ -58,7 +58,7 @@ const RecruiterAddCompanyModal = () => {
           <Plus /> Register a company
         </Button>
         <Modal.Backdrop>
-          <Modal.Container placement="auto">
+          <Modal.Container placement="center">
             <Modal.Dialog className="p-0 rounded-lg border max-h-[80vh] w-full sm:max-w-xl">
               <Form
                 className="flex flex-col overflow-hidden"
@@ -76,7 +76,7 @@ const RecruiterAddCompanyModal = () => {
                 <Modal.Body className="overflow-y-auto flex-1 ">
                   <Surface
                     variant="default"
-                    className="bg-foreground/3 dark:bg-black/50 p-6 border-y flex flex-col gap-4"
+                    className="bg-foreground/5 dark:bg-black p-6 border-y flex flex-col gap-4"
                   >
                     <div className="flex flex-col sm:flex-row gap-5">
                       <TextField
@@ -262,7 +262,7 @@ const RecruiterAddCompanyModal = () => {
                   <Button
                     slot="close"
                     variant="tertiary"
-                    className="rounded-lg bg-foreground/10 text-base sm:text-sm"
+                    className="rounded-lg bg-foreground/10 text-base py-5"
                     style={{
                       boxShadow: "none",
                       outline: "none",
@@ -273,7 +273,7 @@ const RecruiterAddCompanyModal = () => {
 
                   <Button
                     type="submit"
-                    className="rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 text-base sm:text-sm"
+                    className="rounded-lg bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 text-base py-5"
                   >
                     Register Company
                   </Button>

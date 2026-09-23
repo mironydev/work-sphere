@@ -12,13 +12,19 @@ import {
   Tooltip,
 } from "@heroui/react";
 import Link from "next/link";
-import { Check, ClockFill, Persons, PlanetEarth } from "@gravity-ui/icons";
+import {
+  Check,
+  ClockFill,
+  EllipsisVertical,
+  Persons,
+  PlanetEarth,
+} from "@gravity-ui/icons";
 import { deleteCompany } from "@/lib/actions/company";
 import { toast } from "sonner";
 import RecruiterEditCompanyModal from "./RecruiterEditCompanyModal";
 import { capitalize, useSessionClient } from "@/lib/helpers";
 import DashboardSpinner from "../DashboardSpinner";
-import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
 const RecruiterCompany = ({ companies }) => {
   const [selectedCompany, setSelectedCompany] = useState(null);
@@ -52,13 +58,10 @@ const RecruiterCompany = ({ companies }) => {
 
   if (!companies.length) {
     return (
-      <div className="flex min-h-[70vh] items-center justify-center">
-        <div className="bg-white dark:bg-foreground/5 border rounded-md text-center p-8 sm:p-15">
-          <p className="text-2xl sm:text-4xl font-medium text-muted">
-            No Companies Found
-          </p>
-
-          <p className="text-muted sm:mt-2 mb-4 sm:mb-6">
+      <div className="flex h-screen -mt-26 items-center justify-center">
+        <div className="bg-white dark:bg-foreground/5 border rounded-md text-center p-8 sm:p-10">
+          <p className="text-2xl font-medium text-muted">No Companies Found</p>
+          <p className="text-muted sm:mt-1 mb-4">
             You haven&apos;t created any companies yet.
           </p>
 
@@ -80,7 +83,7 @@ const RecruiterCompany = ({ companies }) => {
         <RecruiterAddCompanyModal />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
         {companies.map((comp) => (
           <div
             key={comp._id}
@@ -119,7 +122,7 @@ const RecruiterCompany = ({ companies }) => {
                       outline: "none",
                     }}
                   >
-                    <p className="p-2 hover:bg-foreground/5 rounded-sm cursor-pointer">
+                    <p className="flex items-center justify-center hover:bg-foreground/5 active:bg-foreground/5 p-1.5 rounded-full cursor-pointer">
                       <EllipsisVertical className="w-4 h-4" />
                     </p>
                   </Dropdown.Trigger>
@@ -228,7 +231,7 @@ const RecruiterCompany = ({ companies }) => {
           }}
         >
           <Modal.Backdrop>
-            <Modal.Container placement="auto">
+            <Modal.Container placement="center">
               <Modal.Dialog className="p-0 rounded-lg border max-h-[80vh] w-full sm:max-w-xl">
                 <Modal.CloseTrigger />
 
@@ -247,7 +250,7 @@ const RecruiterCompany = ({ companies }) => {
 
       {deletingCompany && (
         <AlertDialog
-          isOpen={true}
+          isOpen={Boolean(deletingCompany)}
           onOpenChange={(open) => {
             if (!open) {
               setDeletingCompany(null);
@@ -255,39 +258,40 @@ const RecruiterCompany = ({ companies }) => {
           }}
         >
           <AlertDialog.Backdrop>
-            <AlertDialog.Container>
-              <AlertDialog.Dialog className="sm:max-w-100">
-                <AlertDialog.CloseTrigger />
-
+            <AlertDialog.Container placement="center">
+              <AlertDialog.Dialog className="rounded-xl sm:max-w-96">
                 <AlertDialog.Header>
-                  <AlertDialog.Icon status="danger" />
-
-                  <AlertDialog.Heading>Delete permanently?</AlertDialog.Heading>
+                  <AlertDialog.Heading className="text-xl">
+                    Delete permanently?
+                  </AlertDialog.Heading>
                 </AlertDialog.Header>
 
                 <AlertDialog.Body>
-                  <p>
+                  <p className="text-sm leading-6 text-muted">
                     This will permanently delete{" "}
-                    <strong>{deletingCompany.companyName}</strong> and all of
-                    its published <strong>jobs</strong>. This action cannot be
-                    undone.
+                    <span className="font-medium text-foreground">
+                      {deletingCompany?.companyName}
+                    </span>{" "}
+                    and all of its published{" "}
+                    <span className="font-medium text-foreground">jobs</span>.
+                    This action cannot be undone.
                   </p>
                 </AlertDialog.Body>
 
                 <AlertDialog.Footer>
                   <button
-                    className="rounded-lg px-4 py-2 bg-foreground/10 cursor-pointer active:opacity-70"
+                    className="w-full rounded-lg bg-foreground/10 px-4 py-2 text-sm font-medium cursor-pointer active:opacity-70"
                     onClick={() => setDeletingCompany(null)}
                   >
                     Cancel
                   </button>
 
                   <button
-                    className="rounded-lg bg-danger text-white px-4 py-2 cursor-pointer active:opacity-80"
+                    className="w-full rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white cursor-pointer active:opacity-80"
                     onClick={() =>
                       handleCompanyDelete(
-                        deletingCompany._id,
-                        deletingCompany.companyName,
+                        deletingCompany?._id,
+                        deletingCompany?.companyName,
                       )
                     }
                   >

@@ -7,15 +7,9 @@ import {
   Briefcase,
   CircleDollar,
   ArrowUpRightFromSquare,
-  TrashBin,
 } from "@gravity-ui/icons";
 import Link from "next/link";
-import {
-  capitalize,
-  currencySymbol,
-  formatDate,
-  useSessionClient,
-} from "@/lib/helpers";
+import { currencySymbol, formatDate, useSessionClient } from "@/lib/helpers";
 import DashboardSpinner from "../dashboard/DashboardSpinner";
 
 const JobDetails = ({ job, hasApplied, applicationId }) => {
@@ -52,10 +46,10 @@ const JobDetails = ({ job, hasApplied, applicationId }) => {
             <h1 className="text-2xl sm:text-3xl font-bold md:text-nowrap">
               {jobTitle}
             </h1>
-            <div className="flex gap-1">
+            <div className="flex items-center gap-1 mt-1">
               <p className="text-sm text-muted">{job.company.companyName}</p>
               <p
-                className={`${userRole === "recruiter" ? "block" : "hidden"} text-sm text-muted break-all`}
+                className={`${userRole === "recruiter" ? "block" : "hidden"} text-xs text-muted break-all`}
               >
                 (Created {formatDate(job.createdAt)})
               </p>
@@ -71,7 +65,7 @@ const JobDetails = ({ job, hasApplied, applicationId }) => {
                   ? `/dashboard/seeker/applications/${applicationId}`
                   : `/jobs/${_id}/apply`
               }
-              className={`hidden sm:block text-center ${hasApplied ? "bg-foreground text-background" : "bg-indigo-600 hover:bg-indigo-700 text-white"} dark:font-medium rounded-lg px-4 py-2 active:scale-95 duration-100`}
+              className={`hidden sm:block text-center ${hasApplied ? "bg-foreground text-background" : "bg-indigo-600 hover:bg-indigo-700 text-white"} dark:font-medium rounded-md px-4 py-2 active:scale-95 duration-100`}
             >
               {hasApplied ? "View Application" : "Apply Now"}
             </Link>

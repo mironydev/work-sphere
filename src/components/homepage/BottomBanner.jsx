@@ -3,10 +3,7 @@
 import Link from "next/link";
 
 const primaryClass =
-  "rounded-lg bg-black px-4 py-3 font-medium ring-2 ring-black/80 dark:ring-white ring-offset-2 ring-offset-background text-white dark:bg-white dark:text-black active:scale-95 duration-100";
-
-const secondaryClass =
-  "rounded-lg px-4 py-3 font-medium ring-2 ring-white dark:ring-black ring-offset-2 ring-offset-foreground/10 bg-white dark:bg-black active:scale-95 duration-100";
+  "rounded-lg bg-black px-4 py-3 font-bold ring-2 ring-black/80 dark:ring-white ring-offset-2 ring-offset-background text-white dark:bg-white dark:text-black active:scale-95 duration-100 text-lg";
 
 const BottomBanner = ({ user }) => {
   const dashboardHref =
@@ -16,8 +13,6 @@ const BottomBanner = ({ user }) => {
         ? "/dashboard/admin"
         : "/dashboard/seeker";
 
-  const settingsHref = "/dashboard/seeker/profile"; // only ever used for seeker now
-
   const buttons =
     user?.accountType === "seeker"
       ? [
@@ -25,11 +20,6 @@ const BottomBanner = ({ user }) => {
             href: dashboardHref,
             label: "Go to dashboard",
             className: primaryClass,
-          },
-          {
-            href: settingsHref,
-            label: "View Profile",
-            className: secondaryClass,
           },
         ]
       : user

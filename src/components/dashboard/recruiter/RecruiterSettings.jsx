@@ -25,7 +25,7 @@ const RecruiterSettings = () => {
 
   return (
     <div>
-      <div className="mb-6">
+      <div className="mb-4">
         <h1 className="text-3xl font-semibold">Profile</h1>
         <p className="text-muted mt-1">Your account information.</p>
       </div>

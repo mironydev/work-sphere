@@ -43,7 +43,7 @@ const RecruiterEditJob = ({ job }) => {
   } = job;
 
   const inputClassName =
-    "rounded-md border border-foreground/15 focus:border-transparent focus:ring-1 focus:ring-foreground/50 aria-invalid:focus:ring-red-500 bg-foreground/2 focus:bg-white dark:focus:bg-black dark:bg-black placeholder:text-foreground/40 mt-1";
+    "rounded-md border border-foreground/15 focus:border-transparent focus:ring-1 focus:ring-foreground/50 aria-invalid:focus:ring-red-500 bg-foreground/2 focus:bg-white dark:focus:bg-black dark:bg-background/70 placeholder:text-foreground/40 mt-1";
 
   const industries = [
     { id: "technology", label: "Technology" },
@@ -91,16 +91,16 @@ const RecruiterEditJob = ({ job }) => {
   return (
     <div>
       <div>
-        <h1 className="text-3xl font-bold">Edit Job Posting</h1>
+        <h1 className="text-3xl font-semibold">Edit Job Posting</h1>
         <p className="mt-1 opacity-70">
           Update the details below to modify your job listing.
         </p>
       </div>
 
-      <div className="flex items-center justify-center mt-6">
+      <div className="flex items-center justify-center mt-4">
         <Form
           onSubmit={handleForm}
-          className="relative p-6 w-full sm:w-xl lg:w-2xl rounded-lg bg-white dark:bg-foreground/5 border shadow-xs"
+          className="relative p-6 w-full sm:w-xl lg:w-2xl rounded-lg bg-white dark:bg-foreground/10 border shadow-xs"
         >
           <Fieldset className="w-full mb-8">
             <Fieldset.Legend>Job Information</Fieldset.Legend>
@@ -510,7 +510,7 @@ const RecruiterEditJob = ({ job }) => {
             <Fieldset.Actions className="justify-center">
               <Button
                 type="submit"
-                className="w-full sm:w-1/2 py-5 rounded-md bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 pr-6 text-base"
+                className="w-full sm:w-1/2 py-6 rounded-md bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-600 pr-6 text-base"
               >
                 <Check />
                 Update Job

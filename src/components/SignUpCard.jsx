@@ -91,16 +91,14 @@ const SignUpCard = () => {
   };
 
   const inputClass =
-    "rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15 bg-foreground/2 dark:bg-black focus:bg-white dark:focus:bg-black placeholder:opacity-60";
+    "rounded-md focus:ring-1 focus:ring-indigo-500 aria-invalid:focus:ring-red-500 shadow-none border border-foreground/15 bg-foreground/3 dark:bg-foreground/10 focus:bg-white dark:focus:bg-foreground/10 placeholder:opacity-60";
 
   return (
     <div className="px-4 h-screen">
-      <div className="mt-24 sm:mt-28 bg-white dark:bg-foreground/5 p-6 pb-5 max-w-sm mx-auto rounded-xl border">
-        <h2 className="text-center text-3xl font-semibold pb-4">
-          Create Account
-        </h2>
+      <div className="mt-24 sm:mt-28 bg-white dark:bg-black p-6 pb-5 max-w-sm mx-auto rounded-xl border shadow-xs">
+        <h2 className="text-center text-3xl font-semibold">Create Account</h2>
 
-        <Separator className="mb-4 dark:bg-foreground/15" />
+        <Separator className="my-5 dark:bg-foreground/15" />
         <Form className="flex mx-auto flex-col gap-4" onSubmit={onSubmit}>
           <TextField
             name="name"

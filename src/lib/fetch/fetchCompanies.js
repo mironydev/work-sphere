@@ -2,8 +2,8 @@ import { authHeader } from "../authHeader";
 
 const url = process.env.SERVER_URL;
 
-export const getCompanies = async () => {
-  const res = await fetch(`${url}/companies`);
+export const getCompanies = async (query) => {
+  const res = await fetch(`${url}/companies?${query}`);
   return res.json();
 };
 

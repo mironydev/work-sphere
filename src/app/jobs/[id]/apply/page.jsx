@@ -24,8 +24,8 @@ const ApplyPage = async ({ params }) => {
 
   if (user.accountType !== "seeker") {
     return (
-      <div className="mt-36 px-4 flex justify-center">
-        <div className="max-w-md w-full rounded-xl border border-white dark:border-foreground/15 bg-white/70 dark:bg-foreground/5 p-8 text-center shadow-xs">
+      <div className="px-4 flex justify-center items-center h-screen ">
+        <div className="max-w-md w-full rounded-xl border border-foreground/15 bg-white dark:bg-foreground/5 p-8 text-center">
           <div className="pt-2 pb-5">
             <svg
               xmlns="http://www.w3.org/2000/svg"

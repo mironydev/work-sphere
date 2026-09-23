@@ -5,14 +5,21 @@ import JobsCard from "./JobsCard";
 import JobsFilter from "./JobsFilter";
 import JobsPagination from "./JobsPagination";
 import { useSessionClient } from "@/lib/helpers";
+import Link from "next/link";
 
 const Jobs = ({ jobs, total, searchQuery, savedJobs }) => {
   const [page, setPage] = useState(searchQuery.page || 1);
   const { isPending } = useSessionClient();
 
   const handleSetPage = (newPage) => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
     setPage(newPage);
+
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
   };
 
   const startItem = (page - 1) * 9 + 1;
@@ -21,15 +28,13 @@ const Jobs = ({ jobs, total, searchQuery, savedJobs }) => {
   return (
     <div>
       <h1 className="text-4xl md:text-5xl font-bold text-center sm:py-5">
-        Find Jobs
+        <Link href="/jobs?page=1"> Find Jobs </Link>
       </h1>
-      {jobs.length > 0 && (
-        <JobsFilter
-          searchQuery={searchQuery}
-          page={page}
-          setPage={handleSetPage}
-        />
-      )}
+      <JobsFilter
+        searchQuery={searchQuery}
+        page={page}
+        setPage={handleSetPage}
+      />
       <p className={`text-sm text-muted mb-3 ${!jobs.length && "hidden"}`}>
         Showing {startItem}-{endItem} of
         <span className="font-medium"> {total} Jobs</span>

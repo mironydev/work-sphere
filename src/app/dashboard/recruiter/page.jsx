@@ -2,17 +2,22 @@ import RecruiterHomepage from "@/components/dashboard/recruiter/RecruiterHomepag
 import { getRecruiterStats } from "@/lib/fetch/fetchRecruiterStats";
 
 const RecruiterPage = async () => {
-  const stats = await getRecruiterStats();
+  const {
+    totalApplications,
+    totalJobs,
+    recentApplications,
+    pendingApplications,
+    activeJobs,
+  } = await getRecruiterStats();
 
   return (
     <div>
       <RecruiterHomepage
-        totalApplications={stats.totalApplications}
-        totalJobs={stats.totalJobs}
-        recentApplications={stats.recentApplications}
-        topCompanies={stats.topCompanies}
-        pendingReview={stats.pendingApplications}
-        activeJobs={stats.activeJobs}
+        totalApplications={totalApplications}
+        totalJobs={totalJobs}
+        recentApplications={recentApplications}
+        pendingReview={pendingApplications}
+        activeJobs={activeJobs}
       />
     </div>
   );

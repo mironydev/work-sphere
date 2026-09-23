@@ -13,7 +13,7 @@ import { JobCardMenu } from "./JobCardMenu";
 const JobsCard = ({ job, savedJobs, isPending }) => {
   if (isPending) {
     return (
-      <div className="flex flex-col justify-between p-6 rounded-xl bg-white dark:bg-foreground/5 border-t-2 dark:border border-white dark:border-white/15 shadow-sm">
+      <div className="flex flex-col justify-between p-6 rounded-xl bg-white dark:bg-foreground/10 border">
         <div>
           <div className="flex items-center gap-2 mb-4">
             <Skeleton className="w-8 h-8 rounded-full" />

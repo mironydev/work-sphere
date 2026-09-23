@@ -5,7 +5,7 @@ import Link from "next/link";
 const ErrorPage = () => {
   return (
     <div className="mt-24 px-4 flex items-center justify-center min-h-[60vh]">
-      <div className="max-w-md w-full text-center shadow-xs dark:border border-foreground/15 rounded-xl p-8 bg-white dark:bg-foreground/5">
+      <div className="max-w-md w-full text-center border shadow-xs rounded-xl p-8 bg-white dark:bg-foreground/5">
         <p className="text-4xl font-bold mb-2 text-red-500">Oops!</p>
         <h1 className="text-xl font-semibold mb-3">Something went wrong</h1>
         <p className="text-foreground/70 mb-8">

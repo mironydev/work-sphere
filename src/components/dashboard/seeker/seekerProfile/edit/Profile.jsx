@@ -235,7 +235,7 @@ const SeekerProfile = ({ user }) => {
             </button>
             <button
               type="button"
-              className="bg-white dark:bg-red-500 border border-red-400 dark:border-red-500 text-red-500 dark:text-white active:text-red-400 dark:active:opacity-80 px-3 font-medium  rounded-sm cursor-pointer select-none"
+              className="bg-white dark:bg-red-500 border border-red-400 dark:border-red-500 text-red-500 dark:text-white active:text-red-400 dark:active:text-white dark:active:opacity-80 px-3 font-medium  rounded-sm cursor-pointer select-none"
             >
               Reset Password
             </button>

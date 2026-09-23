@@ -10,7 +10,7 @@ const db = client.db(process.env.DB_NAME);
 const ALLOWED_ACCOUNT_TYPES = ["seeker", "recruiter"];
 const ALLOWED_PLANS = ["seeker_starter", "recruiter_starter"];
 export const auth = betterAuth({
-  trustedOrigins: process.env.TRUSTED_ORIGINS.split(","),
+  trustedOrigins: ["*"],
 
   emailAndPassword: {
     enabled: true,

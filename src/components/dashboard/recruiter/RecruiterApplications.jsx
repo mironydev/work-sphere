@@ -52,7 +52,7 @@ const RecruiterApplications = ({ applications }) => {
     <div>
       <div>
         <h1 className="text-3xl font-semibold">Applications</h1>
-        <p className="text-muted mt-1 mb-6">
+        <p className="text-muted mt-1 mb-4">
           {applications.length} applications received
         </p>
       </div>

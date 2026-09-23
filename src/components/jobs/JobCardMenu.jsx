@@ -96,7 +96,7 @@ export const JobCardMenu = ({ job, savedJobs }) => {
             id="save"
             textValue="Save"
             isDisabled={isLoading}
-            className="rounded-lg"
+            className="rounded-lg active:bg-[#EBEBEC] dark:active:bg-[#27272A]"
             style={{ boxShadow: "none", outline: "none" }}
           >
             {isSaved ? (
@@ -115,7 +115,7 @@ export const JobCardMenu = ({ job, savedJobs }) => {
           <Dropdown.Item
             id="details"
             textValue="View details"
-            className="rounded-lg text-nowrap"
+            className="rounded-lg text-nowrap active:bg-[#EBEBEC] dark:active:bg-[#27272A]"
             style={{ boxShadow: "none", outline: "none" }}
           >
             <Eye className="w-4 h-4" />
@@ -125,7 +125,7 @@ export const JobCardMenu = ({ job, savedJobs }) => {
           <Dropdown.Item
             id="share"
             textValue="Share"
-            className="rounded-lg"
+            className="rounded-lg active:bg-[#EBEBEC] dark:active:bg-[#27272A]"
             style={{ boxShadow: "none", outline: "none" }}
           >
             <Share2 className="w-4 h-4" />
@@ -136,7 +136,7 @@ export const JobCardMenu = ({ job, savedJobs }) => {
           <Dropdown.Item
             id="hide"
             textValue="Hide"
-            className="rounded-lg"
+            className="rounded-lg active:bg-[#EBEBEC] dark:active:bg-[#27272A]"
             style={{ boxShadow: "none", outline: "none" }}
           >
             <EyeOff className="w-4 h-4" />
@@ -144,13 +144,12 @@ export const JobCardMenu = ({ job, savedJobs }) => {
           </Dropdown.Item>
           <Dropdown.Item
             id="report"
-            variant="danger"
             textValue="Report"
-            className="rounded-lg"
+            className="rounded-lg text-rose-600 active:bg-[#EBEBEC] dark:active:bg-[#27272A]"
             style={{ boxShadow: "none", outline: "none" }}
           >
             <AlertCircle className="w-4 h-4" />
-            <Label>Report</Label>
+            <Label className="text-rose-600 dark:font-bold">Report</Label>
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown.Popover>

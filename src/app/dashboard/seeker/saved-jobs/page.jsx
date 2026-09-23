@@ -8,12 +8,11 @@ const SavedJobsPage = async () => {
     headers: await headers(),
   });
   const user = session?.user;
-  const savedJobs = await getSavedJobs(user?.id);
-  const data = savedJobs.result;
+  const { result, total } = await getSavedJobs(user?.id);
 
   return (
     <div>
-      <SeekerSavedJobs savedJobs={data} />
+      <SeekerSavedJobs savedJobs={result} total={total} />
     </div>
   );
 };

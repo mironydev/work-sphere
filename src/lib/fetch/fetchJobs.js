@@ -23,8 +23,10 @@ export const getJobDetails = async (jobId) => {
   return res.json();
 };
 
-export const getSavedJobs = async (userId) => {
-  const res = await fetch(`${url}/savedjobs?userId=${userId}`);
+export const getSavedJobs = async (userId, sortQuery) => {
+  const res = await fetch(
+    `${url}/savedjobs?userId=${userId}&sortby=${sortQuery}`,
+  );
   return res.json();
 };
 
@@ -43,4 +45,9 @@ export const listAllUsers = async () => {
     headers: await headers(),
   });
   return users;
+};
+
+export const getAdminStats = async () => {
+  const res = await fetch(`${url}/admin/stats`);
+  return res.json();
 };

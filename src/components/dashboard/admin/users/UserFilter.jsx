@@ -5,20 +5,23 @@ import { Select, ListBox } from "@heroui/react";
 const UserFilter = ({ users, setFilteredUsers }) => {
   const handleSelectFilter = (value) => {
     const filterByRole =
-      value === "" ? users : users.filter((user) => user.role === value);
+      value === "" ? users : users.filter((user) => user.accountType === value);
     setFilteredUsers(filterByRole);
   };
 
   return (
     <div>
       <Select
-        className="w-24 outline outline-foreground/15 focus:ring-0 rounded-sm"
+        className="w-24 rounded-sm border border-foreground/20"
         placeholder="Filter"
         aria-label="Filter by Role"
         onChange={(value) => handleSelectFilter(value)}
       >
-        <Select.Trigger className="rounded-sm shadow-none focus:ring-foreground/30 dark:focus:ring-foreground/20 focus:ring-1">
-          <Select.Value className="whitespace-nowrap text-sm" />
+        <Select.Trigger
+          className="rounded-sm hover:bg-foreground/5 dark:hover:bg-foreground/15"
+          style={{ outline: "none", boxShadow: "none" }}
+        >
+          <Select.Value className="whitespace-nowrap text-sm data-[placeholder=true]:text-foreground" />
           <Select.Indicator />
         </Select.Trigger>
         <Select.Popover className="rounded-lg">
@@ -26,7 +29,11 @@ const UserFilter = ({ users, setFilteredUsers }) => {
             <ListBox.Item
               id=""
               textValue="All"
-              className="ring-foreground ring-0 rounded-md"
+              style={{
+                outline: "none",
+                boxShadow: "none",
+                borderRadius: "6px",
+              }}
             >
               All
               <div className="px-1">
@@ -36,7 +43,11 @@ const UserFilter = ({ users, setFilteredUsers }) => {
             <ListBox.Item
               id="seeker"
               textValue="Seeker"
-              className="ring-foreground ring-0 rounded-md"
+              style={{
+                outline: "none",
+                boxShadow: "none",
+                borderRadius: "6px",
+              }}
             >
               Seeker
               <div className="px-1">
@@ -46,12 +57,16 @@ const UserFilter = ({ users, setFilteredUsers }) => {
             <ListBox.Item
               id="recruiter"
               textValue="Recruiter"
-              className="ring-foreground ring-0 rounded-md"
+              style={{
+                outline: "none",
+                boxShadow: "none",
+                borderRadius: "6px",
+              }}
             >
               Recruiter
               <div className="px-1">
                 <ListBox.ItemIndicator />
-              </div>{" "}
+              </div>
             </ListBox.Item>
           </ListBox>
         </Select.Popover>
